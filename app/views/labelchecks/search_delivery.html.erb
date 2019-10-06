@@ -1,0 +1,19 @@
+<h4 align="left">Deliveries</h4> 
+
+<div align="left">
+
+<%= form_for(:labelcheck, :html => {class: "form", role: "form"}, url: labelcheck_search_path) do |f| %>
+
+  <div class="form-group">
+    <%= f.text_field :docnum, class: "form-control", placeholder: "Delivery Note Nr...", autofocus: true %>
+  </div>
+  <br>
+  <div class="form-group">
+    <%= f.submit "Search" %>
+  </div>
+<% end %>
+<br>
+<br>
+<%= link_to 'Back to Home Page', root_path %>
+
+</div>
