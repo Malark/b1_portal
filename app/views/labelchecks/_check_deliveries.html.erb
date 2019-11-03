@@ -1,0 +1,44 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<% if !@finished %>
+
+  <!--
+  <%= form_tag check_labels_path, remote: true, method: :get, id: 'check-deliveries-form' do %>     
+    <div class="form-group">
+      <%= text_field_tag :labelcheck2, params[:label_id], placeholder: "Scan Master Label", autofocus: true, class: "form-control" %>
+    </div>  
+    <div class="form-group">
+      <%= button_tag(type: :submit) do %>
+        Mehet
+      <% end %>
+    </div>        
+  <% end %>
+  -->
+
+  <%= form_tag check_labels_path, remote: true, method: :get, id: 'check-deliveries-form', class: 'ui reply form' do %> 
+    <div class="field">
+      <div class="ui fluid icon input">
+        <%= text_field_tag :labelcheck2, params[:label_id], placeholder: "Scan Master Label" %>
+        <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+      </div>
+    </div>
+  <% end %>
+
+
+  <div class="well results-block">
+    <strong><p>Összes raklap: <%= session[:labels].count %></p></strong>
+    <strong><p>Ellenőrzött raklap: <%= session[:checked_labels].count %></p></strong>
+  </div>
+
+<% else %>
+  <br>
+  <br>
+  <%= form_tag delivery_checked_path, remote: true, method: :get, id: 'delivery-checked-form' do %>     
+    <div class="form-group">
+      <%= button_tag(type: :submit) do %>
+        Ellenőrzés befejezése
+      <% end %>
+    </div>        
+  <% end %>
+<% end %>

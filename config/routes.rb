@@ -10,9 +10,14 @@ Rails.application.routes.draw do
   post 'scan', to: 'scans#create'
   get 'show', to: 'scans#show'
 
-  get 'labelcheck_search', to: 'labelchecks#search_delivery'
-  post 'labelcheck_search', to: 'labelchecks#set_delivery'
-  get 'labelcheck', to: 'labelchecks#check'
+  get 'labelcheck_search', to: 'labelchecks#search_deliveries'
+  get 'search_deliveries', to: 'customers#search'
+  get 'choose_deliveries', to: 'customers#choose'
+  get 'labelcheck_check',  to: 'labelchecks#check_deliveries'
+  get 'check_labels',      to: 'labelchecks#check_labels'
+  get 'delivery_checked',  to: 'labelchecks#checked_delivery'
+
+  #get 'labelcheck', to: 'labelchecks#check'
   #post 'labelcheck', to: 'labelcheck#create'
   #get 'show', to: 'labelchecks#show'
 

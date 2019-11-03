@@ -1,0 +1,24 @@
+<h1>Check Deliveries</h1>
+
+<!--
+<%= form_tag check_labels_path, remote: true, method: :get, id: 'check-deliveries-form' do %>     
+  <div class="form-group">
+    <%= text_field_tag :labelcheck2, params[:label_id], placeholder: "Scan Master Label", autofocus: true, class: "form-control" %>
+  </div>  
+  <div class="form-group">
+    <%= button_tag(type: :submit) do %>
+      Mehet
+    <% end %>
+  </div>        
+<% end %>
+-->
+
+<div id="check_deliveries">
+<%= render 'check_deliveries' %>
+</div>
+
+<!--
+<br>
+<br>
+<%= link_to 'Back to Home Page', root_path %>  
+-->

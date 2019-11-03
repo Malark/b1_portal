@@ -1,0 +1,34 @@
+<h4 align="left">Kérem válasszon vevőcsoportot!</h4> 
+
+<div align="left">
+
+  <%= form_tag search_deliveries_path, remote: true, method: :get, id: 'customer-lookup-form' do %>
+
+    <div class="form-group">
+      <%= collection_select( :labelcheck, :customer, Vevocsoport.all, :Code, :Name, prompt: "Kérem válasszon...") %>
+    </div>
+    
+    <!-- 
+    <div class="form-group">
+      <%= text_field_tag :labelcheck2, params[:customer2], placeholder: "Stock Ticker Symbol", class: "form-control" %>
+    </div>  
+    -->
+    <br>
+    <div class="form-group">
+      <%= button_tag(type: :submit) do %>Nyitott szállítások keresése
+      <% end %>
+    </div>
+  
+  <% end %>
+
+  <br>
+  
+
+  <div id="deliveries">
+    <%= render 'deliveries' %>
+  </div>
+  <br>
+  <br>
+  <%= link_to 'Back to Home Page', root_path %>  
+
+</div>

@@ -15,3 +15,19 @@
 //= require turbolinks
 //= require semantic-ui
 //= require_tree .
+
+submit_message = function() {
+  $('#labelcheck2').on('keydown', function(e) {
+    if (e.keyCode == 13) {
+      $('button').click();
+      //e.target.value = "";
+    };
+  });
+  $("#labelcheck2").focus();
+};
+
+
+$(document).on('turbolinks:load', function () {
+  $("#labelcheck2").focus();
+  submit_message();
+})
