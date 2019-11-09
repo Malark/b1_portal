@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get 'labelcheck_search', to: 'labelchecks#search_deliveries'
   get 'search_deliveries', to: 'customers#search'
   get 'choose_deliveries', to: 'customers#choose'
-  get 'labelcheck_check',  to: 'labelchecks#check_deliveries'
+  get 'labelcheck_check',  to: 'labelchecks#check_delivery'
   get 'check_labels',      to: 'labelchecks#check_labels'
   get 'delivery_checked',  to: 'labelchecks#checked_delivery'
 

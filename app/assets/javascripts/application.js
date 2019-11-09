@@ -17,9 +17,11 @@
 //= require_tree .
 
 submit_message = function() {
-  $('#labelcheck2').on('keydown', function(e) {
+  $('#labelcheck22').on('keydown', function(e) {
     if (e.keyCode == 13) {
-      $('button').click();
+      //alert('You clicked Entrer');
+      //$('button').click();
+      //$(this).closest('form').submit();
       //e.target.value = "";
     };
   });
@@ -28,6 +30,5 @@ submit_message = function() {
 
 
 $(document).on('turbolinks:load', function () {
-  $("#labelcheck2").focus();
-  submit_message();
+  //submit_message();
 })
