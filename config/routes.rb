@@ -17,10 +17,10 @@ Rails.application.routes.draw do
   get 'check_labels',      to: 'labelchecks#check_labels'
   get 'delivery_checked',  to: 'labelchecks#checked_delivery'
 
-  #get 'labelcheck', to: 'labelchecks#check'
-  #post 'labelcheck', to: 'labelcheck#create'
-  #get 'show', to: 'labelchecks#show'
+  get 'beerkezes_gyartasbol_step1', to: 'beerkezes#step1'
+  get 'search_production_orders', to: 'beerkezes#search_production_orders'
+  get 'beerkezes_gyartasbol_step2', to: 'beerkezes#step2'
+  get 'beerkezes_gyartasbol_step3', to: 'beerkezes#step3'
 
-  #get 'deliverynote'
 
 end

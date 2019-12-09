@@ -1,0 +1,17 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<%= form_tag search_production_orders_path, remote: true, method: :get, id: 'beerkezes_gyartasbol_step1-form', class: 'ui reply form' do %> 
+  <div class="field">
+    <div class="ui fluid icon input">
+      <%= text_field_tag :internal_label, nil, placeholder: "Belső címke beolvasása...", autofocus: true %>
+      <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+    </div>
+  </div>
+<% end %>
+<br>
+<div id="step1_result">
+  <%= render 'step1_result' %>
+</div>
+<br>
+

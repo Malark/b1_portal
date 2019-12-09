@@ -1,0 +1,22 @@
+<%= render 'layouts/messages' %>
+
+<h2>Beérkezés gyártásból - 2. lépés</h2>
+<h4>Gyártási rendelés kiválasztása</h4>
+
+<% if @prod_orders %>
+  <div class="well results-block">
+    <%= form_tag beerkezes_gyartasbol_step3_path, method: :get, id: 'choose-prod-order-form' do %>
+
+        <% @prod_orders.each do |row| %>
+            <label class="category-select">
+              <%= radio_button_tag :param1, row["DocNum"] , false %> <%= row["DocNum"] %> <br/>
+            </label>
+        <% end %>
+      <br>
+      <div class="form-group">
+        <%= button_tag(type: :submit) do %>Tovább
+        <% end %>
+      </div>
+    <% end %> 
+  </div>
+<% end %>

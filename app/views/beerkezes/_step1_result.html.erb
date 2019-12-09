@@ -1,0 +1,87 @@
+<%= render 'layouts/messages' %>
+
+<% if @prod_orders %>
+  <div class="well results-block">
+    <br>
+    <h4>Beolvasott címke adatai:</h4>
+     <div class="ui fluid card">
+      <div class="content">
+        <div class="header">
+          <div class="ui grid">
+            <div class="left aligned ten wide column"><%= @label.itemcode %></div>
+            <div class="right aligned six wide column"><%= @label.quantity %> db</div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <h4 class="ui sub header"><%= @itemname %></h4>
+        <div class="ui small feed">
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Sarzs azonosító: <%= @label.charge_nr %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Gyártás dátuma: <%= @label.prod_date %>, <%= @label.prod_time %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Csomagolási egység, típus: <%= @label.package_unit %>, <%= @label.package_type %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Csomagoló: <%= @label.packager_id %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                MEO munkatárs: <%= @label.qainspector_id %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="extra content">
+        <%= link_to "Nyitott gyártási rendelések száma: #{@prod_orders.length}", beerkezes_gyartasbol_step1_path %>
+      </div>
+      <div class="extra content">
+        <div class="ui grid">
+          <div class="left aligned eight wide column"><%= link_to "Újra kezd", beerkezes_gyartasbol_step1_path, class: "ui primary button" %></div>
+          <% if @prod_orders != nil %>
+            <% if @prod_orders.length == 1 %>
+              <div class="right aligned eight wide column"><%= link_to "Tovább a 3. lépésre", beerkezes_gyartasbol_step3_path(param1: @selected_prod_order), class: "ui primary button" %></div>
+            <% else %>
+              <div class="right aligned eight wide column"><%= link_to "Tovább a 2. lépésre", beerkezes_gyartasbol_step2_path(param1: @prod_orders), class: "ui primary button" %></div>
+            <% end %>  
+          <% else %>
+            <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button" %></div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+    <ul class="delivery-list">
+      <% @prod_orders.each do |row| %>
+        <li>
+          <%= row["DocNum"] %>
+        </li>
+      <% end %>
+    </ul>
+<% else %>
+  <% if @label %>
+    <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button" %></div>
+  <% end %>  
+<% end %>
