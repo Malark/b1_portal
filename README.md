@@ -116,3 +116,31 @@ check_delyverr.html.erb:
 -->
 
 ---------------------------------
+
+      <table id="prod_order_table" class="ui table">
+        <thead>
+          <tr>
+            <th>Név</th>
+            <th>Település</th>
+            <th>Cím</th>
+            <th>Telefon</th>
+            <th>Funkciók</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @prod_orders.each do |row| %>
+            <tr>
+              <label class="category-select">
+                <td><%= radio_button_tag :param1, row["DocNum"] , false %></td> 
+                <td><%= row["DocNum"] %></td> 
+                <td><%= row["DueDate"] %></td>
+                <td><%= row["PlannedQty"] %></td>
+                <td><%= row["CmpltQty"] %></td>
+              </label>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+
+---------------------------------      

@@ -1,0 +1,78 @@
+<%= render 'layouts/messages' %>
+
+<% if @selected_storage_id %>
+  <div class="well results-block">
+    <br>
+    <h4>Összegzés:</h4>
+     <div class="ui fluid card">
+      <div class="content">
+        <div class="header">
+          <div class="ui grid">
+            <div class="left aligned ten wide column"><%= session[:label]["itemcode"] %></div>
+            <div class="right aligned six wide column"><%= session[:label]["quantity"] %> db</div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <h4 class="ui sub header"><%= session[:itemname] %></h4>
+        <div class="ui small feed">
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Sarzs azonosító: <%= session[:label]["charge_nr"] %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Gyártás dátuma: <%= session[:label]["prod_date"] %>, <%= session[:label]["prod_time"] %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Csomagolási egység, típus: <%= session[:label]["package_unit"] %>, <%= session[:label]["package_type"] %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Csomagoló: <%= session[:label]["packager_id"] %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                MEO munkatárs: <%= session[:label]["qainspector_id"] %>
+              </div>
+            </div>
+          </div>
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                Rendelésszám: <%= @selected_prod_order %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="summary">
+          <h4 class="ui header">Tárolóhely: <%= @selected_storage_id %></h4>
+        </div>  
+      </div>
+      <div class="content">
+        <div class="ui grid">
+          <div class="left aligned eight wide column"><%= link_to "Mégsem", beerkezes_gyartasbol_step1_path, class: "ui primary button" %></div>
+          <div class="right aligned eight wide column"><%= link_to "Rögzít", beerkezes_gyartasbol_step4_path(prod_order: @selected_prod_order, storage_id: @selected_storage_id), class: "ui primary button" %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+

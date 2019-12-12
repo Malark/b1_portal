@@ -54,16 +54,18 @@
         </div>
       </div>
       <div class="extra content">
-        <%= link_to "Nyitott gyártási rendelések száma: #{@prod_orders.length}", beerkezes_gyartasbol_step1_path %>
+        <div class="summary">
+          <h4 class="ui header">Nyitott gyártási rendelések száma: <%= @prod_orders.length %></h4>
+        </div>  
       </div>
-      <div class="extra content">
+      <div class="content">
         <div class="ui grid">
           <div class="left aligned eight wide column"><%= link_to "Újra kezd", beerkezes_gyartasbol_step1_path, class: "ui primary button" %></div>
           <% if @prod_orders != nil %>
             <% if @prod_orders.length == 1 %>
-              <div class="right aligned eight wide column"><%= link_to "Tovább a 3. lépésre", beerkezes_gyartasbol_step3_path(param1: @selected_prod_order), class: "ui primary button" %></div>
+              <div class="right aligned eight wide column"><%= link_to "Tovább", beerkezes_gyartasbol_step3_path(param1: @selected_prod_order), class: "ui primary button" %></div>
             <% else %>
-              <div class="right aligned eight wide column"><%= link_to "Tovább a 2. lépésre", beerkezes_gyartasbol_step2_path(param1: @prod_orders), class: "ui primary button" %></div>
+              <div class="right aligned eight wide column"><%= link_to "Tovább", beerkezes_gyartasbol_step2_path(param1: @prod_orders), class: "ui primary button" %></div>
             <% end %>  
           <% else %>
             <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button" %></div>
@@ -73,15 +75,11 @@
     </div>
   </div>
   <br>
-    <ul class="delivery-list">
-      <% @prod_orders.each do |row| %>
-        <li>
-          <%= row["DocNum"] %>
-        </li>
-      <% end %>
-    </ul>
 <% else %>
   <% if @label %>
-    <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button" %></div>
+    <div class="ui grid">
+      <div class="left aligned eight wide column"><%= link_to "Új beolvasás", beerkezes_gyartasbol_step1_path, class: "ui primary button" %></div>
+      <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button" %></div>
+    </div>
   <% end %>  
 <% end %>

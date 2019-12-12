@@ -5,10 +5,11 @@ class OWOR < ApplicationRecord
     begin 
 
       query = <<-SQL 
-        select DocNum
+        select DocNum, DueDate, PlannedQty, CmpltQty
         from OWOR
         where Status = 'R' and Type = 'S' and ItemCode = '#{itemcode}'
         and CmpltQty < PlannedQty
+        order by DocNum
       SQL
       result = ActiveRecord::Base.connection.exec_query(query)
       if result.count > 0

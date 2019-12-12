@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'search_production_orders', to: 'beerkezes#search_production_orders'
   get 'beerkezes_gyartasbol_step2', to: 'beerkezes#step2'
   get 'beerkezes_gyartasbol_step3', to: 'beerkezes#step3'
-
+  get 'beerkezes_summary', to: 'beerkezes#summary'
+  get 'beerkezes_gyartasbol_step4', to: 'beerkezes#step4'
 
 end

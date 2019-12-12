@@ -1,21 +1,66 @@
-<%= render 'layouts/messages' %>
-
 <h2>Beérkezés gyártásból - 2. lépés</h2>
 <h4>Gyártási rendelés kiválasztása</h4>
-
+<br>
 <% if @prod_orders %>
   <div class="well results-block">
     <%= form_tag beerkezes_gyartasbol_step3_path, method: :get, id: 'choose-prod-order-form' do %>
-
-        <% @prod_orders.each do |row| %>
-            <label class="category-select">
-              <%= radio_button_tag :param1, row["DocNum"] , false %> <%= row["DocNum"] %> <br/>
-            </label>
-        <% end %>
-      <br>
-      <div class="form-group">
-        <%= button_tag(type: :submit) do %>Tovább
-        <% end %>
+      <% @prod_orders.each do |row| %>
+        <div class="ui fluid card">
+          <div class="content">
+            <div class="header">
+              <h4 class="ui sub header"><%= radio_button_tag :param1, row["DocNum"] , false %> <%= row["DocNum"] %></h4>
+            </div>
+          </div>
+          <div class="content">
+            <h4 class="ui sub header"><%= @itemname %></h4>
+            <div class="ui small feed">
+              <div class="event">
+                <div class="content">
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Befejezés dátuma:</div>
+                      <div class="right aligned eight wide column"><%= row["DueDate"].to_s.first(10) %></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="event">
+                <div class="content">
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Terv mennyiség:</div>
+                      <div class="right aligned eight wide column"><%= row["PlannedQty"].to_i %></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="event">
+                <div class="content">
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Tény mennyiség:</div>
+                      <div class="right aligned eight wide column"><%= row["CmpltQty"].to_i %></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="event">
+                <div class="content">
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Nyitott mennyiség:</div>
+                      <div class="right aligned eight wide column"><%= row["PlannedQty"].to_i - row["CmpltQty"].to_i %></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <div class="ui grid">
+        <div class="left aligned eight wide column"><%= link_to "Újra kezd", beerkezes_gyartasbol_step1_path, class: "ui primary button" %></div>
+        <div class="right aligned eight wide column"><%= button_tag(type: :submit, :class => "ui primary button") do %>Tovább<% end %></div>
       </div>
     <% end %> 
   </div>
