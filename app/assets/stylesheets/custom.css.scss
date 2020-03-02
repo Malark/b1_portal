@@ -10,3 +10,13 @@
     display:none;
   }
 }
+
+h1.mobile {
+  text-align: center;
+  font-size: 5.5em; /* 40px/16=2.5em */
+}
+
+div.mobile .item {
+  text-align: center;
+  font-size: 2.5em; /* 40px/16=2.5em */
+}

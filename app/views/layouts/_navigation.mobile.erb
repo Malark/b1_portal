@@ -1,0 +1,28 @@
+<div class="ui massive inverted menu">
+  <div class="ui stackable container">
+    <div class="item">
+      <%= link_to image_tag("polytec_logo_black.png"), root_path, class: "item" %>
+    </div>
+    <%= link_to "Warehouse", root_path, class: "item" %>
+    <a class="item">
+      Quality
+    </a>
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Account <i class="dropdown icon"></i>
+        <div class="menu">
+          <% if logged_in? %>
+            <%= link_to "Logout", logout_path, method: :delete, class: "item" %>
+          <% else %>
+            <%= link_to "Log in", login_path, class: "item" %>
+          <% end %>
+        </div>
+      </div>
+      <% if !logged_in? %>
+        <div class="item">
+          <%= link_to "Log in", login_path, class: "ui primary button" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
