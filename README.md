@@ -144,3 +144,33 @@ check_delyverr.html.erb:
 
 
 ---------------------------------      
+
+_deliveries.html.erb-ből az else ág, nem tudom, mire kellett:
+
+<% else %>
+
+  <% if @master_labels %>
+    <strong>Master címkék ellenőrzése!</strong>
+    <% @master_labels.each do |row| %>
+      <ul>
+        <li><%= row %></li>
+      </ul>
+    <% end %>
+    <% @firstcall = false %>    
+    <%= form_tag check_deliveries_path, remote: true, method: :get, id: 'check-deliveries-form' do %>     
+      <div class="form-group">
+        <%= text_field_tag :labelcheck2, params[:label_id], placeholder: "Scan Master Label...", class: "form-control" %>
+      </div>  
+      <div class="form-group">
+        <%= button_tag(type: :submit) do %>
+          Mehet
+        <% end %>
+      </div>        
+    <% end %>  
+
+    <div class="well results-block">
+      <strong><p><%= @aaa %></p></strong>
+    </div>
+  <% end %>  
+
+<% end %>

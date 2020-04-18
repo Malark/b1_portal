@@ -11,7 +11,7 @@ gem 'rails', '~> 5.1.7'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 1.3.13'
 # Use Puma as the app server
-gem 'puma', '~> 3.12.2'
+gem 'puma', '~> 4.3.1'
 # Use SCSS for stylesheets
 gem 'bootstrap-sass', '~> 3.4.1'
 gem 'sass-rails', '~> 5.0'
@@ -33,6 +33,9 @@ gem 'jquery-rails'
 # Use ActiveModel has_secure_password
  gem 'bcrypt', '~> 3.1.7'
  gem 'hirb', '~> 0.7.3'
+
+ #for mobile devices
+gem 'mobile-fu', '~> 1.4'
 
 
 gem 'tiny_tds', '~> 1.3.0'

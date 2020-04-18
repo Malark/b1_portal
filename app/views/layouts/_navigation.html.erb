@@ -1,28 +1,53 @@
 <div class="ui small inverted menu">
-      <div class="ui container">
-        <div class="item">
-          <%= link_to image_tag("polytec_logo_black.png"), root_path, class: "item" %>
-        </div>
-        <%= link_to "Warehouse", root_path, class: "item" %>
-        <a class="item">
-          Quality
-        </a>
-        <div class="right menu">
-          <div class="ui dropdown item">
-            Account <i class="dropdown icon"></i>
-            <div class="menu">
-              <% if logged_in? %>
-                <%= link_to "Logout", logout_path, method: :delete, class: "item" %>
-              <% else %>
-                <%= link_to "Log in", login_path, class: "item" %>
-              <% end %>
-            </div>
-          </div>
-          <% if !logged_in? %>
-            <div class="item">
-              <%= link_to "Log in", login_path, class: "ui primary button" %>
-            </div>
-          <% end %>
-        </div>
+  <div class="ui stackable container">
+
+    <div class="item">
+      <%= link_to image_tag("polytec_logo_black.png"), root_path, class: "item" %>
+    </div>
+
+    <%#= link_to "Warehouse", root_path, class: "item" %>
+
+    <div class="ui dropdown item">
+      Raktár modul 
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <%= link_to "Beérkezés gyártásból", beerkezes_gyartasbol_step1_path, class: "item" %>
+        <div class="divider"></div>
+        <%= link_to "VDA címke ellenőrzés", root_path, class: "item" %>
+        <%= link_to "Szállítások ellenőrzése", labelcheck_search_path, class: "item" %>
+        <%= link_to "Daimler RFID ellenőrzés", root_path, class: "item" %>
       </div>
     </div>
+
+    <a class="item">
+      Minőségirányítás
+    </a>
+    
+    
+    <div class="right menu">
+      <% if logged_in? %>
+        <div class="ui dropdown item">
+          <%= current_user.username %> 
+          <%= " (admin)" if current_user.admin? %>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+              <%= link_to "Saját profil szerkesztése", edit_user_path(current_user), class: "item" %>
+              <%= link_to "Saját profil megtekintése", user_path(current_user), class: "item" %>
+              <% if current_user.admin? %>
+                <div class="divider"></div>
+                <%= link_to "Felhasználók listája", users_path, class: "item" %>
+                <%= link_to "Új felhasználó rögzítése", signup_path, class: "item" %>
+              <% end %>
+              <div class="divider"></div>
+              <%= link_to "Kilépés", logout_path, method: :delete, class: "item" %>
+          </div>
+        </div>
+      <% else %>
+        <div class="item">
+          <%= link_to "Belépés", login_path, class: "ui orange button" %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>

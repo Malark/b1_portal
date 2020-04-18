@@ -6,10 +6,6 @@ Rails.application.routes.draw do
   post 'login', to: 'sessions#create'
   delete 'logout', to: 'sessions#destroy'
 
-  get 'scan', to: 'scans#new'
-  post 'scan', to: 'scans#create'
-  get 'show', to: 'scans#show'
-
   get 'labelcheck_search', to: 'labelchecks#search_deliveries'
   get 'search_deliveries', to: 'customers#search'
   get 'choose_deliveries', to: 'customers#choose'

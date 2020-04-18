@@ -3,20 +3,23 @@
 
 <% if !@finished %>
 
-<%= form_tag check_labels_path, remote: true, method: :get, id: 'check-deliveries-form', class: 'ui reply form' do %> 
-  <div class="field">
-    <div class="ui fluid icon input">
-      <%= text_field_tag :labelcheck22, nil, placeholder: "Scan Master Label", autofocus: true %>
-      <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+  <%= form_tag check_labels_path, remote: true, method: :get, id: 'check-deliveries-form', class: 'ui reply form' do %> 
+    <div class="field">
+      <div class="ui fluid icon input">
+        <%= text_field_tag :labelcheck22, nil, placeholder: "Kérem olvasson be egy master címke vonalkódot!", autofocus: true %>
+        <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+      </div>
     </div>
-  </div>
-<% end %>
-
-
+  <% end %>
+  
+  <br>
   <div class="well results-block">
-    <strong><p>Összes raklap: <%= session[:labels].count %></p></strong>
-    <strong><p>Ellenőrzött raklap: <%= session[:checked_labels].count %></p></strong>
+    <strong><h3>Ellenőrzött raklapok száma: <%= session[:checked_labels].count %> / <%= session[:labels].count %></h3></strong>
   </div> 
+
+  <br>
+  <br>
+  <%= link_to 'Ellenőrzés megszakítása', root_path %> 
  
 <% else %>
   <br>

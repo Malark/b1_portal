@@ -8,6 +8,8 @@ class CustomersController < ApplicationController
       if @deliveries == nil
       #@deliveries = params[:labelcheck][:customer]
         flash.now[:danger] = "Az adott vevőcsoportnak nincsenek nyitott szállításai!"
+      else
+        puts @deliveries
       end  
     end
     @step2 = false

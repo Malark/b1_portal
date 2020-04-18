@@ -3,48 +3,25 @@
   <% if @deliveries %>
     <div class="well results-block">
       <%= form_tag choose_deliveries_path, remote: true, method: :get, id: 'choose-deliveries-form' do %>
-        <ul class="delivery-list">
+        <ul class="ui list">
           <% @deliveries.each do |row| %>
+            <% puts row %>
+            <% delivery_note_label = row["DocNum"].to_s + " | " + row["DocDueDate"].strftime("%Y.%m.%d") + "  | " + row["palettes"].to_s + " db raklap" + " | " + row["ShipToCode"]  %>
             <li>
               <label class="category-select">
                 <%= check_box_tag "deliveries[]", row["DocNum"] %>
-                <%= row["DocNum"] %>
+                <%= delivery_note_label %>
               </label>
             </li>
           <% end %>
         </ul>
         <br>
         <div class="form-group">
-          <%= button_tag(type: :submit) do %>Ellenőrzés
+          <%= button_tag(type: :submit, class: "ui basic orange button") do %>
+            Ellenőrzés
           <% end %>
         </div>
       <% end %>
     </div>
   <% end %>
-
-  <% else %>
-    <% if @master_labels %>
-      <strong>Master címkék ellenőrzése!</strong>
-      <% @master_labels.each do |row| %>
-        <ul>
-          <li><%= row %></li>
-        </ul>
-      <% end %>
-      <% @firstcall = false %>    
-      <%= form_tag check_deliveries_path, remote: true, method: :get, id: 'check-deliveries-form' do %>     
-        <div class="form-group">
-          <%= text_field_tag :labelcheck2, params[:label_id], placeholder: "Scan Master Label", class: "form-control" %>
-        </div>  
-        <div class="form-group">
-          <%= button_tag(type: :submit) do %>
-            Mehet
-          <% end %>
-        </div>        
-      <% end %>  
-
-      <div class="well results-block">
-        <strong><p><%= @aaa %></p></strong>
-      </div>
-
-    <% end %>  
 <% end %>

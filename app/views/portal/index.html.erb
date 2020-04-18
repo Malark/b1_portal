@@ -1,5 +1,7 @@
-<h1>Warehouse Module</h1>
+<br>
+<h1>SAP Business One Portal - Dashboard</h1>
 
+<!--
 <div class="ui vertical inverted labeled icon massive menu">
   <%= link_to "<i class='browser icon'></i> Beérkezés gyártásból".html_safe, beerkezes_gyartasbol_step1_path, class: "item" %>
 </div>
@@ -9,3 +11,72 @@
   <%= link_to "<i class='truck icon'></i> Szállítások ellenőrzése".html_safe, labelcheck_search_path, class: "item" %>
   <%= link_to "<i class='rss square icon'></i> Daimler RFID ellenőrzés".html_safe, root_path, class: "item" %>
 </div>
+
+<br>
+-->
+
+<br>
+
+<div class="ui horizontal center aligned list">
+  <div class="item">
+    <h3 class="ui center aligned icon header">
+      <%= link_to "<i class='browser orange circular icon'></i> Beérkezés gyártásból".html_safe, beerkezes_gyartasbol_step1_path %>    
+    </h3>
+  </div>
+  
+  <div class="item">
+    <h3 class="ui center aligned icon header">
+      <%= link_to "<i class='barcode orange circular icon'></i> VDA címke ellenőrzés".html_safe, root_path %>    
+    </h3>
+  </div>
+
+  <div class="item">
+    <h3 class="ui center aligned icon header">
+      <%= link_to "<i class='truck orange circular icon'></i> Szállítások ellenőrzése".html_safe, labelcheck_search_path, class: "item" %>    
+    </h3>
+  </div>
+
+  <div class="item">
+    <h3 class="ui center aligned icon header">
+      <%= link_to "<i class='rss square orange circular icon'></i> Daimler RFID ellenőrzés".html_safe, root_path, class: "item" %>    
+    </h3>
+  </div>
+</div>
+
+<br>
+
+<!--
+<br>
+<h2 class="ui dividing header">Változások - v1.2.x  (2020.xx.xx)</h2>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th class="two wide">Modul</th>
+      <th class="fourteen wide">Leírás</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Főmenü</td>
+    <td>Dashboard a legfontosabb menükkel, lista az előző verzióhoz képest történt változtatásokról</td>
+  </tr>
+</table>
+-->
+<br>
+<h2 class="ui dividing header">Változások - v1.0.0  (2020.04.1x)</h2>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th class="three wide">Modul</th>
+      <th class="thirteen wide">Leírás</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Szállítások ellenőrzése</td>
+    <td>Szállítások ellenőrzése modul HD képernyőre optimalizálva</td>
+  </tr>
+  <tr>
+    <td>Szállítások ellenőrzése</td>
+    <td>Szállítások ellenőrzése modul mobil képernyőre optimalizálva</td>
+  </tr>
+</table>
+<br>

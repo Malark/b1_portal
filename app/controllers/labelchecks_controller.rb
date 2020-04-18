@@ -8,9 +8,9 @@ class LabelchecksController < ApplicationController
     obj = params[:labelcheck][:docnum]
     delivery_note = obj[1,obj.length-1]
     #puts delivery_note
-    elem = ODLN.find_by(DocNum: delivery_note.to_i)
+    elem = ODLN.(DocNum: delivery_note.to_i)
     if elem
-      flash[:success] = "Van ilyen szállítólevél"
+      fla h[:success] = "Van ilyen szállítólevél"
       redirect_to labelcheck_path(elem)
     else
       render 'search_delivery'
@@ -35,10 +35,13 @@ class LabelchecksController < ApplicationController
       #puts '+++Nem adott meg vonalkódot'
     else
       label = params[:labelcheck22]
-      if label.length > 1 
-        label = label[1,label.length-1]
-        #puts '==Input érték=='
-        #puts label
+      #In case of AUDI (label example: 6JUN364740217000070179)
+      if label.length == 22 
+        label = (label[13,label.length-1]).to_i.to_s
+      else  #Volvo, Daimler, BMW  (label example: M77079)
+        if label.length > 1 
+          label = label[1,label.length-1]
+        end
       end
       if checkable_label(label)
         session[:checked_labels].push(label)    
@@ -63,19 +66,13 @@ class LabelchecksController < ApplicationController
       write_data
     end 
 
-    #puts 'Ellenorizendok:'
-    #puts session[:checkable_labels]
-    #puts '------------'
-    #puts 'Ellenorzottek:'
-    #puts session[:checked_labels]
-
     respond_to do |format|
       format.js { render partial: 'labelchecks/check_deliveries' }
     end
   end
 
   def write_data
-    puts "Update database for checked records"
+    #puts "Update database for checked records"
     MOS_OWSD.update_checked_labels(session[:checked_labels])
   end
 

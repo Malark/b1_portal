@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
+  has_mobile_fu  #has_mobile_fu false #-> if you do not want to set the format to :mobile
+  #before_action :force_mobile_format #-> if you want to force mobile format
   protect_from_forgery with: :exception
-
   helper_method :current_user, :logged_in?
 
   def current_user
