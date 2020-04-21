@@ -1,0 +1,33 @@
+<br>
+<h2 align="center" class="mobile">Szállítások ellenőrzése</h2> 
+<br>
+<br>
+<div align="left">
+  <%= form_tag search_deliveries_path, remote: true, method: :get, id: 'customer-lookup-form' do %>
+
+    <%= label_tag :labelcheck, "Vevőcsoport", class: "mobile-label-tag" %>
+    <div class="field mobile-dropdown">
+      <%= collection_select( :labelcheck, :customer, Vevocsoport.all, :Code, :Name, {:include_blank => 'Kérem válasszon...'}, class: "ui dropdown mobile-large-text") %>
+    </div>
+
+    <br>
+    <br>
+    <div class="form-group">
+      <%= button_tag(type: :submit, class: "ui basic massive orange button") do %>
+        Keresés
+      <% end %>
+    </div>
+
+  
+  <% end %>
+
+  <br>
+
+  <div id="deliveries">
+    <%= render 'deliveries' %>
+  </div>
+  <br>
+  <br>
+  <%= link_to 'Vissza', root_path, class: "mobile-large-text" %>  
+
+</div>

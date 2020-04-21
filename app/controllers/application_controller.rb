@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   has_mobile_fu  #has_mobile_fu false #-> if you do not want to set the format to :mobile
-  #before_action :force_mobile_format #-> if you want to force mobile format
+  before_action :set_mobile_device 
   protect_from_forgery with: :exception
   helper_method :current_user, :logged_in?
 
@@ -18,6 +18,14 @@ class ApplicationController < ActionController::Base
       redirect_to login_path
     end
   end
-  
+
+  def set_mobile_device
+    session[:mobile_device] = false
+
+    #force_mobile_format   #-> if you want to force mobile format
+    #session[:mobile_device] = true
+
+  end
+
 end
 

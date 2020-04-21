@@ -12,16 +12,47 @@
 }
 
 h1.mobile {
-  text-align: center;
   font-size: 5.5em; /* 40px/16=2.5em */
 }
 
 h2.mobile {
-  text-align: center;
   font-size: 3.5em; 
+}
+
+h3.mobile {
+  font-size: 1.7em; 
+}
+
+div.mobile-menu .item {
+  text-align: center;
+  font-size: 1.5em; /* 40px/16=2.5em */
 }
 
 div.mobile .item {
   text-align: center;
   font-size: 2.5em; /* 40px/16=2.5em */
 }
+
+div .mobile-header {
+  text-align: center;
+  font-size: 4.5em; /* 40px/16=2.5em */
+}
+
+.mobile-label-tag {
+  font-size: 2.5em;
+  /*font-size: 40px;*/
+}
+
+div .mobile-large-text {
+  font-size: 24px;
+}
+
+.ui.selection.dropdown.mobile-large-text .menu .item {
+  font-size: 24px;
+}
+
+.ui.message.mobile-large-text .header:not(.ui)
+{
+  font-size: 1.5em;
+}
+

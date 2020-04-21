@@ -5,28 +5,32 @@
 
   <%= form_tag check_labels_path, remote: true, method: :get, id: 'check-deliveries-form', class: 'ui reply form' do %> 
     <div class="field">
-      <div class="ui fluid icon input">
+      <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
         <%= text_field_tag :labelcheck22, nil, placeholder: "Kérem olvasson be egy master címke vonalkódot!", autofocus: true %>
         <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
-      </div>
+      <% end %>
     </div>
   <% end %>
   
   <br>
   <div class="well results-block">
-    <strong><h3>Ellenőrzött raklapok száma: <%= session[:checked_labels].count %> / <%= session[:labels].count %></h3></strong>
+    <strong>
+      <%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+        Ellenőrzött raklapok száma: <%= session[:checked_labels].count %> / <%= session[:labels].count %>
+      <% end %>
+    </strong>
   </div> 
 
   <br>
   <br>
-  <%= link_to 'Ellenőrzés megszakítása', root_path %> 
+  <%= link_to 'Ellenőrzés megszakítása', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 
  
 <% else %>
   <br>
   <br>
   <%= form_tag delivery_checked_path, remote: true, method: :get, id: 'delivery-checked-form' do %>     
     <div class="form-group">
-      <%= button_tag(type: :submit) do %>
+      <%= button_tag(type: :submit, class: "ui basic orange button #{ 'massive' if session[:mobile_device] == true }") do %>
         Vissza a főmenübe
       <% end %>
     </div>        
