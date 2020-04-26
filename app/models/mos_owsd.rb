@@ -37,10 +37,13 @@ class MOS_OWSD < ApplicationRecord
 
   def self.update_checked_labels(labels)
     #hiba = false
+    #formatting date
+    current_date = Time.now.strftime("%Y-%m-%d").to_s
     labels.each do |row|
       query = <<-SQL 
         update dbo.[@MOS_OWSD]
-        set U_mezo09 = getdate(), U_mezo10 = 'User'
+        set U_mezo09 = '#{current_date}', U_mezo10 = 'User'
+        --set U_mezo09 = getdate(), U_mezo10 = 'User'
         where U_raklap2 = #{row}
       SQL
       result = ActiveRecord::Base.connection.exec_query(query) 

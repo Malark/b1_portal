@@ -33,9 +33,10 @@ class KOM_GYARTBEERK < ApplicationRecord
   end  
   
   def self.update_internal_label(charge_nr, itemcode, master_label_id)
+    current_date = Time.now.strftime("%Y-%m-%d %H:%M:%S").to_s
     query = <<-SQL 
       update dbo.[@KOM_GYARTBEERK]
-      set U_VDADATUM = getdate(), U_VDAUSER = 'User', U_VDASORSZAM = '#{master_label_id}'
+      set U_VDADATUM = '#{current_date}', U_VDAUSER = 'User', U_VDASORSZAM = '#{master_label_id}'
       where U_SARZSSZAM = '#{charge_nr}'
       and U_ItemCode = '#{itemcode}'
     SQL

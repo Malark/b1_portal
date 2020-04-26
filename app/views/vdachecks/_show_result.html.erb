@@ -3,27 +3,29 @@
   <div class="ui fluid card">
     <div class="content">
       <div class="header">
+      <%= content_tag :div, class: "header #{ 'mobile' if session[:mobile_device] == true }"  do %>
         <% if @checked == true %>
           Sikeres összerendelés
         <% else %>
           Sikertelen összerendelés
         <% end %>  
-      </div>
+      <% end %>
     </div>
     <div class="content" align="center">
       <%= @checked == true ? image_tag("ok.png") : image_tag("wrong.png") %>
     </div>
     <div class="extra content">
       <div class="summary">
-        <h4 class="ui header">
+        <%= content_tag :h4, class: "ui header #{ 'mobile' if session[:mobile_device] == true }"  do %>
           <%= @result_text %>
-        </h4>
+        <% end %> 
       </div>  
     </div>
-    <div class="content">
+    <div class="extra content">
+      <br>
       <div class="ui grid">
-        <div class="left aligned eight wide column"><%= link_to "Következő", check_vda_index_path, class: "ui primary button" %></div>
-        <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button" %></div>
+        <div class="left aligned eight wide column"><%= link_to "Következő", check_vda_index_path, class: "ui primary button #{ 'massive' if session[:mobile_device] == true }" %></div>
+        <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button #{ 'massive' if session[:mobile_device] == true }" %></div>
       </div>
     </div>
   </div>

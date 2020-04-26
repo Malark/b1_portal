@@ -10,16 +10,27 @@ class BeerkezesController < ApplicationController
   def search_production_orders
     #Search opened production orders
     if params[:internal_label].blank?
-      flash.now[:danger] = "Kérem, olvasson be egy belső címkét!"
+      flash.now[:danger] = "A belső címke QR kódja nem lehet üres!"
     else
       @selected_prod_order = ''
-      internal_label = params[:internal_label]
       #With String manipulation get the data form the barcode
       # Test QR code: 14032V2;125;M;200422143021;053;Standard;2020.04.22;14:30:21;csomagolt
-      #@label = Label.new('01521', 50, '2019-10-10', '11:50:18', 'Raklap', 'Standard', '030', '055', '14')
-      #@label = Label.new('13900V2', 100, '2019-10-09', '13:52:18', 'Raklap', 'Standard', '030', '055', '13')
-      #@label = Label.new('00003', 100, '2019-10-09', '13:52:18', 'Raklap', 'Standard', '030', '055', '13')
-      @label = Label.new('14032V2', 125, '2020-04-22', '14:30:21', 'Raklap', 'Standard', '030', '', '200422143021')
+      # positions:        0  ; 1 ;2;      3     ; 4 ;    5   ;     6    ;    7   ;    8
+      internal_label = params[:internal_label]
+      values = internal_label.split(";")
+      #label type formatting
+      label_type = ""
+      if values[2] == 'M'
+        label_type = 'Raklap'
+      else
+        label_type = 'KLT'
+      end
+      #date formatting
+      production_date = values[6].tr(".", "-")
+
+      @label = Label.new(values[0], values[1], production_date, values[7], label_type, values[5], values[4], '', values[3])
+      #@label = Label.new('14032V2', 125, '2020-04-22', '14:30:21', 'Raklap', 'Standard', '030', '', '200422143021')
+
       session[:label] = @label
       itemname = OITM.search_itemname(@label.itemcode)
       if itemname != nil
