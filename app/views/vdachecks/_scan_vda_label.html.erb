@@ -1,0 +1,14 @@
+<h3>VDA címke beolvasása</h3>
+
+<% if session[:internal_itemcode] %>
+
+  <%= form_tag check_vda_label_path, remote: true, method: :get, id: 'check_vda_label_form', class: 'ui reply form' do %> 
+    <div class="field">
+      <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+        <%= text_field_tag :vda_label, nil, placeholder: "VDA címke sorszám vonalkód...", autofocus: true  %>
+        <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+      <% end %>
+    </div>
+  <% end %>  
+
+<% end %>

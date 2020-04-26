@@ -1,0 +1,25 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="scan_internal_label">
+    <%= render 'scan_internal_label' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 2 %>
+  <div id="scan_vda_label">
+    <%= render 'scan_vda_label' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 3 %>  
+  <div id="show_result">
+    <%= render 'show_result' %>
+  </div>
+<% end %>
+
+<br>
+<br>
+<%= link_to 'Vissza a főmenübe', root_path %>  

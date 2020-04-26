@@ -1,6 +1,8 @@
 class MOS_OWSD < ApplicationRecord
   self.table_name = '@MOS_OWSD'
 
+  #scope :search_master_label, -> (master_label) { where("U_raklap2 = #{master_label}") }
+
   def self.search_master_labels(delivery_note)
     query = <<-SQL 
       select distinct U_raklap2
@@ -13,6 +15,20 @@ class MOS_OWSD < ApplicationRecord
       #result.each do |row|
       #  puts row["DocNum"]
       #end  
+      return result
+    else
+      return nil
+    end
+  end
+
+  def self.search_master_label_by_label_id(master_label_id)
+    query = <<-SQL 
+      select distinct U_raklap2, U_ItemCode
+      from dbo.[@MOS_OWSD]
+      where U_raklap2 = '#{master_label_id}'
+    SQL
+    result = ActiveRecord::Base.connection.exec_query(query)
+    if result.count > 0
       return result
     else
       return nil

@@ -20,4 +20,8 @@ Rails.application.routes.draw do
   get 'beerkezes_summary', to: 'beerkezes#summary'
   get 'beerkezes_gyartasbol_step4', to: 'beerkezes#step4'
 
+  get 'check_vda_index', to: 'vdachecks#check_vda_index'
+  get 'check_internal_label', to: 'vdachecks#check_internal_label'
+  get 'check_vda_label', to: 'vdachecks#check_vda_label'
+
 end

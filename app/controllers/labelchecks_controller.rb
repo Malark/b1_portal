@@ -10,7 +10,7 @@ class LabelchecksController < ApplicationController
     #puts delivery_note
     elem = ODLN.(DocNum: delivery_note.to_i)
     if elem
-      fla h[:success] = "Van ilyen szállítólevél"
+      flash[:success] = "Van ilyen szállítólevél"
       redirect_to labelcheck_path(elem)
     else
       render 'search_delivery'

@@ -15,10 +15,11 @@ class BeerkezesController < ApplicationController
       @selected_prod_order = ''
       internal_label = params[:internal_label]
       #With String manipulation get the data form the barcode
-      #....
+      # Test QR code: 14032V2;125;M;200422143021;053;Standard;2020.04.22;14:30:21;csomagolt
       #@label = Label.new('01521', 50, '2019-10-10', '11:50:18', 'Raklap', 'Standard', '030', '055', '14')
-      @label = Label.new('13900V2', 100, '2019-10-09', '13:52:18', 'Raklap', 'Standard', '030', '055', '13')
+      #@label = Label.new('13900V2', 100, '2019-10-09', '13:52:18', 'Raklap', 'Standard', '030', '055', '13')
       #@label = Label.new('00003', 100, '2019-10-09', '13:52:18', 'Raklap', 'Standard', '030', '055', '13')
+      @label = Label.new('14032V2', 125, '2020-04-22', '14:30:21', 'Raklap', 'Standard', '030', '', '200422143021')
       session[:label] = @label
       itemname = OITM.search_itemname(@label.itemcode)
       if itemname != nil
@@ -29,7 +30,7 @@ class BeerkezesController < ApplicationController
       session[:itemname] = @itemname
       @prod_orders = OWOR.search_from_lookup(@label.itemcode)
       if @prod_orders == nil
-        flash.now[:danger] = "Azz adott cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
+        flash.now[:danger] = "Az adott cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
       else
         if @prod_orders.length == 1
           @prod_orders.each do |row| 
@@ -91,7 +92,7 @@ class BeerkezesController < ApplicationController
       redirect_to root_path
     else
       d = DateTime.now
-      beerkezes = Kom_gyartbeerk.new
+      beerkezes = KOM_GYARTBEERK.new
       beerkezes.U_GYARTRENDSZAM = params[:prod_order]
       beerkezes.U_ItemCode = session[:label]["itemcode"]
       beerkezes.U_Quantity = session[:label]["quantity"]
