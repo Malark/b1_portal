@@ -1,10 +1,15 @@
 class LabelchecksController < ApplicationController
 
-  def search_delivery
 
+  def search_deliveries
+    @customer_groups = Vevocsoport.all
+  end
+
+  def search_delivery
   end
   
   def set_delivery
+    puts "111111111111111111111MMMMMMMMMMMMMMMMMMMMMMMOOOOOOOOOOOOOOOOOOOOOOOOSSSSSSSSSSSSSSSSSSSSSSSSTTTTTTTTTTTTTTTTTTTTTTT"
     obj = params[:labelcheck][:docnum]
     delivery_note = obj[1,obj.length-1]
     #puts delivery_note

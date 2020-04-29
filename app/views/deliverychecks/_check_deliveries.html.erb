@@ -1,0 +1,32 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="choose_customer_group">
+    <%= render 'choose_customer_group' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 2 %>
+  <div id="choose_deliveries">
+    <%= render 'choose_deliveries' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 3 %>  
+  <div id="check_labels">
+    <%= render 'check_labels' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 4 %>  
+  <div id="show_result">
+    <%= render 'show_result' %>
+  </div>
+<% end %>
+
+<br>
+<br>
+
+<%= link_to 'Ellenőrzés megszakítása', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 

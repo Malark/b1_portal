@@ -2,7 +2,7 @@
 <% if !@step2 %>
   <% if @deliveries %>
     <div class="well results-block">
-      <%= form_tag choose_deliveries_path, remote: true, method: :get, id: 'choose-deliveries-form' do %>
+      <%= form_tag choose_deliveries_old_path, remote: true, method: :get, id: 'choose-deliveries-form' do %>
         <!--<ul class="ui list mobile-large-text">-->
         <%= content_tag :ul, class: "ui list #{ 'mobile-large-text' if session[:mobile_device] == true }"  do %>
           <% @deliveries.each do |row| %>
@@ -12,8 +12,8 @@
               <%= delivery_note_label %>
             <% end %>
           <% end %>
-        <!--</ul>-->
         <% end %>
+        <!--</ul>-->
         <br>
         <div class="form-group">
           <%= button_tag(type: :submit, class: "ui basic orange button #{ 'massive' if session[:mobile_device] == true }") do %>

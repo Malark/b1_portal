@@ -1,10 +1,12 @@
 class CustomersController < ApplicationController
 
   def search
-    if params[:labelcheck][:customer].blank?
+    #if params[:labelcheck][:customer].blank?
+    if params[:customer_group].blank?
       flash.now[:danger] = "Vevőcsoport kiválasztása kötelező!"
     else
-      @deliveries = ODLN.search_from_lookup(params[:labelcheck][:customer])
+      #@deliveries = ODLN.search_from_lookup(params[:labelcheck][:customer])
+      @deliveries = ODLN.search_from_lookup(params[:customer_group])
       if @deliveries == nil
       #@deliveries = params[:labelcheck][:customer]
         flash.now[:danger] = "Az adott vevőcsoportnak nincsenek nyitott szállításai!"

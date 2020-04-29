@@ -8,9 +8,9 @@ Rails.application.routes.draw do
 
   get 'labelcheck_search', to: 'labelchecks#search_deliveries'
   get 'search_deliveries', to: 'customers#search'
-  get 'choose_deliveries', to: 'customers#choose'
+  get 'choose_deliveries_old', to: 'customers#choose'
   get 'labelcheck_check',  to: 'labelchecks#check_delivery'
-  get 'check_labels',      to: 'labelchecks#check_labels'
+  get 'check_labels_old',      to: 'labelchecks#check_labels'
   get 'delivery_checked',  to: 'labelchecks#checked_delivery'
 
   get 'beerkezes_gyartasbol_step1', to: 'beerkezes#step1'
@@ -23,5 +23,10 @@ Rails.application.routes.draw do
   get 'check_vda_index', to: 'vdachecks#check_vda_index'
   get 'check_internal_label', to: 'vdachecks#check_internal_label'
   get 'check_vda_label', to: 'vdachecks#check_vda_label'
+
+  get 'check_delivery_index', to: 'deliverychecks#check_delivery_index'  
+  get 'choose_customer_group', to: 'deliverychecks#choose_customer_group'
+  get 'choose_deliveries', to: 'deliverychecks#choose_deliveries'
+  get 'check_labels', to: 'deliverychecks#check_labels'
 
 end

@@ -1,10 +1,16 @@
 <div class="ui massive inverted menu mobile-menu">
   <div class="ui stackable container">
 
-    <%= link_to "B1 Portal - ZEBRA", root_path, class: "item" %>
+
+    <%= link_to({:controller => 'portal', :action => 'index'}, class: 'item icon') do %>
+      <i class='home icon large'></i>
+    <% end %>
 
 
     <div class="right menu">
+      <div class="item">
+          <%= current_database["database"] %>
+        </div>
       <% if logged_in? %>
         <div class="ui dropdown item">
           <%= current_user.username %> 

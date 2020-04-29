@@ -4,15 +4,11 @@
     <div class="content">
       <div class="header" align="center">
       <%= content_tag :div, class: "header #{ 'mobile' if session[:mobile_device] == true }" do %>
-        <% if @checked == true %>
-          Sikeres összerendelés
-        <% else %>
-          Sikertelen összerendelés
-        <% end %>  
+        Sikeres szállítmány ellenőrzés
       <% end %>
     </div>
     <div class="content" align="center">
-      <%= @checked == true ? image_tag("ok.png") : image_tag("wrong.png") %>
+      <%= image_tag("ok.png") %>
     </div>
     <div class="extra content">
       <div class="summary">
@@ -24,7 +20,7 @@
     <div class="extra content">
       <br>
       <div class="ui grid">
-        <div class="left aligned eight wide column"><%= link_to "Tovább", check_vda_index_path, class: "ui primary button #{ 'massive' if session[:mobile_device] == true }" %></div>
+        <div class="left aligned eight wide column"><%= link_to "Tovább", check_delivery_index_path, class: "ui primary button #{ 'massive' if session[:mobile_device] == true }" %></div>
         <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary button #{ 'massive' if session[:mobile_device] == true }" %></div>
       </div>
     </div>

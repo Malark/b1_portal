@@ -16,16 +16,24 @@ h1.mobile {
 }
 
 h2.mobile {
-  font-size: 3.5em; 
+  font-size: 4.5em; 
 }
 
 h3.mobile {
-  font-size: 1.7em; 
+  font-size: 2.5em; 
+}
+
+div.ui.input.massive {
+  font-size: 2.7em;
+}
+
+.ui.button.massive {
+  font-size: 2.7em;
 }
 
 div.mobile-menu .item {
-  text-align: center;
-  font-size: 1.5em; /* 40px/16=2.5em */
+  text-align: left;
+  font-size: 2.1em; /* 40px/16=2.5em */
 }
 
 div.mobile .item {
@@ -44,7 +52,7 @@ div .mobile-header {
 }
 
 div .mobile-large-text {
-  font-size: 24px;
+  font-size: 32px;
 }
 
 .ui.selection.dropdown.mobile-large-text .menu .item {
@@ -57,5 +65,61 @@ div .mobile-large-text {
 }
 
 .ui.card .content .header.mobile  {
-  font-size: 1.7em;
+  font-size: 2.7em;
+  padding-bottom: 50px;
+}
+
+
+.field input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  transform: scale(1.5);
+  padding: 20px;
+}
+
+.field.mobile-large-text input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(4); /* IE */
+  -moz-transform: scale(4); /* FF */
+  -webkit-transform: scale(4); /* Safari and Chrome */
+  -o-transform: scale(4); /* Opera */
+  transform: scale(4);
+  padding: 20px;
+}
+
+.field input[type=radio]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(1.5); /* IE */
+  -moz-transform: scale(1.5); /* FF */
+  -webkit-transform: scale(1.5); /* Safari and Chrome */
+  -o-transform: scale(1.5); /* Opera */
+  transform: scale(1.5);
+  padding: 20px;
+}
+
+
+.field.mobile-large-text input[type=radio]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(4); /* IE */
+  -moz-transform: scale(4); /* FF */
+  -webkit-transform: scale(4); /* Safari and Chrome */
+  -o-transform: scale(4); /* Opera */
+  transform: scale(4);
+  padding: 20px;
+}
+
+
+/* Might want to wrap a span around your checkbox text */
+.checkboxtext
+{
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
 }

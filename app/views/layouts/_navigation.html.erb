@@ -14,7 +14,7 @@
         <%= link_to "Beérkezés gyártásból", beerkezes_gyartasbol_step1_path, class: "item" %>
         <div class="divider"></div>
         <%= link_to "VDA címke ellenőrzés", check_vda_index_path, class: "item" %>
-        <%= link_to "Szállítások ellenőrzése", labelcheck_search_path, class: "item" %>
+        <%= link_to "Szállítások ellenőrzése", check_delivery_index_path, class: "item" %>
         <div class="divider"></div>
         <%= link_to "Daimler RFID ellenőrzés", root_path, class: "item" %>
       </div>
@@ -26,6 +26,9 @@
     
     
     <div class="right menu">
+        <div class="item">
+          <%= current_database["database"] %>
+        </div>
       <% if logged_in? %>
         <div class="ui dropdown item">
           <%= current_user.username %> 

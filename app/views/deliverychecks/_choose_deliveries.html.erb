@@ -1,0 +1,32 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  Szállítások kiválasztása
+<% end %>
+<br>
+<br>
+<% if @deliveries %>
+  <div class="well results-block">
+    <%= form_tag choose_deliveries_path, remote: true, method: :get, id: 'choose-deliveries-form' do %>
+        <% @deliveries.each do |row| %>
+          <% delivery_note_label = row["DocNum"].to_s + " | " + row["DocDueDate"].strftime("%Y.%m.%d") + "  | " + row["palettes"].to_s + " db raklap" %>
+          <% if session[:mobile_device] == false %>
+            <% delivery_note_label = delivery_note_label + " | " + row["ShipToCode"] %>
+          <% end %>
+          <%= content_tag :div, class: "field #{ 'mobile-large-text' if session[:mobile_device] == true }"  do %>
+            <%= check_box_tag "deliveries[]", row["DocNum"], false %>
+            <%= "   " %> <%= delivery_note_label %>
+            <br>
+            <br> 
+            <% if session[:mobile_device] == true %>
+              <br>            
+            <% end %>  
+          <% end %>
+        <% end %>
+      <br>
+      <div class="form-group">
+        <%= button_tag(type: :submit, class: "ui basic orange button #{ 'massive' if session[:mobile_device] == true }") do %>
+          Ellenőrzés
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,5 +1,5 @@
 <br>
-<h1>SAP Business One Portal - Dashboard</h1>
+<h1>SAP Business One Portal v1.1.1 - Dashboard</h1>
 
 <!--
 <div class="ui vertical inverted labeled icon massive menu">
@@ -32,15 +32,17 @@
 
   <div class="item">
     <h3 class="ui center aligned icon header">
-      <%= link_to "<i class='truck orange circular icon'></i> Szállítások ellenőrzése".html_safe, labelcheck_search_path, class: "item" %>    
+      <%= link_to "<i class='truck orange circular icon'></i> Szállítások ellenőrzése".html_safe, check_delivery_index_path, class: "item" %>    
     </h3>
   </div>
 
+  <!--
   <div class="item">
     <h3 class="ui center aligned icon header">
       <%= link_to "<i class='rss square orange circular icon'></i> Daimler RFID ellenőrzés".html_safe, root_path, class: "item" %>    
     </h3>
   </div>
+  -->
 </div>
 
 <br>
@@ -61,6 +63,29 @@
   </tr>
 </table>
 -->
+
+<br>
+<h2 class="ui dividing header">Változások - v1.1.1  (2020.04.29)</h2>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th class="three wide">Modul</th>
+      <th class="thirteen wide">Leírás</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Főmenü</td>
+    <td>Ezentúl látható a fejlécben, hogy a mobil eszköz vagy a honlap melyik adatbázishoz csatlakozik éppen</td>
+  </tr>
+  <tr>
+    <td>VDA címke ellenőrzés</td>
+    <td>Mobil képernyőn sokkal nagyobb betűk és elemek használata</td>
+  </tr> 
+  <tr>
+    <td>Szállítások ellenőrzése</td>
+    <td>Mobil képernyőn sokkal nagyobb betűk és elemek használata. Háttér folyamatok optimalizálása.</td>
+  </tr>    
+</table>
 
 <br>
 <h2 class="ui dividing header">Változások - v1.1.0  (2020.04.26)</h2>

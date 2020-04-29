@@ -10,6 +10,19 @@
     </div>
 
     <br>
+    <br>
+      <div class="grouped fields">
+          <% @customer_groups.each do |row| %>
+            <%= content_tag :div, class: "field #{ 'mobile-large-text' if session[:mobile_device] == true }"  do %>
+              <%= radio_button_tag "customer_group", row["Code"], false %>
+              <%= "   " %> <%= row["Name"] %>
+              <br>
+              <br>
+            <% end %>
+          <% end %>
+      </div>
+      
+    <br>
     <div class="form-group">
       <%= button_tag(type: :submit, class: "ui basic orange button") do %>
         Keresés

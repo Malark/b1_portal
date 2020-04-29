@@ -1,0 +1,15 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="scan_internal_label">
+    <%= render 'scan_internal_label' %>
+  </div>
+<% end %>
+
+
+<br>
+<br>
+
+<%= link_to 'Bevételezés megszakítása', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 
