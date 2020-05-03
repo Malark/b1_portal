@@ -28,5 +28,11 @@
 
 <br>
 <br>
+<% if session[:mobile_device] == true %>
+  <br>            
+  <br>
+  <br>            
+  <br>
+<% end %> 
 
 <%= link_to 'Ellenőrzés megszakítása', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 

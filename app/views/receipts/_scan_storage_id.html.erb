@@ -1,0 +1,13 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  4. Tárolóhely beolvasása
+<% end %>
+
+<%= form_tag set_storage_id_path, remote: true, method: :get, id: 'scan_storage_id-form', class: 'ui reply form' do %> 
+  <div class="field">
+    <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+      <%= text_field_tag :storage_id, nil, placeholder: "Tárolóhely azonosító beolvasása...", autofocus: true %>
+      <%= hidden_field_tag :prod_order, @selected_prod_order %>
+      <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,4 +1,6 @@
-<h3 align="left" class="mobile">Vevőcsoport kiválasztása</h3>
+<br>
+<br>
+<h3 align="left" class="mobile">1. Vevőcsoport kiválasztása</h3>
 <br>
 <br>
 <%= form_tag choose_customer_group_path, remote: true, method: :get, id: 'choose_customer_group-form', class: 'ui reply form' do %>
@@ -7,6 +9,7 @@
         <%= content_tag :div, class: "field #{ 'mobile-large-text' if session[:mobile_device] == true }"  do %>
           <%= radio_button_tag "customer_group", row["Code"], false %>
           <%= "   " %> <%= row["Name"] %>
+          <br>
           <br>
           <br>
         <% end %>

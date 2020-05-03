@@ -1,0 +1,91 @@
+<% if @selected_storage_id %>
+  <%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+    5. Összesítés
+  <% end %>    
+  <div class="well results-block">
+     <div class="ui fluid card">
+      <div class="content">
+        <%= content_tag :div, class: "header #{ 'mobile' if session[:mobile_device] == true }" do %>
+          <div class="ui grid">
+            <div class="left aligned ten wide column"><%= session[:label]["itemcode"] %></div>
+            <div class="right aligned six wide column"><%= session[:label]["quantity"] %> db</div>
+          </div>
+        <% end %>
+      </div>
+      <div class="content">
+        <%= content_tag :h4, class: "ui sub header #{ 'mobile' if session[:mobile_device] == true }" do %>
+          <%= session[:itemname] %>
+        <% end %>
+        <div class="ui small feed">
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Sarzs azonosító: <%= session[:label]["charge_nr"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Gyártás dátuma: <%= session[:label]["prod_date"] %>, <%= session[:label]["prod_time"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Csomagolási egység, típus: <%= session[:label]["package_unit"] %>, <%= session[:label]["package_type"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Csomagoló: <%= session[:label]["packager_id"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                MEO munkatárs: <%= session[:label]["qainspector_id"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Rendelésszám: <%= @selected_prod_order %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="summary">
+          <%= content_tag :h4, class: "ui header #{ 'mobile' if session[:mobile_device] == true }" do %>
+            Tárolóhely: <%= @selected_storage_id %>
+          <% end %>
+        </div>  
+      </div>
+      <div class="content">
+        <div class="ui grid">
+          <div class="left aligned eight wide column"><%= link_to "Mégsem", root_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %></div>
+          <div class="right aligned eight wide column">
+            <div class="right aligned eight wide column">
+              <%= form_tag save_record_path_path, remote: true, method: :get, id: 'continue_to_get_storage_id-form', class: 'ui reply form' do %> 
+                <%= hidden_field_tag :prod_order, @selected_prod_order %>
+                <%= hidden_field_tag :storage_id, @selected_storage_id %>
+                <div class="form-group">
+                  <%= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+                    Mentés
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

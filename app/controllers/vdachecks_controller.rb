@@ -11,12 +11,13 @@ class VdachecksController < ApplicationController
       @actu_step = 1
       flash.now[:danger] = "A belső címke QR kódja nem lehet üres!"
     else
+      puts params[:internal_label]
       # Split this string on a space.
       input = params[:internal_label]
       values = input.split(";")
       # Display each value to the console.
       #values.each do |value|
-      #    puts value
+      #  puts value
       #end
       @actu_step = 2
       session[:internal_itemcode] = values[0]

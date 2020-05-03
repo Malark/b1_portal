@@ -1,7 +1,7 @@
 <br>
 <%= render 'layouts/messages' %>
 
-<%= form_tag search_production_orders_path, remote: true, method: :get, id: 'beerkezes_gyartasbol_step1-form', class: 'ui reply form' do %> 
+<%= form_tag search_production_orders_old_path, remote: true, method: :get, id: 'beerkezes_gyartasbol_step1-form', class: 'ui reply form' do %> 
   <div class="field">
     <div class="ui fluid icon input">
       <%= text_field_tag :internal_label, nil, placeholder: "Belső címke beolvasása...", autofocus: true %>

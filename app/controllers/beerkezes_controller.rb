@@ -41,7 +41,7 @@ class BeerkezesController < ApplicationController
       session[:itemname] = @itemname
       @prod_orders = OWOR.search_from_lookup(@label.itemcode)
       if @prod_orders == nil
-        flash.now[:danger] = "Az adott cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
+        flash.now[:danger] = "A #{@label.itemcode} cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
       else
         if @prod_orders.length == 1
           @prod_orders.each do |row| 
@@ -116,7 +116,7 @@ class BeerkezesController < ApplicationController
       beerkezes.U_TARHELY = params[:storage_id]
       beerkezes.U_RAKTAROS = "0000"  #Itt majd kell a loged User
       beerkezes.U_CreateDate = d.strftime "%Y-%m-%d  %H:%M:%S"
-      beerkezes.save      
+      #beerkezes.save      
     end  
   end
 

@@ -1,0 +1,73 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  3. Gyártási rendelés kiválasztása
+<% end %>  
+<% if @prod_orders %>
+  <div class="well results-block">
+    <%= form_tag get_storage_id_path, remote: true, method: :get, id: 'choose-prod-order-form' do %>
+      <% @prod_orders.each do |row| %>
+        <div class="ui fluid card">
+          <div class="content">
+            <%= content_tag :div, class: "header field #{ 'mobile' if session[:mobile_device] == true }" do %>
+              <h4 class="ui sub header"><%= radio_button_tag :prod_order, row["DocNum"] , false %> <%= "   " %><%= row["DocNum"] %></h4>
+            <% end %>
+          </div>
+          <div class="content">
+            <%= content_tag :h4, class: "ui sub header #{ 'mobile' if session[:mobile_device] == true }" do %>
+              <%= @itemname %>
+            <% end %>
+            <div class="ui small feed">
+              <div class="event">
+                <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Befejezés dátuma:</div>
+                      <div class="right aligned eight wide column"><%= row["DueDate"].to_s.first(10) %></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+              <div class="event">
+                <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Terv mennyiség:</div>
+                      <div class="right aligned eight wide column"><%= row["PlannedQty"].to_i %></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+              <div class="event">
+                <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Tény mennyiség:</div>
+                      <div class="right aligned eight wide column"><%= row["CmpltQty"].to_i %></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+              <div class="event">
+                <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+                  <div class="summary">
+                    <div class="ui grid">
+                      <div class="left aligned eight wide column">Nyitott mennyiség:</div>
+                      <div class="right aligned eight wide column"><%= row["PlannedQty"].to_i - row["CmpltQty"].to_i %></div>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <div class="ui grid">
+        <div class="left aligned eight wide column"><%= link_to "Újra kezd", receipt_from_production_index_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %></div>
+        <div class="right aligned eight wide column">
+          <%= button_tag(type: :submit, :class => "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+            Tovább
+          <% end %>
+        </div>
+      </div>
+    <% end %> 
+  </div>
+<% end %>

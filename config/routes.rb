@@ -14,11 +14,20 @@ Rails.application.routes.draw do
   get 'delivery_checked',  to: 'labelchecks#checked_delivery'
 
   get 'beerkezes_gyartasbol_step1', to: 'beerkezes#step1'
-  get 'search_production_orders', to: 'beerkezes#search_production_orders'
+  get 'search_production_orders_old', to: 'beerkezes#search_production_orders'
   get 'beerkezes_gyartasbol_step2', to: 'beerkezes#step2'
   get 'beerkezes_gyartasbol_step3', to: 'beerkezes#step3'
   get 'beerkezes_summary', to: 'beerkezes#summary'
   get 'beerkezes_gyartasbol_step4', to: 'beerkezes#step4'
+
+
+
+  get 'receipt_from_production_index', to: 'receipts#receipt_from_production_index' 
+  get 'search_production_orders', to: 'receipts#search_production_orders'
+  get 'select_production_order', to: 'receipts#select_production_order'
+  get 'get_storage_id', to: 'receipts#get_storage_id'
+  get 'set_storage_id', to: 'receipts#set_storage_id'
+  get 'save_record_path', to: 'receipts#save_record'
 
   get 'check_vda_index', to: 'vdachecks#check_vda_index'
   get 'check_internal_label', to: 'vdachecks#check_internal_label'

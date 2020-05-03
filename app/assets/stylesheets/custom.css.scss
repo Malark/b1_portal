@@ -20,7 +20,7 @@ h2.mobile {
 }
 
 h3.mobile {
-  font-size: 2.5em; 
+  font-size: 3.0em; 
 }
 
 div.ui.input.massive {
@@ -52,7 +52,12 @@ div .mobile-header {
 }
 
 div .mobile-large-text {
+  font-size: 42px;
+}
+
+div .mobile-medium-text {
   font-size: 32px;
+  padding-bottom: 20px;
 }
 
 .ui.selection.dropdown.mobile-large-text .menu .item {
@@ -61,12 +66,17 @@ div .mobile-large-text {
 
 .ui.message.mobile-large-text .header:not(.ui)
 {
-  font-size: 1.5em;
+  font-size: 2.1em;
 }
 
 .ui.card .content .header.mobile  {
   font-size: 2.7em;
-  padding-bottom: 50px;
+  line-height: 2.6;
+}
+
+.ui.card .content .sub.header.mobile  {
+  font-size: 1.7em;
+  padding-bottom: 20px;
 }
 
 
@@ -84,11 +94,11 @@ div .mobile-large-text {
 .field.mobile-large-text input[type=checkbox]
 {
   /* Double-sized Checkboxes */
-  -ms-transform: scale(4); /* IE */
-  -moz-transform: scale(4); /* FF */
-  -webkit-transform: scale(4); /* Safari and Chrome */
-  -o-transform: scale(4); /* Opera */
-  transform: scale(4);
+  -ms-transform: scale(4.5); /* IE */
+  -moz-transform: scale(4.5); /* FF */
+  -webkit-transform: scale(4.5); /* Safari and Chrome */
+  -o-transform: scale(4.4); /* Opera */
+  transform: scale(4.5);
   padding: 20px;
 }
 
@@ -107,11 +117,23 @@ div .mobile-large-text {
 .field.mobile-large-text input[type=radio]
 {
   /* Double-sized Checkboxes */
-  -ms-transform: scale(4); /* IE */
-  -moz-transform: scale(4); /* FF */
-  -webkit-transform: scale(4); /* Safari and Chrome */
-  -o-transform: scale(4); /* Opera */
-  transform: scale(4);
+  -ms-transform: scale(4.5); /* IE */
+  -moz-transform: scale(4.5); /* FF */
+  -webkit-transform: scale(4.5); /* Safari and Chrome */
+  -o-transform: scale(4.5); /* Opera */
+  transform: scale(4.5);
+  padding: 20px;
+}
+
+
+.field.mobile input[type=radio]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(3.0); /* IE */
+  -moz-transform: scale(3.0); /* FF */
+  -webkit-transform: scale(3.0); /* Safari and Chrome */
+  -o-transform: scale(3.0); /* Opera */
+  transform: scale(3.0);
   padding: 20px;
 }
 

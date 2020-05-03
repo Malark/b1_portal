@@ -7,7 +7,7 @@
   <div class="well results-block">
     <%= form_tag choose_deliveries_path, remote: true, method: :get, id: 'choose-deliveries-form' do %>
         <% @deliveries.each do |row| %>
-          <% delivery_note_label = row["DocNum"].to_s + " | " + row["DocDueDate"].strftime("%Y.%m.%d") + "  | " + row["palettes"].to_s + " db raklap" %>
+          <% delivery_note_label = row["DocNum"].to_s + " | " + row["DocDueDate"].strftime("%Y.%m.%d") + "  | " + row["palettes"].to_s + " db" %>
           <% if session[:mobile_device] == false %>
             <% delivery_note_label = delivery_note_label + " | " + row["ShipToCode"] %>
           <% end %>
@@ -22,6 +22,10 @@
           <% end %>
         <% end %>
       <br>
+      <% if session[:mobile_device] == true %>
+        <br>            
+        <br>
+      <% end %> 
       <div class="form-group">
         <%= button_tag(type: :submit, class: "ui basic orange button #{ 'massive' if session[:mobile_device] == true }") do %>
           Ellenőrzés

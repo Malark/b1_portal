@@ -1,8 +1,11 @@
 <% flash.each do |message_type, message_content| %>
-  <div class="ui <%= message_type %> message mobile-large-text transition"%>
+  <!--
+  <div class="ui <%#= message_type %> message transition"%>
+  -->
+  <%= content_tag :div, class: "ui message #{ 'mobile-large-text' if session[:mobile_device] == true } transition" do %>
     <i class="close icon"></i>
     <div class="header">
       <%= message_content %>
     </div>
-  </div>
+  <% end %>
 <% end %>

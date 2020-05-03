@@ -1,0 +1,52 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="scan_internal_label">
+    <%= render 'scan_internal_label' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 2 %>
+  <div id="show_internal_label">
+    <%= render 'show_internal_label' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 3 %>
+  <div id="choose_production_order">
+    <%= render 'choose_production_order' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 4 %>
+  <div id="scan_storage_id">
+    <%= render 'scan_storage_id' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 5 %>
+  <div id="show_summary">
+    <%= render 'show_summary' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 6 %>
+  <div id="success_page">
+    <%= render 'success_page' %>
+  </div>
+<% end %>
+
+<br>
+<br>
+<% if session[:mobile_device] == true %>
+  <br>            
+  <br>
+  <br>            
+  <br>
+<% end %> 
+
+<% if @actu_step != 6 %>
+  <%= link_to 'Bevételezés megszakítása', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 
+<% end %>  

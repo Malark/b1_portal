@@ -1,0 +1,13 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  1. Belső címke beolvasása
+<% end %>
+
+
+<%= form_tag search_production_orders_path, remote: true, method: :get, id: 'beerkezes_gyartasbol_step1-form', class: 'ui reply form' do %> 
+  <div class="field">
+    <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+      <%= text_field_tag :internal_label, nil, placeholder: "Belső címke beolvasása...", autofocus: true %>
+      <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+    <% end %>
+  </div>
+<% end %>
