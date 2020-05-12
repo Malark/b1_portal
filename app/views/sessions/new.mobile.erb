@@ -1,17 +1,27 @@
-<h1>Login page</h1>
-
-<%= form_for(:session, :html => {class: "ui form", role: "form"}, url: login_path) do |f| %>
-  <div class="field">
-    <div class="ui right labeled left icon transparent input">
-      <i class="tags icon"></i>
-      <%= f.text_field :username, placeholder: "Log in with RFID", autofocus: true %>
-      <a class="ui tag label">
-        Scan RFID
-      </a>
-    </div>
-
-
-
+<h4 class="ui center aligned large icon header mobile">
+  <i class="circular orange power off icon"></i>
+  <h3 align="center" class="mobile">Belépés</h3>
+</h4>
+<br>
+<br>
+<%= form_for(:session, html: {class: "ui form", role: "form"}, url: login_path) do |f| %>
+  <div class="field mobile">
+    <%= f.label :username, "Felhasználói név", class: "mobile-medium-text" %>
+    <%= content_tag :div, class: "ui fluid left icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+      <%= f.text_field :username, value: "Zebra" %>
+      <i class="user icon"></i>
+    <% end %>
   </div>
-  <%= f.submit "Log in", class: 'ui orange submit button' %>
+  <br>
+  <div class="field mobile">
+    <%= f.label :password, "PIN kód" %>
+    <%= content_tag :div, class: "ui fluid left icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+      <%= f.password_field :password, placeholder: "PIN kód", autofocus: true %>
+      <i class="lock icon"></i>
+    <% end %>
+  </div>
+  <br>
+  <br>
+  <br>
+  <%= f.button "Belépés", class: "ui orange submit #{ 'massive' if session[:mobile_device] == true } button" %>
 <% end %>

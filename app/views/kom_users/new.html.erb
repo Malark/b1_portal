@@ -1,0 +1,10 @@
+<h1 align="center">Új felhasználó rögzítése</h1>
+
+<% if current_user.admin == '1' %>
+  <%= render 'form' %>
+<% else %>  
+  <br>
+  <h3 align="left">Figyelem! Csak Admin jogkörrel rögzíthető új felhasználó!</h3>
+  <br>
+  <%= link_to 'Kilépés', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 
+<% end %>

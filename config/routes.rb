@@ -1,10 +1,17 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  
+  #homepage
   root 'portal#index'
 
+  #session
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
   delete 'logout', to: 'sessions#destroy'
+
+  #user
+  get 'signup', to: 'kom_users#new'
+  resources :kom_users, except: [:new]
+
 
   get 'labelcheck_search', to: 'labelchecks#search_deliveries'
   get 'search_deliveries', to: 'customers#search'

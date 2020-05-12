@@ -93,7 +93,7 @@ class VdachecksController < ApplicationController
             @checked = false
             @result_text = "A #{session[:internal_charge_nr]} sarzsszámú raklaphoz már történt VDA címke hozzárendelés! (VDA címke: #{internal_master_label})"
           else
-            KOM_GYARTBEERK.update_internal_label(session[:internal_charge_nr], session[:internal_itemcode], label)
+            KOM_GYARTBEERK.update_internal_label(session[:internal_charge_nr], session[:internal_itemcode], label, current_user.username)
             @result_text = "Az ellenőrzött cikkszámok megegyeznek! Sikeres rögzítés! Cikkszám: #{owsd_itemcode}, Raklap címke: #{label}"
           end
         end

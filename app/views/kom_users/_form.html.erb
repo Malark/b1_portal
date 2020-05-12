@@ -1,0 +1,34 @@
+<%= form_for(@user, :html => {class: "ui form", role: "form"}) do |f| %>
+  <div class="field">
+    <%= f.label :U_USERNAME, "Felhasználói név" %>
+    <div class="ui left icon input">
+      <%= f.text_field :U_USERNAME, placeholder: "Felhasználói név" %>
+      <i class="user icon"></i>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :U_EMAIL, "Email cím" %>
+    <div class="ui left icon input">
+      <%= f.text_field :U_EMAIL, placeholder: "Email cím" %>
+      <i class="envelope icon"></i>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :password, "Jelszó" %>
+    <div class="ui left icon input">
+      <%= f.password_field :password, placeholder: "Jelszó" %>
+      <i class="lock icon"></i>
+    </div>
+  </div>
+  <% if current_user.admin == '1' %>
+    <%= content_tag :div, class: "ui checkbox"  do %>
+      <%= f.check_box :U_ADMIN %>
+      <%= f.label :U_ADMIN, "Admin jogkör" %>
+    <% end %>
+  <% end %>
+  <p>
+  <br>
+  <div>
+    <%= f.submit(@user.new_record? ? "Regisztráció" : "Módosítás", class: "ui orange submit button") %>
+  </div>  
+<% end %>

@@ -112,7 +112,6 @@ class ReceiptsController < ApplicationController
 
   def set_storage_id
     @selected_prod_order = params[:prod_order]
-    puts "fffffffffffffffffffffffff"
     puts @selected_prod_order
     if params[:storage_id].blank?
       flash.now[:danger] = "A tárolóhely azonosító nem lehet üres!"
@@ -128,7 +127,6 @@ class ReceiptsController < ApplicationController
   end
 
   def save_record
-    puts 'GGGGGGGGGGGGGGGGGGGGGGGG'
     puts params[:prod_order]
     puts params[:storage_id]
     puts session[:itemname]
@@ -149,7 +147,7 @@ class ReceiptsController < ApplicationController
       beerkezes.U_CSOMEGYSEG = session[:label]["package_unit"]
       beerkezes.U_CSOMTIPUS = session[:label]["package_type"]
       beerkezes.U_TARHELY = params[:storage_id]
-      beerkezes.U_RAKTAROS = "0000"  #Itt majd kell a loged User
+      beerkezes.U_RAKTAROS = current_user.username  
       beerkezes.U_CreateDate = d.strftime "%Y-%m-%d  %H:%M:%S"
       if beerkezes.save
         @actu_step = 6

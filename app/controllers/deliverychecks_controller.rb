@@ -96,7 +96,7 @@ class DeliverychecksController < ApplicationController
 
   def write_data
     #puts "Update database for checked records"
-    MOS_OWSD.update_checked_labels(session[:checked_labels])
+    MOS_OWSD.update_checked_labels(session[:checked_labels], current_user.username)
   end
 
 

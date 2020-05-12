@@ -14,11 +14,9 @@
       <% if logged_in? %>
         <div class="ui dropdown item">
           <%= current_user.username %> 
-          <%= " (admin)" if current_user.admin? %>
+          <%#= " (admin)" if current_user.admin? %>
           <i class="dropdown icon"></i>
           <div class="menu">
-            <%= link_to "Saját profil megtekintése", user_path(current_user), class: "item" %>
-            <div class="divider"></div>
             <%= link_to "Kilépés", logout_path, method: :delete, class: "item" %>
           </div>
         </div>
