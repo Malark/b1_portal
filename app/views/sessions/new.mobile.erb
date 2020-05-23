@@ -6,7 +6,7 @@
 <br>
 <%= form_for(:session, html: {class: "ui form", role: "form"}, url: login_path) do |f| %>
   <div class="field mobile">
-    <%= f.label :username, "Felhasználói név", class: "mobile-medium-text" %>
+    <%= f.label :username, "Felhasználói név" %>
     <%= content_tag :div, class: "ui fluid left icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
       <%= f.text_field :username, value: "Zebra" %>
       <i class="user icon"></i>

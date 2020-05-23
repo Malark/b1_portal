@@ -1,5 +1,5 @@
 <br>
-<h1>SAP Business One Portal v1.2.0 - Dashboard</h1>
+<h1>SAP Business One Portal v1.3.0 - Dashboard</h1>
 
 <!--
 <div class="ui vertical inverted labeled icon massive menu">
@@ -37,13 +37,12 @@
   </div>
 
 
-  <!--
   <div class="item">
     <h3 class="ui center aligned icon header">
-      <%= link_to "<i class='rss square orange circular icon'></i> Daimler RFID ellenőrzés".html_safe, receipt_from_production_index_path, class: "item" %>    
+      <%= link_to "<i class='rss clipboard outline orange circular icon'></i>Új alapanyag igénylés".html_safe, new_foam_request_index_path, class: "item" %>    
     </h3>
   </div>
-  -->
+
  
 </div>
 
@@ -65,6 +64,29 @@
   </tr>
 </table>
 -->
+<br>
+<h2 class="ui dividing header">Változások - v1.3.0  (2020.05.22)</h2>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th class="three wide">Modul</th>
+      <th class="thirteen wide">Leírás</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Raktár / Daimler RFID</td>
+    <td>Daimler RFID Hexa kód generálás VDA4994 szerint. Egy szállítólevél számot megadva a program elkészíti a Daimler által kért RFID Hexa kódot és azt vissza is írja a címkekiosztás táblába.</td>
+  </tr> 
+  <tr>
+    <td>Zebra modulok</td>
+    <td>Hibajavítás: Betűméret javítása a beérkezés gyártásból modulban</td>
+  </tr>  
+  <tr>
+    <td>Gyártás / Alapanyag igénylés</td>
+    <td>Alapanyag igénylés funkció előkészítése (menük, adatszerkezet kialakítása)</td>
+  </tr>
+</table>
+
 <br>
 <h2 class="ui dividing header">Változások - v1.2.0  (2020.05.13)</h2>
 <table class="ui celled table">

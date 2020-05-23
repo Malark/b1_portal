@@ -45,4 +45,10 @@ Rails.application.routes.draw do
   get 'choose_deliveries', to: 'deliverychecks#choose_deliveries'
   get 'check_labels', to: 'deliverychecks#check_labels'
 
+  get 'new_foam_request_index', to: 'foamrequests#new_foam_request_index'
+  get 'choose_foaming_machine', to: 'foamrequests#choose_foaming_machine'
+
+  get 'rfid_conversation_index', to: 'rfidconversations#rfid_conversation_index'
+  get 'get_delivery_note', to: 'rfidconversations#get_delivery_note'
+
 end

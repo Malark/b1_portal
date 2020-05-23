@@ -21,6 +21,7 @@ class MOS_OWSD < ApplicationRecord
     end
   end
 
+
   def self.search_master_label_by_label_id(master_label_id)
     query = <<-SQL 
       select distinct U_raklap2, U_ItemCode
@@ -35,6 +36,7 @@ class MOS_OWSD < ApplicationRecord
     end
   end
 
+  
   def self.update_checked_labels(labels, current_user)
     #hiba = false
     #formatting date
@@ -55,5 +57,32 @@ class MOS_OWSD < ApplicationRecord
     end  
     #return hiba
   end
+
+
+  #-------- RFID conversation -----------
+
+  def self.search_labels(delivery_note)
+    query = <<-SQL 
+      select *
+      from dbo.[@MOS_OWSD]
+      where U_forrasbiz = #{delivery_note} 
+    SQL
+    result = ActiveRecord::Base.connection.exec_query(query)
+    if result.count > 0
+      return result
+    else
+      return nil
+    end
+  end
+
+
+  def self.update_rfid_label(code, lcid_palette, lcid_klt, rfid_palette, rfid_klt)
+    query = <<-SQL 
+      update dbo.[@MOS_OWSD]
+      set U_lcid_raklap = '#{lcid_palette}', U_lcid_doboz = '#{lcid_klt}', U_rfid_raklap = '#{rfid_palette}', U_rfid_doboz = '#{rfid_klt}'
+      where Code = #{code}
+    SQL
+    result = ActiveRecord::Base.connection.exec_query(query) 
+  end  
 
 end

@@ -1,0 +1,15 @@
+  <%= form_tag choose_foaming_machine_path, remote: true, method: :get, id: 'choose_foaming_machine' do %>
+
+    <%= label_tag :labelcheck, "Vevőcsoport" %>
+    <div class="field">
+      <%= collection_select( :labelcheck, :customer, Vevocsoport.all, :Code, :Name, {:include_blank => 'Kérem válasszon...'}, class: "ui dropdown") %>
+    </div>
+
+    <br>
+    <div class="form-group">
+      <%= button_tag(type: :submit, class: "ui basic orange button") do %>
+        Keresés
+      <% end %>
+    </div>
+
+  <% end %>

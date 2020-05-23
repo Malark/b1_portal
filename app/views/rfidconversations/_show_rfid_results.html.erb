@@ -1,0 +1,33 @@
+<% if @all_labels %>
+  <%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+    RFID konverzió kész!
+  <% end %>  
+  <br>
+  <h3 class="ui dividing header">Szállítólevél száma: <%= @delivery_note_nr %> </h3>
+  <table id="rfid_result_table" class="ui celled table">
+    <thead>
+      <tr>
+        <th class="two wide">Raklap sorszám</th>
+        <th class="two wide">Doboz sorszám</th>
+        <th class="three wide">Raklap LC ID</th>
+        <th class="three wide">Doboz LC ID</th>
+        <th class="three wide">Raklap RFID</th>
+        <th class="three wide">Doboz RFID</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @all_labels.each do |label| %>
+        <tr>
+          <td><%= label["U_raklap2"] %></td>
+          <td><%= label["U_doboz2"] %></td>
+          <td><%= label["U_lcid_raklap"] %></td>
+          <td><%= label["U_lcid_doboz"] %></td>
+          <td><%= label["U_rfid_raklap"] %></td>
+          <td><%= label["U_rfid_doboz"] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<% end %>

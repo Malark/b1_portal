@@ -1,0 +1,21 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="select_delivery_note">
+    <%= render 'select_delivery_note' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 2 %>
+  <div id="show_rfid_results">
+    <%= render 'show_rfid_results' %>
+  </div>
+<% end %>
+
+<br>
+<br>
+<%= link_to 'Vissza a főmenübe', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 
+<br>
+<br>

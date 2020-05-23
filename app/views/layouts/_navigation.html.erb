@@ -15,13 +15,20 @@
           <%= link_to "VDA címke ellenőrzés", check_vda_index_path, class: "item" %>
           <%= link_to "Szállítások ellenőrzése", check_delivery_index_path, class: "item" %>
           <div class="divider"></div>
-          <%= link_to "Daimler RFID ellenőrzés", root_path, class: "item" %>
+          <%= link_to "Daimler RFID konvertálás", rfid_conversation_index_path, class: "item" %>
         </div>
       </div>
 
-      <a class="item">
-        Minőségirányítás
-      </a>
+      <div class="ui dropdown item">
+        Gyártás 
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <%= link_to "Új alapanyag igénylés", new_foam_request_index_path, class: "item" %>
+          <%= link_to "Nyitott igénylések", root_path, class: "item" %>
+          <div class="divider"></div>
+          <%= link_to "Tartály nyilvántartás", root_path, class: "item" %>
+        </div>
+      </div>
     <% end %>
     
     
