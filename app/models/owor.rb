@@ -1,7 +1,7 @@
 class OWOR < ApplicationRecord
   self.table_name = 'OWOR'
 
-  def self.search_from_lookup(itemcode)
+  def self.search_opened_production_orders(itemcode)
     begin 
 
       query = <<-SQL 

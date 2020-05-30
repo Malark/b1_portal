@@ -3,17 +3,27 @@
 
 <br>
 <% if @actu_step == 1 %>
-  <div id="choose_foaming_machine">
-    <%= render 'choose_foaming_machine' %>
+  <div id="select_parameters">
+    <%= render 'select_parameters' %>
   </div>
 <% end %>
 
 <% if @actu_step == 2 %>
-
+  <div id="show_choosen_parameters">
+    <%= render 'show_choosen_parameters' %>
+  </div>
 <% end %>
 
 <% if @actu_step == 3 %>  
+  <div id="select_quantities">
+    <%= render 'select_quantities' %>
+  </div>
+<% end %>
 
+<% if @actu_step == 4 %>  
+  <div id="success_page">
+    <%= render 'success_page' %>
+  </div>
 <% end %>
 
 <br>

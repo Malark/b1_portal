@@ -1,0 +1,30 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  3. Igényelt mennyiségek megadása (Habrendszer: <%= session[:foam_system] %>)
+<% end %>
+<br>
+<%= form_tag set_quantities_path, remote: true, method: :get, id: 'set_quantities' do %>
+  <%= label_tag :iso_qty, "ISO komponens" %>
+  <div class="field">
+    <div class="ui right labeled input">
+      <%= number_field_tag :iso_qty, '0' %>
+      <div class="ui basic label">kg</div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <%= label_tag :poliol_qty, "POLIOL komponens" %>
+  <div class="field">
+    <div class="ui right labeled input">
+      <%= number_field_tag :poliol_qty, '0' %>
+      <div class="ui basic label">kg</div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="form-group">
+    <%= button_tag(type: :submit, class: "ui basic orange button") do %>
+      Igénylés
+    <% end %>
+  </div>
+
+<% end %>

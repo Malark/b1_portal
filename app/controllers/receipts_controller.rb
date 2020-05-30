@@ -54,7 +54,7 @@ class ReceiptsController < ApplicationController
             end
           end
           session[:itemname] = @itemname
-          @prod_orders = OWOR.search_from_lookup(@label.itemcode)
+          @prod_orders = OWOR.search_opened_production_orders(@label.itemcode)
           if @prod_orders == nil
             @actu_step = 1
             flash.now[:danger] = "A #{@label.itemcode} cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
@@ -77,7 +77,7 @@ class ReceiptsController < ApplicationController
   def select_production_order
     itemcode = session[:label]["itemcode"]
     @itemname = session[:itemname]
-    @prod_orders = OWOR.search_from_lookup(itemcode)
+    @prod_orders = OWOR.search_opened_production_orders(itemcode)
     if @prod_orders == nil
       @actu_step = 1
       flash.now[:danger] = "Hiba a #{itemcode} cikk gyártási rendeléseinek keresése közben! A bevételezés nem folytatható!"      
@@ -94,7 +94,7 @@ class ReceiptsController < ApplicationController
     if params[:prod_order].blank?
       flash[:danger] = "Kérem válasszon ki egy gyártási rendelést!"
       itemcode = session[:label]["itemcode"]
-      @prod_orders = OWOR.search_from_lookup(itemcode)
+      @prod_orders = OWOR.search_opened_production_orders(itemcode)
       if @prod_orders == nil
         @actu_step = 1
         flash.now[:danger] = "Hiba a #{itemcode} cikk gyártási rendeléseinek keresése közben! A bevételezés nem folytatható!"      
@@ -127,10 +127,6 @@ class ReceiptsController < ApplicationController
   end
 
   def save_record
-    puts params[:prod_order]
-    puts params[:storage_id]
-    puts session[:itemname]
-    puts session[:label]["itemcode"]
     if params[:prod_order].blank? || params[:storage_id].blank?
       flash[:danger] = "Hiba a feldolgozás során! A rendelésszám és a tárolóhely mező nem lehet üres! A bevételezési folyamat megszakadt!"
       @actu_step = 1

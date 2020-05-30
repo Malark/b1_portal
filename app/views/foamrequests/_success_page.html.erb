@@ -1,0 +1,9 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  Sikeres rögzítés!
+<% end %>
+<br>
+<br>
+<div class="ui grid">
+  <div class="left aligned eight wide column"><%= link_to "Új igénylés", new_foam_request_index_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %></div>
+  <div class="right aligned eight wide column"><%= link_to "Kilépés", root_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %></div>
+</div>

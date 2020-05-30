@@ -1,0 +1,28 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  1. Habosító gép és gyártandó termék kiválasztása
+<% end %>
+<br>
+
+  <%= form_tag set_parameters_path, remote: true, method: :get, id: 'set_parameters' do %>
+
+    <%= label_tag :foaming_machine, "Habosító gép száma" %>
+    <div class="field">
+      <%= collection_select( :foaming_machine, :machines, Gepek.all, :Code, :Name, {:include_blank => 'Kérem válasszon...'}, class: "ui dropdown") %>
+    </div>
+    <br>
+    <br>
+    <div class="field">
+      <%= label_tag :product_itemcode, "Termék cikkszám" %>
+      <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+        <%= text_field_tag :product_itemcode, nil, placeholder: "Gyártandó termék cikkszáma..." %>
+      <% end %>
+    </div>
+    <br>
+    <br>
+    <div class="form-group">
+      <%= button_tag(type: :submit, class: "ui basic orange button") do %>
+        Tovább
+      <% end %>
+    </div>
+
+  <% end %>

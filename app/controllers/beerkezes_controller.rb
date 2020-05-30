@@ -39,7 +39,7 @@ class BeerkezesController < ApplicationController
         end
       end
       session[:itemname] = @itemname
-      @prod_orders = OWOR.search_from_lookup(@label.itemcode)
+      @prod_orders = OWOR.search_opened_production_orders(@label.itemcode)
       if @prod_orders == nil
         flash.now[:danger] = "A #{@label.itemcode} cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
       else
@@ -60,7 +60,7 @@ class BeerkezesController < ApplicationController
 
   def step2
     itemcode = session[:label]["itemcode"]
-    @prod_orders = OWOR.search_from_lookup(itemcode)
+    @prod_orders = OWOR.search_opened_production_orders(itemcode)
     if @prod_orders == nil
       flash.now[:danger] = "Az adott cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
     end
