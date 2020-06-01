@@ -34,12 +34,19 @@ gem 'jquery-rails'
  gem 'bcrypt', '~> 3.1.7'
  gem 'hirb', '~> 0.7.3'
 
- #for mobile devices
-gem 'mobile-fu', '~> 1.4'
-
-
+#MS-SQL
 gem 'tiny_tds', '~> 1.3.0'
 gem 'activerecord-sqlserver-adapter'
+
+#for mobile devices
+gem 'mobile-fu', '~> 1.4'
+
+#Reporting
+gem 'thinreports-rails'
+
+#Shorting tables
+gem 'jquery-tablesorter'
+
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

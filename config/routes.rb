@@ -48,9 +48,15 @@ Rails.application.routes.draw do
   get 'rfid_conversation_index', to: 'rfidconversations#rfid_conversation_index'
   get 'get_delivery_note', to: 'rfidconversations#get_delivery_note'
 
+  resources :foamrequests, :only => [:index, :edit, :update ]
+  get 'delete_request', to: 'foamrequests#delete_request'
   get 'new_foam_request_index', to: 'foamrequests#new_foam_request_index'
   get 'set_parameters', to: 'foamrequests#set_parameters'
   get 'select_quantities', to: 'foamrequests#select_quantities'
   get 'set_quantities', to: 'foamrequests#set_quantities'
+  get 'prepare_request', to: 'foamrequests#prepare_request'
+  get 'prepare_request_index', to: 'foamrequests#prepare_request_index'
+  get 'use_prepared_request', to: 'foamrequests#use_prepared_request'
+  get 'use_prepared_request_index', to: 'foamrequests#use_prepared_request_index'
 
 end

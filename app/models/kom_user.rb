@@ -16,9 +16,45 @@ class Kom_User < ApplicationRecord
             length: { maximum: 100 },
             uniqueness: { case_sensitive: false },
             format: { with: VALID_EMAIL_REGEX }
+  validates :roles, presence: true, 
+            length: { is: 2 }            
   has_secure_password
 
-  
+
+  def self.get_warehouse_role(user)
+    if user != nil
+      roles = user.U_ROLES
+      if roles == nil 
+        roles = 'NN'
+      end
+      if roles[0].upcase == 'I'
+        return true
+      else
+        return false
+      end
+    else
+      retrun false
+    end
+  end
+
+
+  def self.get_production_role(user)
+    if user != nil
+      roles = user.U_ROLES
+      if roles == nil 
+        roles = 'NN'
+      end
+      if roles[1].upcase == 'I'
+        return true
+      else
+        return false
+      end
+    else
+      return false
+    end
+  end
+
+
   private 
 
   def generate_random_id

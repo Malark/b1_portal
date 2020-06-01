@@ -150,3 +150,19 @@ div .mobile-medium-text {
   font-size: 110%;
   display: inline;
 }
+
+.error-helper {
+  color: #9F3A38;
+}
+
+#new-request-icon-popup {
+  height: 40px;
+  width: 200px;
+  text-align: center;
+  vertical-align:middle;
+  background-color: olivedrab;
+  color: white;
+  display: none;
+  padding-top: 8px;
+  position: absolute;
+}

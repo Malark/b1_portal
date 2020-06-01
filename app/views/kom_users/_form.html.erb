@@ -1,4 +1,16 @@
 <%= form_for(@user, :html => {class: "ui form", role: "form"}) do |f| %>
+
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= "#{@user.errors.count} hiba" %> akadályozza a felhasználó rögzítését:</h2>
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <div class="field">
     <%= f.label :U_USERNAME, "Felhasználói név" %>
     <div class="ui left icon input">
@@ -20,11 +32,24 @@
       <i class="lock icon"></i>
     </div>
   </div>
+  <br>
   <% if current_user.admin == '1' %>
-    <%= content_tag :div, class: "ui checkbox"  do %>
-      <%= f.check_box :U_ADMIN %>
-      <%= f.label :U_ADMIN, "Admin jogkör" %>
-    <% end %>
+    <div class="field">
+      <%= f.label :U_ROLES, "Jogosultságok" %>
+      <div class="ui left icon input">
+        <%= f.text_field :U_ROLES, placeholder: "NI" %>
+        <i class="user icon"></i>
+      </div>
+      <small class="error-helper">Pozíció #1: Raktár modul,  Pozíció #2: Gyártás modul</small><br>      
+      <small class="error-helper">I = Igen, N = Nem</small>      
+    </div>
+    <div class="field">
+      <%= content_tag :div, class: "ui checkbox"  do %>
+        <%= f.check_box :U_ADMIN %>
+        <%= f.label :U_ADMIN, "Admin jogkör" %>
+      <% end %>
+    </div> 
+    <br>
   <% end %>
   <p>
   <br>

@@ -1,4 +1,29 @@
 class FoamrequestsController < ApplicationController
+  before_action :set_request, only: [:edit, :update, :delete_request, :prepare_request, :use_prepared_request]
+  
+
+  def index
+    @foamrequests = KOM_HABIGENYLES.all_open
+
+    #@igroups_all = Igroup.order('igroups.name ASC').all
+    #@foamrequest_search = KOM_HABIGENYLES.multiple_search(session[:igroup_id], params[:search])
+  end
+
+
+  def edit
+  end
+
+
+  def delete_request
+    if @request.U_STATUS == 'O'
+      @request.destroy
+      flash[:danger] = "A kiválaszottt alapanyag igény végleges törlése sikeresen megtörtént!"
+    else
+      flash[:danger] = "Sikerltelen törlési kísérlet! Csak új igényt lehet törölni, előkészített vagy lezárt tétel nem törölhető!"
+    end  
+    redirect_to foamrequests_path
+  end
+
 
   def new_foam_request_index
     @actu_step = 1
@@ -110,7 +135,7 @@ class FoamrequestsController < ApplicationController
           @actu_step = 4
         else
           @actu_step = 3
-          flash[:danger] = "Sikertelen mentési kísérlet az adatbázisba! Ismételje meg a folyamatot!"
+          flash.now[:danger] = "Sikertelen mentési kísérlet az adatbázisba! Ismételje meg a folyamatot!"
         end
       end
     end
@@ -119,5 +144,33 @@ class FoamrequestsController < ApplicationController
       format.js { render partial: 'request_foam' }
     end        
   end
+
+
+  def prepare_request
+    if @request.U_STATUS == 'O'
+      redirect_to prepare_request_index_path      
+    else
+      flash[:danger] = "HIBA! Csak 'új igények' státuszú tétel készíthető össze!"
+      redirect_to foamrequests_path
+    end  
+  end
+
+
+  def use_prepared_request
+    if @request.U_STATUS == 'P'
+      redirect_to use_prepared_request_index_path      
+    else
+      flash[:danger] = "HIBA! Csak 'előkészített' státuszú tétel tölthető tartályba!"
+      redirect_to foamrequests_path
+    end  
+  end
+
+
+  private
+
+  def set_request
+    @request = KOM_HABIGENYLES.find(params[:id])
+  end
+
 
 end

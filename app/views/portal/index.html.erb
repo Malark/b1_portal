@@ -1,5 +1,5 @@
 <br>
-<h1>SAP Business One Portal v1.3.1 - Dashboard</h1>
+<h1>SAP Business One Portal v1.3.2 - Dashboard</h1>
 
 <!--
 <div class="ui vertical inverted labeled icon massive menu">
@@ -17,33 +17,47 @@
 
 <br>
 
-<div class="ui horizontal center aligned list">
-  <div class="item">
-    <h3 class="ui center aligned icon header">
-      <%= link_to "<i class='browser orange circular icon'></i> Beérkezés gyártásból".html_safe, receipt_from_production_index_path, class: "item" %>    
-    </h3>
-  </div>
-  
-  <div class="item">
-    <h3 class="ui center aligned icon header">
-      <%= link_to "<i class='barcode orange circular icon'></i> VDA címke ellenőrzés".html_safe, check_vda_index_path, class: "item" %>    
-    </h3>
-  </div>
+<% if session[:role_warehouse] == true %>
+  <div class="ui horizontal center aligned list">
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='browser orange circular icon'></i> Beérkezés gyártásból".html_safe, receipt_from_production_index_path, class: "item" %>    
+      </h3>
+    </div>
+    
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='barcode orange circular icon'></i> VDA címke ellenőrzés".html_safe, check_vda_index_path, class: "item" %>    
+      </h3>
+    </div>
 
-  <div class="item">
-    <h3 class="ui center aligned icon header">
-      <%= link_to "<i class='truck orange circular icon'></i> Szállítások ellenőrzése".html_safe, check_delivery_index_path, class: "item" %>    
-    </h3>
-  </div>
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='truck orange circular icon'></i> Szállítás ellenőrzés".html_safe, check_delivery_index_path, class: "item" %>    
+      </h3>
+    </div>
 
-  <div class="item">
-    <h3 class="ui center aligned icon header">
-      <%= link_to "<i class='rss clipboard outline orange circular icon'></i>Új alapanyag igénylés".html_safe, new_foam_request_index_path, class: "item" %>    
-    </h3>
-  </div>
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='tint orange circular icon'></i>Alapanyag előkészítés".html_safe, foamrequests_path, class: "item" %>    
+      </h3>
+    </div>
+  </div>    
+<% end %>
+<br>
+<br>
+<% if session[:role_production] == true %>
+  <div class="ui horizontal center aligned list">
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='rss clipboard outline orange circular icon'></i>Alapanyag igénylés".html_safe, foamrequests_path, class: "item" %>    
+      </h3>
+    </div>
+  </div>    
+<% end %>    
 
  
-</div>
+
 
 <br>
 
@@ -63,6 +77,25 @@
   </tr>
 </table>
 -->
+<br>
+<h2 class="ui dividing header">Változások - v1.3.2  (2020.06.xx)</h2>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th class="three wide">Modul</th>
+      <th class="thirteen wide">Leírás</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Minden modul</td>
+    <td>Felhasználói jogosultságok beépítve: mostantól a felhasználóknál be kell állítani, hogy melyik fő modulhoz van hozzáférésük. Egyelőre a raktári és a gyártás főmodulra történhet meg a jogosultság beállítása.</td>
+  </tr>
+  <tr>
+    <td>Alapanyag igénylés</td>
+    <td>Index nézet, ahol nyomon lehet követni az igénylásek állapotát</td>
+  </tr>  
+</table>
+
 <br>
 <h2 class="ui dividing header">Változások - v1.3.1  (2020.05.30)</h2>
 <table class="ui celled table">

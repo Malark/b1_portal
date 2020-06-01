@@ -52,8 +52,7 @@ class KomUsersController < ApplicationController
   end
 
   def user_params
-    puts "PARRRRRRRRRRRRRAAAAAAAAAAMMMMMMSSSSSSSSS"
-    params.require(:kom_user).permit(:U_USERNAME, :U_EMAIL, :password, :U_ADMIN)
+    params.require(:kom_user).permit(:U_USERNAME, :U_EMAIL, :password, :U_ADMIN, :U_ROLES)
   end
 
   def require_same_user

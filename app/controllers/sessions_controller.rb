@@ -12,6 +12,8 @@ class SessionsController < ApplicationController
     user = Kom_User.find_by(username: params[:session][:username])
     if user && user.authenticate(params[:session][:password])
       session[:user_id] = user.id
+      session[:role_warehouse] = Kom_User.get_warehouse_role(user)
+      session[:role_production] = Kom_User.get_production_role(user)
       flash[:success] = "Sikeres bejelentkezés!"
       #redirect_to user_path(user)
       redirect_to root_path
@@ -24,6 +26,9 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
+    session[:role_warehouse] = false
+    session[:role_production] = false 
+
     flash[:success] = "Sikeres kijelentkezés!"
     redirect_to login_path
   end

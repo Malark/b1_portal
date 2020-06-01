@@ -1,0 +1,86 @@
+<% if session[:role_production] == true %>
+  <h1>Alapanyag igénylések (Gyártás)</h1>
+<% else %>  
+  <h1>Alapanyag igénylések (Raktár)</h1>
+<% end %>    
+
+<div class="ui grid">
+  <div class="left aligned fourteen wide column">
+    <!--
+    <div class="ui search foamrequest">
+      <div class="ui icon input">
+        <input class="prompt" type="text" placeholder="Keresés...">
+        <i class="search icon"></i>
+      </div>
+      <div class="results"></div>
+    </div>    
+    -->
+  </div>
+
+  <div class="bottom aligned right aligned two wide column">
+    <%= link_to new_foam_request_index_path, id: 'new-request-icon', class: 'item icon' do %>
+      <i class='plus square big icon orange large'></i>
+    <% end %>
+    <div id='new-request-icon-popup'>Új alapanyag igénylés</div>
+  </div>
+</div>
+
+<br>
+<table id="foamrequests_index_table" class="tablesorter">
+  <thead>
+    <tr>
+      <th class="one wide center aligned">Gép</th>
+      <th class="two wide center aligned">Habrendszer</th>
+      <th class="two wide center aligned">Termék</th>
+      <th class="two wide center aligned">ISO mennyiség</th>
+      <th class="two wide center aligned">Poliol mennyiség</th>
+      <th class="three wide">Igénylés dátuma</th>
+      <th class="two wide">Igénylő</th>
+      <th class="one wide">Státusz</th>
+      <th class="one wide center aligned no-sort" colspan="3">Műveletek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @foamrequests.each do |req| %>
+      <tr>
+        <td align="center"><%= req.U_GEP_ID %></td>
+        <td align="center"><%= req.U_HABRENDSZER %></td>
+        <td align="center"><%= req.U_FOCIKKSZAM %></td>
+        <td align="right" style="padding-right: 10px;"><%= req.U_ISO_MENNYISEG %> kg</td>
+        <td align="right" style="padding-right: 10px;"><%= req.U_POLIOL_MENNYISEG %> kg</td>
+        <td align="center"><%= req.U_IGENYDATUM.to_s[0..16] %></td>
+        <td align="left"><%= req.U_IGENYLO %></td>
+        <% if req.U_STATUS == 'O' %>
+          <td align="left">Új igény</td>
+        <% elsif req.U_STATUS == 'P' %>
+          <td align="left">Előkészítve</td>
+        <% elsif req.U_STATUS == 'C' %>
+          <td align="left">Lezárt</td>
+        <% else %>
+          <td align="left">HIBA!!!</td>
+        <% end %>
+
+        <td  align="center">
+          <% if req.U_STATUS == 'O' %>
+            <% if session[:role_production] == true %>
+              <%= link_to delete_request_path(:id => req), data: { confirm: 'Biztos, hogy törölni szeretné?' }, class: 'item icon' do %>
+                <i class='trash alternate outline large icon orange'></i>
+              <% end %>
+            <% end %>
+            <% if session[:role_warehouse] == true %>  
+              <%= link_to prepare_request_path(:id => req), class: 'item icon' do %>
+                <i class='tint large icon orange'></i>
+              <% end %>
+            <% end %>
+          <% end %>
+          <% if (req.U_STATUS == 'P' && session[:role_production] == true) %>                    
+            <%= link_to use_prepared_request_path(:id => req), class: 'item icon' do %>
+              <i class='industry large icon orange'></i>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
