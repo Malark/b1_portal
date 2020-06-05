@@ -5,6 +5,7 @@ class Kom_User < ApplicationRecord
   alias_attribute :email, :U_EMAIL
   alias_attribute :admin, :U_ADMIN
   alias_attribute :roles, :U_ROLES
+  alias_attribute :approver, :U_PROD_APPROVER
   before_create :generate_random_id
 
   before_save { self.email = email.downcase }
@@ -53,6 +54,24 @@ class Kom_User < ApplicationRecord
       return false
     end
   end
+
+
+  def self.get_production_approval_role(user)
+    if user != nil
+      approval_role = user.U_PROD_APPROVER
+      if approval_role == nil 
+        return false
+      else
+        if approval_role == '1'
+          return true
+        else
+          return false
+        end
+      end
+    else
+      return false
+    end
+  end  
 
 
   private 

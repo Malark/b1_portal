@@ -51,12 +51,12 @@ $(document).on('turbolinks:load', function () {
     
     theme : 'green',
 
-    sortList: [[5,1]],
+    sortList: [[0,1]],
 
     headers: {
       3: { sorter: 'digit' }, // column number, type
       4: { sorter: 'digit' },
-      8 : { sorter: false }
+      9 : { sorter: false }
       }
   });  
 

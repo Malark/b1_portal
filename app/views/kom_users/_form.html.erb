@@ -44,13 +44,20 @@
       <small class="error-helper">I = Igen, N = Nem</small>      
     </div>
     <div class="field">
-      <%= content_tag :div, class: "ui checkbox"  do %>
+      <%= content_tag :div, class: "ui checkbox" do %>
         <%= f.check_box :U_ADMIN %>
         <%= f.label :U_ADMIN, "Admin jogkör" %>
       <% end %>
     </div> 
+    <div class="field">
+      <%= content_tag :div, class: "ui checkbox" do %>
+        <%= f.check_box :U_PROD_APPROVER %>
+        <%= f.label :U_PROD_APPROVER, "Gyártási jóváhagyó" %>
+      <% end %>
+    </div> 
     <br>
   <% end %>
+
   <p>
   <br>
   <div>

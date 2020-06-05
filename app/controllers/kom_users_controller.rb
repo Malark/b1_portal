@@ -40,7 +40,6 @@ class KomUsersController < ApplicationController
 
   def destroy
     #@user.destroy
-    #flash[:danger] = "Sikeres felhasználó törlés!"
     flash[:danger] = "Figyelem! Felhasználó törlése nem lehetséges, mivel ez a fiók már használatban volt!"
     redirect_to kom_users_path
   end
@@ -52,7 +51,7 @@ class KomUsersController < ApplicationController
   end
 
   def user_params
-    params.require(:kom_user).permit(:U_USERNAME, :U_EMAIL, :password, :U_ADMIN, :U_ROLES)
+    params.require(:kom_user).permit(:U_USERNAME, :U_EMAIL, :password, :U_ADMIN, :U_ROLES, :U_PROD_APPROVER)
   end
 
   def require_same_user

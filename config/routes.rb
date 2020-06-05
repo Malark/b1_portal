@@ -56,6 +56,11 @@ Rails.application.routes.draw do
   get 'set_quantities', to: 'foamrequests#set_quantities'
   get 'prepare_request', to: 'foamrequests#prepare_request'
   get 'prepare_request_index', to: 'foamrequests#prepare_request_index'
+
+  get 'approve_request', to: 'foamrequests#approve_request'
+  get 'approve_request_index', to: 'foamrequests#approve_request_index'
+  get 'set_approved', to: 'foamrequests#set_approved'
+
   get 'use_prepared_request', to: 'foamrequests#use_prepared_request'
   get 'use_prepared_request_index', to: 'foamrequests#use_prepared_request_index'
 
