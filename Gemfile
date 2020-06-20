@@ -43,6 +43,9 @@ gem 'mobile-fu', '~> 1.4'
 
 #Reporting
 gem 'thinreports-rails'
+gem 'barby'
+gem 'rqrcode'
+gem 'chunky_png'
 
 #Shorting tables
 gem 'jquery-tablesorter'

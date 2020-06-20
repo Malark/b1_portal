@@ -1,0 +1,65 @@
+
+
+
+
+<h1>NEM EZ AZ ÉLES!!!!!</h1>
+
+ű
+ű
+ű
+ű
+
+
+<h3>Összekészítendő alapanyagok</h3>
+<br>
+<table id="preparable_index_table" class="tablesorter">
+  <thead>
+    <tr>
+      <th class="one wide center aligned">Cikkszám</th>
+      <th class="three wide center aligned">Megnevezés</th>
+      <th class="one wide center aligned">Típus</th>
+      <th class="two wide center aligned">Terv</th>
+      <th class="two wide center aligned">Tény</th>
+      <th class="two wide center aligned">Raktárkészlet</th>
+      <th class="one wide center aligned">Sarzs kezelt</th>
+      <th class="one wide">Státusz</th>
+      <th class="one wide center aligned no-sort" colspan="3">Műveletek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @requested_materials.each do |req| %>
+      <tr>
+        <td align="left"><%= req["ItemCode"] %></td>
+        <td align="left"><%= req["ItemName"] %></td>
+        <td align="left"><%= req["material_type"] %></td>
+        <td align="right" style="padding-right: 10px;"><%= req["requested"] %> kg</td>
+        <td align="right" style="padding-right: 10px;"><%= req["prepared"] %> kg</td>
+        <td align="right" style="padding-right: 10px;"><%= req["onhand"] %> kg</td>
+        <td align="center"><%= req["batch_managed"] %></td>
+        <td align="left"><%= req["status"] %></td>
+        <td align="center">
+          <%= link_to "Mégsem", foamrequests_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+          <%= link_to prepare_request_index_path(:id => req), class: 'item icon' do %>
+            <i class='tint large icon orange'></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<div class="ui grid">
+  <div class="left aligned eight wide column">
+    <%= link_to "Mégsem", foamrequests_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+  </div>
+  <div class="right aligned eight wide column">
+    <%= form_tag set_prepared_summary_path, method: :get, id: 'set_prepared_summary-form', class: 'ui reply form' do %> 
+      <%= hidden_field_tag :request_id, @request.Code %>
+      <div class="form-group">
+        <%= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+          Tovább
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

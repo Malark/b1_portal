@@ -36,6 +36,22 @@ class KOM_HABIGENYLES < ApplicationRecord
     result = ActiveRecord::Base.connection.exec_query(query) 
   end  
 
+
+  def self.find_requests_in_progress(request_id)
+    query = <<-SQL 
+      select *
+      from dbo.[@KOM_HABIGENYLES]
+      where U_SARZSSZAM != '#{request_id}' and  U_STATUS = 'I'
+    SQL
+    results = ActiveRecord::Base.connection.exec_query(query)
+    if results.count > 0
+      return results
+    else
+      return nil
+    end       
+  end
+
+
   private 
 
   def generate_random_id

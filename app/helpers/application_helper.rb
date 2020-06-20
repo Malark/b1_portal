@@ -1,5 +1,10 @@
 module ApplicationHelper
 
+  require 'barby/barcode/ean_13'
+  require 'barby/barcode/ean_8'
+  require 'barby/barcode/qr_code'
+  require 'barby/outputter/png_outputter'  
+
   def mobile_device?
     if is_mobile_device? 
       puts "mobile deviceeeeeeeeeeeeeeeeeeeeeeeee"

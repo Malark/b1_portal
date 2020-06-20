@@ -33,40 +33,45 @@ class ReceiptsController < ApplicationController
         else
           label_type = 'KLT'
         end
-        #date formatting
-        production_date = values[6].tr(".", "-")
-
-        @label = Label.new(  values[0], values[1], production_date, values[7],  label_type, values[5],  values[4], '', values[3])
-        #@label = Label.new('14032V2',  125,       '2020-04-22',    '14:30:21', 'Raklap',   'Standard', '030',         '200422143021')
-
-        #Check the charge_id is it alerady used or is it a brand new palett id
-        internal_label_record = KOM_GYARTBEERK.search_internal_label(@label.charge_nr, @label.itemcode)
-        
-        if internal_label_record != nil
+        if label_type == 'KLT'
           @actu_step = 1
-          flash.now[:danger] = "A #{@label.charge_nr} sarzsszámú raklap már be lett vételezve korábban!"
+          flash.now[:danger] = "Doboz címke szkennelése történt! Doboz címke nem vételezhető be!"
         else
-          session[:label] = @label
-          itemname = OITM.search_itemname(@label.itemcode)
-          if itemname != nil
-            itemname.each do |row|
-              @itemname = row["ItemName"]
-            end
-          end
-          session[:itemname] = @itemname
-          @prod_orders = OWOR.search_opened_production_orders(@label.itemcode)
-          if @prod_orders == nil
+          #date formatting
+          production_date = values[6].tr(".", "-")
+
+          @label = Label.new(  values[0], values[1], production_date, values[7],  label_type, values[5],  values[4], '', values[3])
+          #@label = Label.new('14032V2',  125,       '2020-04-22',    '14:30:21', 'Raklap',   'Standard', '030',         '200422143021')
+
+          #Check the charge_id is it alerady used or is it a brand new palett id
+          internal_label_record = KOM_GYARTBEERK.search_internal_label(@label.charge_nr, @label.itemcode)
+          
+          if internal_label_record != nil
             @actu_step = 1
-            flash.now[:danger] = "A #{@label.itemcode} cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
+            flash.now[:danger] = "A #{@label.charge_nr} sarzsszámú raklap már be lett vételezve korábban!"
           else
-            @actu_step = 2
-            if @prod_orders.length == 1
-              @prod_orders.each do |row| 
-                @selected_prod_order = row["DocNum"]
+            session[:label] = @label
+            itemname = OITM.search_itemname(@label.itemcode)
+            if itemname != nil
+              itemname.each do |row|
+                @itemname = row["ItemName"]
               end
             end
-          end  
-        end
+            session[:itemname] = @itemname
+            @prod_orders = OWOR.search_opened_production_orders(@label.itemcode)
+            if @prod_orders == nil
+              @actu_step = 1
+              flash.now[:danger] = "A #{@label.itemcode} cikknek nincsenek nyitott gyártási rendelései! A bevételezés nem folytatható!"
+            else
+              @actu_step = 2
+              if @prod_orders.length == 1
+                @prod_orders.each do |row| 
+                  @selected_prod_order = row["DocNum"]
+                end
+              end
+            end  
+          end
+        end  
       end
     end
     respond_to do |format|

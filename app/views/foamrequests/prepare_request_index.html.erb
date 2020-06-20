@@ -1,6 +1,90 @@
-<h1>Új alapanyag összekészítése</h1>
-
-<div id="prepare_foam">
-  <%#= render 'request_foam' %>
+<div class="ui grid">
+  <div class="left aligned bottom aligned five wide column">
+    <h1>Alapanyag összekészítés</h1>
+  </div>
+  <div class="center aligned six wide column">
+    <div class="ui red center aligned horizontal massive label"><%= session[:foam_type] %></div>
+  </div>
+  <div class="right aligned bottom aligned five wide column">
+    <h1>Igény sorszám: <%= @request.U_SARZSSZAM %></h1>
+  </div>
 </div>
+<div class="ui divider"></div>
+<div class="summary">
+  Gyártandó termék cikkszáma: <strong><%= @item["ItemCode"] %></strong>
+</div>
+<div class="summary">
+  Gyártandó termék megnevezése: <strong><%= @item["ItemName"] %></strong>
+</div>
+<div class="summary">
+  Gyártandó termék habrendszere: <strong><%= @item["U_HABRENDSZER"] %></strong>
+</div>
+<div class="summary">
+  Igényelt alapanyag típusa: <strong><%= session[:foam_type] %></strong>
+</div>
+<div class="summary">
+  Igényelt mennyiség: <strong><%= @asked_quantity %> kg</strong>
+</div>
+
+<!--
+<div id="prepare_request">
+  <%#= render 'prepare_request' %>
+</div>
+-->
+
+<h3>Összekészítendő alapanyagok</h3>
+<br>
+<table id="preparable_index_table" class="tablesorter">
+  <thead>
+    <tr>
+      <th class="one wide center aligned">Cikkszám</th>
+      <th class="three wide center aligned">Megnevezés</th>
+      <th class="one wide center aligned">Típus</th>
+      <th class="one wide center aligned">Sarzs kezelt</th>
+      <th class="two wide center aligned">Igény</th>
+      <th class="two wide center aligned">Előkészítve</th>
+      <th class="one wide">Státusz</th>
+      <th class="one wide center aligned no-sort" colspan="3">Műveletek</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @components.each do |component| %>
+      <tr>
+        <td align="left"><%= component["U_ITEMCODE"] %></td>
+        <td align="left"><%= component["U_ITEMNAME"] %></td>
+        <td align="left"><%= component["U_MATERIAL_TYPE"] %></td>
+        <td align="center"><%= component["U_BATCH_MANAGED"] %></td>
+        <td align="right" style="padding-right: 10px;"><%= component["U_REQUESTED_QTY"] %> kg</td>
+        <td align="right" style="padding-right: 10px;"><%= component["U_PREPARED_QTY"] %> kg</td>
+        <td align="center">
+        <%if component["U_STATUS"] == 'O' %>
+          <i class="battery empty large icon red"></i>
+        <% elsif component["U_STATUS"] == 'P' %>
+          <i class="battery half large icon orange"></i>
+        <% elsif component["U_STATUS"] == 'C' %>
+          <i class="battery full large icon green"></i>
+        <% else %>
+          <i class="question large icon red"></i>
+        <% end %>
+        </td>
+        <td align="center">
+          <%= link_to 'Előkészít', prepare_component_path(:id => @request.Code, :detail_table_id => component["Code"], :sender => 'index_page'), class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<br>
+<div class="ui grid">
+  <div class="left aligned eight wide column">
+    <%= link_to "Vissza", foamrequests_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+  </div>
+  <div class="right aligned eight wide column">
+    <% if @all_components_prepared == true %>
+      <%= link_to "Tovább", set_prepared_summary_path(:id => @request.Code), class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+    <% end %>
+  </div>
+</div>
+
 

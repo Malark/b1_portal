@@ -1,0 +1,19 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="preparable_index">
+    <%= render 'preparable_index' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 9 %>
+  <div id="error_page">
+    <%= render 'error_page' %>
+  </div>
+<% end %>
+<br>
+<%#= link_to 'Vissza', foamrequests_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 
+<br>
+<br>

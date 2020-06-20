@@ -1,0 +1,97 @@
+<div class="ui grid">
+  <div class="left aligned bottom aligned five wide column">
+    <h1>Véglegesítés</h1>
+  </div>
+  <div class="center aligned six wide column">
+    <div class="ui red center aligned horizontal massive label"><%= session[:foam_type] %></div>
+  </div>
+  <div class="right aligned bottom aligned five wide column">
+    <h1>Igény sorszám: <%= @request.U_SARZSSZAM %></h1>
+  </div>
+</div>
+<div class="ui divider"></div>
+<div class="summary">
+  Gyártandó termék cikkszáma: <strong><%= @item["ItemCode"] %></strong>
+</div>
+<div class="summary">
+  Gyártandó termék megnevezése: <strong><%= @item["ItemName"] %></strong>
+</div>
+<div class="summary">
+  Gyártandó termék habrendszere: <strong><%= @item["U_HABRENDSZER"] %></strong>
+</div>
+<div class="summary">
+  Igényelt alapanyag típusa: <strong><%= session[:foam_type] %></strong>
+</div>
+<div class="summary">
+  Igényelt mennyiség: <strong><%= @asked_quantity %> kg</strong>
+</div>
+
+<br>
+<br>
+<div class="ui grid">
+  <div class="left aligned bottom aligned eight wide column">
+    <h3>Összekészítendő komponensek</h3>
+  </div>
+  <div class="right aligned seven wide column">
+    <h3>Címke nyomtatás: </h3>
+  </div>  
+  <div class="right aligned bottom aligned one wide column">
+    <%= link_to summary_report_path(:request_id => @request.Code), target: :_blank, class: 'item icon run-report-button' do %>
+      <i class='print icon orange large run-report-button'></i>
+    <% end %>
+  </div>
+</div>
+<br>
+<table id="preparable_summary_table" class="tablesorter">
+  <thead>
+    <tr>
+      <th class="one wide left aligned">Típus</th>
+      <th class="one wide center aligned">Cikkszám</th>
+      <th class="three wide center aligned">Megnevezés</th>
+      <th class="one wide center aligned">Sarzsszám</th>
+      <th class="one wide center aligned">Lejárat dátuma</th>
+      <th class="two wide center aligned">Tárolóhely</th>
+      <th class="one wide center aligned">Mennyiség</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @transactions.each do |row| %>
+      <tr>
+        <td align="left"><%= row["U_MATERIAL_TYPE"] %></td>
+        <td align="left"><%= row["U_ItemCode"] %></td>
+        <td align="left"><%= row["U_ItemName"] %></td>
+        <td align="left"><%= row["U_DistNumber"] %></td>
+        <td align="center"><%= row["U_ExpDate"].to_s[0..9] %></td>
+        <td align="left"><%= row["U_SL1Code"] %></td>
+        <td align="right" style="padding-right: 10px;"><%= row["U_MarkedQty"] %> kg</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<br>
+<%= form_tag finish_preparation_path, method: :get, id: 'set_prepared_summary-form', class: 'ui reply form' do %> 
+
+  <div class="field">
+    <%= label_tag :sap_document, "SAP készletáttárolás bizonylatszáma" %>
+    <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+      <%= text_field_tag :sap_document, nil, placeholder: "SAP készletáttárolást igazoló bizonylatszám..." %>
+    <% end %>
+  </div>
+
+  <div class="ui grid">
+    <div class="left aligned eight wide column">
+      <%= link_to "Mégsem", prepare_request_index_path(:id => @request.Code), class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+      
+    </div>
+    <div class="right aligned eight wide column">
+        <%= hidden_field_tag :request_id, @request.Code %>
+        <div class="form-group">
+          <%= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+            Véglegesítés
+          <% end %>
+        </div>
+    </div>
+  </div>
+<% end %>

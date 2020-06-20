@@ -66,7 +66,47 @@ $(document).on('turbolinks:load', function () {
       $('#new-request-icon-popup').hide();
   });
 
- 
+  
+  $("#preparable_index_table").tablesorter({
+    
+    theme : 'green',
+
+    sortList: [[3,1]],
+
+    headers: {
+      4: { sorter: 'digit' }, // column number, type
+      5: { sorter: 'digit' },
+      6: { sorter: 'digit' },
+      7: { sorter: false },
+      8: { sorter: false }
+      }
+  });
+
+
+  $("#preparable_material_table").tablesorter({
+    
+    theme : 'green',
+
+    sortList: [[4,0]],
+
+    headers: {
+      6: { sorter: 'digit' }, // column number, type
+      7: { sorter: 'digit' }, // column number, type   
+      8: { sorter: false }
+      }
+  });
+
+
+  $("#preparable_summary_table").tablesorter({
+    
+    theme : 'green',
+
+    headers: {
+      6: { sorter: 'digit' }
+      }
+  });
+  
+  
   //**************** Üzenetek ********************/
   $('.message .close').on('click', function() {
     $(this).closest('.message').transition('fade');
