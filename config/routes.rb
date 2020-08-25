@@ -66,6 +66,7 @@ Rails.application.routes.draw do
 
 
   get 'use_prepared_request', to: 'foamrequests#use_prepared_request'
-  get 'use_prepared_request_index', to: 'foamrequests#use_prepared_request_index'
+  get 'use_prepared_request_step2', to: 'foamrequests#use_prepared_request_step2'
+  get 'use_prepared_request_step3', to: 'foamrequests#use_prepared_request_step3'
 
 end

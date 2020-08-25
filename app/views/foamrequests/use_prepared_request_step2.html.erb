@@ -1,0 +1,59 @@
+<h1>Előkészített alapanyag tartályba töltése</h1>
+<br>
+
+<% if @material_type == 'ISO' %>
+  <h3>Step 2 - ISO betöltése</h3>
+    <%= form_tag use_prepared_request_step3_path, method: :get, id: 'choose-prod-order-form' do %>
+      <h4>Szilika-gél rendben?</h4>
+      <p><%= radio_button_tag :silica_gel, 'Igen' , false %> Igen</p>
+      <p><%= radio_button_tag :silica_gel, 'Nem' , false %> Nem</p>
+      <br>
+      <div class="field">
+        <%= label_tag :silica_note, "Intézkedés, egyéb megjegyzés" %>
+        <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+          <%= text_field_tag :silica_note, nil, placeholder: "Megjegyzés..." %>
+        <% end %>
+      </div>
+      <br>
+      <%= hidden_field_tag :id, @request.Code %>
+      <%= hidden_field_tag :additional_params, true %>
+      <br> 
+      <br>     
+      <div class="ui grid">
+        <div class="left aligned eight wide column"><%= link_to "Kilépés", foamrequests_path, class: "ui primary button" %></div>
+        <div class="right aligned eight wide column"><%= button_tag(type: :submit, :class => "ui primary button") do %>Tovább<% end %></div>
+      </div>
+    <% end %> 
+<% end %>
+
+<% if @material_type == 'POLIOL' %>
+  <h3>Step 2 - POLIOL betöltése</h3>
+    <%= form_tag use_prepared_request_step3_path, method: :get, id: 'choose-prod-order-form' do %>
+      <br>
+      <%= label_tag :iso_qty, "ESD mérési eredmény" %>
+      <div class="field">
+        <div class="ui fluid right labeled input">
+          <%= number_field_tag :esd_measurement, '0', :step => 0.01 %>
+          <div class="ui basic label">MOhm</div>
+        </div>
+      </div>
+      <br>
+      <!--
+      <div class="field">
+        <%= label_tag :esd_measurement, "ESD mérési eredmény" %>
+        <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+          <%= text_field_tag :esd_measurement, nil, placeholder: "ESD mérés eredménye..." %>
+        <% end %>
+      </div>
+      -->
+      <br>
+      <%= hidden_field_tag :id, @request.Code %>
+      <%= hidden_field_tag :additional_params, true %>
+      <br> 
+      <br>     
+      <div class="ui grid">
+        <div class="left aligned eight wide column"><%= link_to "Kilépés", foamrequests_path, class: "ui primary button" %></div>
+        <div class="right aligned eight wide column"><%= button_tag(type: :submit, :class => "ui primary button") do %>Tovább<% end %></div>
+      </div>
+    <% end %> 
+<% end %>

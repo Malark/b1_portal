@@ -5,6 +5,21 @@ class KOM_HABIGENY_MOZGAS < ApplicationRecord
 
 
 
+  def self.find_components(request_charge_nr)
+    query = <<-SQL 
+      select *
+      from dbo.[@KOM_HABIGENY_MOZGAS]
+      where U_IGENY_SARZSSZAM = '#{request_charge_nr}'
+    SQL
+    results = ActiveRecord::Base.connection.exec_query(query)
+    if results.count > 0
+      return results
+    else
+      return nil
+    end    
+  end  
+
+
   def self.find_transaction_by_absentry(source, absentry)
     begin 
       query = <<-SQL 

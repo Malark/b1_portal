@@ -1,5 +1,5 @@
 class FoamrequestsController < ApplicationController
-  before_action :set_request, only: [:edit, :update, :delete_request, :approve_request, :approve_request_index, :prepare_request_index, :prepare_component, :set_prepared_summary, :use_prepared_request]
+  before_action :set_request, only: [:edit, :update, :delete_request, :approve_request, :approve_request_index, :prepare_request_index, :prepare_component, :set_prepared_summary, :use_prepared_request, :use_prepared_request_step2, :use_prepared_request_step3]
 
   Requested_Material = Struct.new(:ItemCode, :ItemName, :requested, :prepared, :batch_managed, :material_type, :status)
   
@@ -274,7 +274,7 @@ class FoamrequestsController < ApplicationController
     puts "GGGGGGGGGGGGGGGGGGGGGGG"
     #set main parameters
     session[:foam_type] = ''
-    session[:foam_warehouse] = '1_alap3'
+    session[:foam_warehouse] = '1_alapW3'
     session[:material] = ''
     @asked_quantity = 0
     if @request.U_ISO_MENNYISEG.to_i > 0
@@ -417,6 +417,7 @@ class FoamrequestsController < ApplicationController
               component.U_MATERIAL_TYPE = 'Adalék'
               component.U_STATUS = 'O'
               component.U_BATCH_MANAGED = row["ManBtchNum"]
+              component.U_ESD_ADALEK = row["QryGroup44"]
               if component.save     
                 puts "Sikeres Component felírás!!!!!!"
               else
@@ -605,10 +606,6 @@ class FoamrequestsController < ApplicationController
 
 
   def set_prepared_summary
-    puts "QQQQQQQQQQQQQQQQ"
-    #puts params[:request_id]
-    #@request = KOM_HABIGENYLES.find(params[:request_id])
-    puts @request.Code
     error = false
     @components = KOM_HABIGENY_TETEL.find_components(@request.U_SARZSSZAM)
     if @components == nil
@@ -648,8 +645,6 @@ class FoamrequestsController < ApplicationController
 
 
   def summary_report
-    puts "XXXXXXXXXXXXXXXXXXXXX"
-    puts params[:request_id]    
     @request = KOM_HABIGENYLES.find(params[:request_id])
     error = false
     @components = KOM_HABIGENY_TETEL.find_components(@request.U_SARZSSZAM)
@@ -796,12 +791,243 @@ class FoamrequestsController < ApplicationController
 
 
   def use_prepared_request
-    if @request.U_STATUS == 'P'
-      redirect_to use_prepared_request_index_path      
-    else
+    if @request.U_STATUS != 'P'
       flash.now[:danger] = "HIBA! Csak 'előkészített' státuszú tétel tölthető tartályba!"
       redirect_to foamrequests_path
+    else
+      #set the foaming machine
+      @foam_machine = Gepek.search_item(@request["U_GEP_ID"])
+      if @foam_machine == nil
+        flash.now[:danger] = "Nem létező habosító gép ID: #{@request["U_GEP_ID"]} "
+        redirect_to foamrequests_path
+      else
+        #searching for product itemname
+        itemcode = @request["U_FOCIKKSZAM"]
+        s_itemcode = @request["U_FOCIKKSZAM"] + '-S'
+        @item = OITM.search_item(itemcode)
+        if @item == nil
+          flash.now[:danger] = "Nem létező cikkszám: #{itemcode}"
+          redirect_to foamrequests_path
+        else
+          #Check foam system of the product
+          @foam_system = OITM.search_item(@item["U_HABRENDSZER"])
+          if @foam_system == nil
+            flash.now[:danger] = "Hibás vagy hiányzó habrendszer a termék törzsadatokban!"
+            redirect_to foamrequests_path
+          else
+            @error_message = ''
+  
+            #Foam system analysis
+            @iso_component = ITT1.search_iso_component(@item["U_HABRENDSZER"])
+            if @iso_component == nil
+              @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs ISO komponens definiálva! *** "
+            end
+            @poliol_component = ITT1.search_poliol_component(@item["U_HABRENDSZER"])
+            if @poliol_component == nil
+              @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs POLIOL komponens definiálva! *** "
+            end
+            @additives = ITT1.search_additives(@item["U_HABRENDSZER"])
+            @error = false
+            #Are the two foam systems equivalent?
+            if @item["U_HABRENDSZER"] != @foam_machine["U_AKTUHABRENDSZER"]
+              @error = true
+              @error_message += "A #{s_itemcode} termék habrendszere (#{@item["U_HABRENDSZER"]}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
+            end
+
+            # collecting the components
+            @esd_additives = false
+            @components = KOM_HABIGENY_TETEL.find_components(@request.U_SARZSSZAM)
+            if @components == nil
+              flash.now[:danger] = "Nem található egyetlen összekészített komponens sem!"
+              redirect_to foamrequests_path     
+            else
+              @components.each do |component|
+                if component["U_STATUS"] != 'C'
+                  flash.now[:danger] = "Nincs minden komponens összekészítve!"
+                  redirect_to foamrequests_path     
+                else
+                  @components.each do |row|
+                    if row["U_ESD_ADALEK"] == 'Y'
+                      @esd_additives = true
+                    end
+                  end
+                end
+              end
+            end
+            @transactions = KOM_HABIGENY_MOZGAS.find_transactions_by_batch(@request.U_SARZSSZAM)
+            if @transactions == nil
+              flash[:danger] = "Folytatás nem lehetséges! Nem található egyetlen előkészített komponens sem!"
+              redirect_to foamrequests_path
+            end
+            #container foam check
+            if @request.U_ISO_MENNYISEG.to_i > 0
+              if (@foam_machine["U_AKTU_ISO"] != nil and @foam_machine["U_AKTU_ISO"] != @iso_component["ItemCode"])
+                @error = true
+                @error_message += "Az összekészített ISO komponens (#{@iso_component["ItemCode"]}) nem egyezik meg az ISO tartályban jelenleg tárolt ISO cikkszámmal (#{@foam_machine["U_AKTU_ISO"]})!  *** "
+              end
+            else
+              if (@foam_machine["U_AKTU_POLIOL"] != nil and @foam_machine["U_AKTU_POLIOL"] != @poliol_component["ItemCode"])
+                @error = true
+                @error_message += "Az összekészített POLIOL komponens (#{@poliol_component["ItemCode"]}) nem egyezik meg a POLIOL tartályban jelenleg tárolt POLIOL cikkszámmal (#{@foam_machine["U_AKTU_POLIOL"]})!  *** "
+              end  
+            end
+          end
+        end
+      end
     end  
+  end
+
+
+  def use_prepared_request_step2
+    # in case of ISO type we need to check the silicagel's condition 
+    # in case of POLIOL we need to ask some measurements from the user in case of ESD additives
+    @material_type = ''
+    @esd_additives = false
+    if @request.U_ISO_MENNYISEG.to_i > 0
+      puts "type - iso"
+      @material_type = 'ISO'
+    else
+      @material_type = 'POLIOL'
+      puts "type - poliol"
+      # searching for ESD additives
+      @components = KOM_HABIGENY_TETEL.find_components(@request.U_SARZSSZAM)
+      if @components == nil
+        flash.now[:danger] = "Nem található egyetlen összekészített komponens sem!"
+        redirect_to foamrequests_path     
+      else
+        @components.each do |row|
+          if row["U_ESD_ADALEK"] == 'Y'
+            @esd_additives = true
+          end
+        end
+      end
+    end
+    puts @esd_additives
+    # If the material is not ISO and not consists on ESD additives then we can contionue the process without asking any additional info from the user
+    if (@material_type == 'POLIOL' && @esd_additives == false)
+      redirect_to use_prepared_request_step3_path(:id => @request.Code, :additional_params => false)
+    end
+  end
+
+
+  def use_prepared_request_step3
+    error = false
+    szilika_check = ''
+    szilika_comment = ''
+    esd_meres = 0.00
+    main_component = ''
+    if params[:additional_params] == 'true'
+      # check if additional parameters are not empty
+      # ISO Component parameters
+      if @request.U_ISO_MENNYISEG.to_i > 0
+        if params[:silica_gel].blank?
+          error = true
+        else
+          szilika_check = params[:silica_gel]
+          szilika_comment = params[:silica_note]
+          if params[:silica_gel] == 'Nem'
+            # check comment field
+            if params[:silica_note].blank?
+              error = true
+            end
+          end
+        end
+      else
+        # POLIOL Component with ESD additives parameters
+        if params[:esd_measurement].blank?
+          error = true
+        else
+          esd_meres = params[:esd_measurement].to_f
+          if ((params[:esd_measurement].to_f <= 0) || (params[:esd_measurement].to_f > 5))
+            error = true
+          end  
+        end  
+      end  
+      if error == true
+        flash[:danger] = "Hiányos, vagy hibás adat! ISO komponens eseténkérem válaszoljon a szilika-gél ellenőrzés kérdésre. Nem válasz esetén kötelező megjegyzést is írni! ESD komponens esetén a mért értéknek 0 és 5 MOhm között kell lennie. Ha a mért érték nagyobb 5-nél, szóljon az üzemvezetőnek!"
+        redirect_to use_prepared_request_step2_path(:id => @request.Code)
+      end
+    end
+
+    # Write data if no errors
+    if error == false
+      @foam_machine = Gepek.search_item(@request.U_GEP_ID)
+      if @foam_machine == nil
+        flash.now[:danger] = "Nem található gépszám! A betöltési folyamat nem foélytatható!"
+        redirect_to foamrequests_path     
+      end
+      # 1. KOM_TARTALY_MOZGAS
+      @components = KOM_HABIGENY_MOZGAS.find_components(@request.U_SARZSSZAM)
+      if @components == nil
+        flash.now[:danger] = "Nem található egyetlen összekészített komponens sem!"
+        redirect_to foamrequests_path     
+      else
+        d = DateTime.now
+        @components.each do |row|
+          
+
+          @transaction = KOM_TARTALY_MOZGAS.new
+          @transaction.U_GEP_ID = @request["U_GEP_ID"]
+          # In case of ISO
+          if @request.U_ISO_MENNYISEG.to_i > 0
+            # Determine the main component ID
+            if row["U_MATERIAL_TYPE"] == 'ISO'
+              main_component = row["U_ItemCode"]
+            end
+            @transaction.U_TARTALY_ID = @foam_machine["U_ISO_TARTALY_ID"]
+            @transaction.U_TARTALY_TYPE = 'ISO'
+            @transaction.U_GEP_HABCIKKSZAM = @foam_machine["U_AKTU_ISO"]
+            @transaction.U_SZILIKA_CHECK = szilika_check
+            @transaction.U_SZILIKA_COMMENT = szilika_comment
+          else
+            # Determine the main component ID
+            if row["U_MATERIAL_TYPE"] == 'POLIOL'
+              main_component = row["U_ItemCode"]
+            end            
+            @transaction.U_TARTALY_ID = @foam_machine["U_POLIOL_TARTALY_ID"]
+            @transaction.U_TARTALY_TYPE = 'POLIOL'
+            @transaction.U_GEP_HABCIKKSZAM = @foam_machine["U_AKTU_POLIOL"]
+            @transaction.U_ESD_MERES = esd_meres
+          end
+          @transaction.U_GEP_HABRENDSZER = @foam_machine["U_AKTUHABRENDSZER"]
+          @transaction.U_MOZGAS_TIPUS = 'BETÖLTÉS'
+          @transaction.U_IGENY_SARZSSZAM = @request["U_SARZSSZAM"]
+          @transaction.U_HABRENDSZER = @request["U_HABRENDSZER"]
+          @transaction.U_ItemCode = row["U_ItemCode"]
+          @transaction.U_ItemName = row["U_ItemName"]
+          @transaction.U_Batch_Managed = row["U_Batch_Managed"]
+          @transaction.U_MATERIAL_TYPE = row["U_MATERIAL_TYPE"]
+          @transaction.U_DistNumber =  row["U_DistNumber"]
+          @transaction.U_Quantity =  row["U_MarkedQty"]
+          @transaction.U_ExpDate = row["U_ExpDate"]
+          @transaction.U_USER = current_user.username  
+          @transaction.U_CreateDate = d.strftime "%Y-%m-%d  %H:%M:%S"
+          @transaction.save
+          puts row["U_ItemCode"]
+          puts 'MOZGAS FELIRAS KESZ'
+        end
+      end
+
+
+      # 2. GEPEK
+      #@foam_machine = Gepek.search_item(@request.U_GEP_ID)
+      @foam_machine2 = Gepek.find(@foam_machine["Code"])
+      @foam_machine2.U_UTOLSO_MOZGAS = d.strftime "%Y-%m-%d  %H:%M:%S"
+      @foam_machine2.U_AKTUHABRENDSZER = @request["U_HABRENDSZER"]
+      if @request.U_ISO_MENNYISEG.to_i > 0
+        @foam_machine2.U_AKTU_ISO = main_component
+      else
+        @foam_machine2.U_AKTU_POLIOL = main_component
+      end      
+      @foam_machine2.save
+
+      
+      # 3. KOM_HABIGENYLES
+      @request.U_STATUS = 'C'
+      @request.U_BETOLTO_USER = current_user.username  
+      @request.U_BETOLTES_DATUM = d.strftime "%Y-%m-%d  %H:%M:%S"        
+      @request.save   
+    end
   end
 
 

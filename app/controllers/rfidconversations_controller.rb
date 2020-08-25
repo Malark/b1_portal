@@ -83,8 +83,10 @@ class RfidconversationsController < ApplicationController
 
   def create_rfid(lcid, dict_6bit)
     # step-0: add the permanent two prefix to the hexa RFID string (49, A2)
-    rfid = '49A2'
-    rfid_log = '49 A2 '
+    #rfid = '49A2'
+    #rfid_log = '49 A2 '
+    rfid = ''
+    rfid_log = ''
 
     # step-1: convert every character of the string to 6 bit binary code and finally add Eot and Space character at the end
     string_6bit = ''

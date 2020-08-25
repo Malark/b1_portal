@@ -1,0 +1,221 @@
+<h1>Előkészített alapanyag tartályba töltése</h1>
+<br>
+<% if @item %>
+  <div class="well results-block">
+    <div class="ui fluid card">
+      <div class="content">
+        <%= content_tag :div, class: "header #{ 'mobile' if session[:mobile_device] == true }" do %>
+          <div class="ui grid">
+            <div class="left aligned ten wide column">Sorszám: <%= @request["U_SARZSSZAM"] %></div>
+            <div class="right aligned six wide column">Igénylés dátuma: <%= @request["U_IGENYDATUM"].to_s[0..16] %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+
+        <% if @request["U_ISO_MENNYISEG"].to_i > 0 %>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Igényelt alapanyag típusa: <strong>ISO</strong>
+                <!-- <div class="ui red center aligned horizontal large label">ISO</div> -->
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Cikkszám: 
+                <%= @iso_component["ItemCode"] %>, (<%= @iso_component["ItemName"] %>)
+              </div>
+            <% end %>
+          </div>
+
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Előkészített mennyiség: <strong><%= @request["U_ISO_MENNYISEG"] %> kg</strong>
+              </div>
+            <% end %>
+          </div>
+        <% end %>  
+        <% if @request["U_POLIOL_MENNYISEG"].to_i > 0 %>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Igényelt alapanyag típusa: <strong>POLIOL</strong>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Cikkszám: 
+                <%= @poliol_component["ItemCode"] %> (<%= @poliol_component["ItemName"] %>)
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Előkészített mennyiség: <strong><%= @request["U_POLIOL_MENNYISEG"] %> kg</strong>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                ESD adalékot tartalmaz?: <strong><%= @esd_additives == true ? 'IGEN' : 'NEM' %></strong>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+          <br>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                <h4 class="ui dividing header">Habosítógép adatok</h4>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Gép: <%= @foam_machine["Name"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Üzem: <%= @foam_machine["U_Uzem"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Gépben lévő aktuális habrendszer: <%= @foam_machine["U_AKTUHABRENDSZER"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                <% if @request["U_ISO_MENNYISEG"].to_i > 0 %>
+                  Tartály azonosító: <%= @foam_machine["U_ISO_TARTALY_ID"] %>
+                <% else %>  
+                  Tartály azonosító: <%= @foam_machine["U_POLIOL_TARTALY_ID"] %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>          
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                <% if @request["U_ISO_MENNYISEG"].to_i > 0 %>
+                  Tartályban lévő aktuális hab: <%= @foam_machine["U_AKTU_ISO"] %>
+                <% else %>  
+                  Tartályban lévő aktuális hab: <%= @foam_machine["U_AKTU_POLIOL"] %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>          
+          <br>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                <h4 class="ui dividing header">Előkészített alapanyag részletei   
+                    <%= link_to summary_report_path(:request_id => @request.Code), target: :_blank, class: 'item icon run-report-button' do %>
+                      <i class='print icon orange small run-report-button'></i>
+                    <% end %>
+                </h4>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                <br>
+                <table id="preparable_summary_table" class="tablesorter">
+                  <thead>
+                    <tr>
+                      <th class="one wide left aligned">Típus</th>
+                      <th class="one wide center aligned">Cikkszám</th>
+                      <th class="three wide center aligned">Megnevezés</th>
+                      <th class="one wide center aligned">Sarzsszám</th>
+                      <th class="one wide center aligned">Lejárat dátuma</th>
+                      <th class="two wide center aligned">Tárolóhely</th>
+                      <th class="one wide center aligned">Mennyiség</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @transactions.each do |row| %>
+                      <tr>
+                        <td align="left"><%= row["U_MATERIAL_TYPE"] %></td>
+                        <td align="left"><%= row["U_ItemCode"] %></td>
+                        <td align="left"><%= row["U_ItemName"] %></td>
+                        <td align="left"><%= row["U_DistNumber"] %></td>
+                        <td align="center"><%= row["U_ExpDate"].to_s[0..9] %></td>
+                        <td align="left"><%= row["U_SL1Code"] %></td>
+                        <td align="right" style="padding-right: 10px;"><%= row["U_MarkedQty"] %> kg</td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+        <div class="summary">
+          <h4 class="ui dividing header">Figyelmetetések</h4>
+        </div>
+      <% end %>
+
+      <div class="extra content">
+        <div class="summary">
+          <% if @error_message > '' %>
+            <%= content_tag :h3, class: "ui header center aligned #{ 'mobile' if session[:mobile_device] == true }" do %>
+              <div class="ui red center aligned horizontal big label"><%= @error_message %></div>
+            <% end %>
+          <% else %>
+            <%= content_tag :h2, class: "ui header center aligned #{ 'mobile' if session[:mobile_device] == true }" do %>
+              <div class="ui green center aligned horizontal big label">Nincsenek figyelmeztetések!</div>
+            <% end %>
+          <% end %>
+        </div>  
+      </div>
+      <div class="content">
+        <div class="ui grid">
+          <div class="left aligned eight wide column">
+            <%= link_to "Mégsem", foamrequests_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+          </div>
+          <div class="right aligned eight wide column">
+
+            <% if @error == false %>
+              <%= link_to "Tovább", use_prepared_request_step2_path(:id => @request.Code), class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+            <% end %>
+
+
+            <!--
+            <%#= form_tag set_approved_path, remote: true, method: :get, id: 'continue_to_select_quantities-form', class: 'ui reply form' do %> 
+              <%#= hidden_field_tag :id, @request["Code"] %>
+              <div class="form-group">
+                <%#= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+                  Jóváhagy
+                <%# end %>
+              </div>
+            <%# end %>
+            -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+<% end %> 
