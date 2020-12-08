@@ -1,0 +1,70 @@
+<% if @selected_container %>
+  <%= content_tag :h3 do %>
+    Lefejtésre kijelölt tartály adatai
+  <% end %>    
+  <div class="well results-block">
+     <div class="ui fluid card">
+      <div class="content">
+        <%= content_tag :div do %>
+          <div class="ui grid">
+            <div class="left aligned ten wide column"><%= @selected_container["Name"] %></div>
+            <div class="right aligned six wide column"><%= session[:container_id] %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="content">
+        <%= content_tag :h4, class: "ui sub header" do %>
+          Habosító gép: <%= @selected_container["Name"] %>
+        <% end %>
+        <div class="ui small feed">
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Tartály típusa: <%= @container_type %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Gépben lévő aktuális habrendszer: <%= @selected_container["U_AKTUHABRENDSZER"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Tartályban lévő aktuális anyag: <%= @actu_material %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="summary">
+          <%= content_tag :h4, class: "ui header" do %>
+            Lefejteni kívánt mennyiség: <%= @unloadable_qty %> kg
+          <% end %>
+        </div>  
+      </div>
+      <div class="content">
+        <div class="ui grid">
+          <div class="left aligned eight wide column"><%= link_to "Mégsem", root_path, class: "ui primary button" %></div>
+          <div class="right aligned eight wide column">
+            <div class="right aligned eight wide column">
+              <%= form_tag save_record_path_path, remote: true, method: :get, id: 'continue_to_get_storage_id-form', class: 'ui reply form' do %> 
+                <%= hidden_field_tag :container, @selected_container %>
+                <%= hidden_field_tag :container, @container_id %>
+                <div class="form-group">
+                  <%= button_tag(type: :submit, class: "ui primary button") do %>
+                    Lefejtés
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

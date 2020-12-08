@@ -62,11 +62,23 @@ Rails.application.routes.draw do
   get 'prepare_component', to: 'foamrequests#prepare_component'  
   get 'set_prepared_summary', to: 'foamrequests#set_prepared_summary'  
   get 'summary_report', to: 'foamrequests#summary_report'  
+  get 'picklist_report', to: 'foamrequests#picklist_report'  
   get 'finish_preparation', to: 'foamrequests#finish_preparation'  
 
-
+  # Without Barcode
   get 'use_prepared_request', to: 'foamrequests#use_prepared_request'
   get 'use_prepared_request_step2', to: 'foamrequests#use_prepared_request_step2'
   get 'use_prepared_request_step3', to: 'foamrequests#use_prepared_request_step3'
+
+  # With Barcode
+  get 'use_prepared_request_index', to: 'foamrequests#use_prepared_request_index'
+  get 'search_material_request', to: 'foamrequests#search_material_request'
+  get 'search_container_id', to: 'foamrequests#search_container_id'
+
+  # Unloading Containers
+  get 'unloading_container_index', to: 'foamrequests#unloading_container_index'
+  get 'set_unloadable_quantity', to: 'foamrequests#set_unloadable_quantity'
+  get 'search_container_id_unloading', to: 'foamrequests#search_container_id_unloading'
+  get 'save_unloading_record', to: 'foamrequests#save_unloading_record'
 
 end

@@ -7,6 +7,22 @@ class KOM_HABIGENYLES < ApplicationRecord
 
   scope :all_open, -> { where("U_STATUS != 'C'") }
 
+
+  def self.search_prepared_material_record(charge_nr)
+    query = <<-SQL 
+      select *
+      from dbo.[@KOM_HABIGENYLES]
+      where U_SARZSSZAM = '#{charge_nr}'
+      and U_STATUS = 'P'
+    SQL
+    result = ActiveRecord::Base.connection.exec_query(query)
+    if result.count > 0
+      return result
+    else
+      return nil
+    end
+  end  
+
   def self.generate_charge_nr
     query = <<-SQL 
       select TOP 1 *

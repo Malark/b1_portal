@@ -1,0 +1,22 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  2. Lefejtendő mennyiség
+<% end %>
+<br>
+
+
+<%= form_tag set_unloadable_quantity_path, remote: true, method: :get, id: 'set_unloadable_quantity' do %>
+  <%= label_tag :unloadable_qty, "Lefejtendő mennyiség" %>
+  <div class="field">
+    <div class="ui right labeled input">
+      <%= number_field_tag :unloadable_qty, '0' %>
+      <div class="ui basic label">kg</div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="form-group">
+    <%= button_tag(type: :submit, class: "ui basic orange button") do %>
+      Tovább
+    <% end %>
+  </div>
+<% end %>

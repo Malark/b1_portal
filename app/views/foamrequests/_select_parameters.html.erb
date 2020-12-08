@@ -13,7 +13,7 @@
     <br>
     <div class="field">
       <%= label_tag :product_itemcode, "Termék cikkszám" %>
-      <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
+      <%= content_tag :div, class: "ui fluid icon input"  do %>
         <%= text_field_tag :product_itemcode, nil, placeholder: "Gyártandó termék cikkszáma..." %>
       <% end %>
     </div>

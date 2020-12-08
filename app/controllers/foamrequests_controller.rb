@@ -450,7 +450,6 @@ class FoamrequestsController < ApplicationController
   
 
   def prepare_component
-    puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     puts @request.U_POLIOL_MENNYISEG
 
     # check the existing requests: at the same time only one request is allowed to prepare
@@ -673,43 +672,39 @@ class FoamrequestsController < ApplicationController
         #end
       end
     end
-
   end
 
-    #request.U_SARZSSZAM = actual_nr + 1
-    #request.U_STATUS = 'O'  # open status
-    #request.U_GEP_ID = session[:foaming_machine_id]
-    #request.U_FOCIKKSZAM = session[:product_itemcode]
-    #request.U_HABRENDSZER = session[:foam_system]
-    #request.U_ISO_MENNYISEG = iso_qty
-    #request.U_POLIOL_MENNYISEG = poliol_qty
-    #request.U_IGENYDATUM = d.strftime "%Y-%m-%d  %H:%M:%S"
-    #request.U_IGENYLO = current_user.username  
-    #request.U_CreateDate = d.strftime "%Y-%m-%d  %H:%M:%S"  
-    #request.U_MEGJEGYZES = session[:errors]
+  def picklist_report
+    @request = KOM_HABIGENYLES.find(params[:request_id])
+    error = false
+    @components = KOM_HABIGENY_TETEL.find_components(@request.U_SARZSSZAM)
+    if @components == nil
+      error = true      
+    else
+      @components.each do |component|
+        if component["U_STATUS"] != 'C'
+          error = true 
+        end
+      end
+    end
+    if error == true
+      flash[:danger] = "Folytatás nem lehetséges! Nincs összekészítve az összes komponens!"
+      redirect_to prepare_request_index_path(:id => @request) 
+    else
+      @transactions = KOM_HABIGENY_MOZGAS.find_transactions_by_batch(@request.U_SARZSSZAM)
+      if @transactions == nil
+        flash[:danger] = "Folytatás nem lehetséges! Nem található egyetlen mozgás tétel sem!"
+        redirect_to prepare_request_index_path(:id => @request) 
+      else
+        #respond_to do |format|
+        #  format.pdf do
+          send_data generate_picklist_report(@request, @transactions), filename: 'Picklista - ' + Time.now.strftime("%Y-%m-%d") + '.pdf', type: 'application/pdf', disposition: 'inline'
+        #  end
+        #end
+      end
+    end
+  end
 
-    #component.U_IGENY_SARZSSZAM = @request.U_SARZSSZAM
-    #component.U_ITEMCODE = row["ItemCode"]
-    #component.U_ITEMNAME = row["ItemName"]
-    #component.U_REQUESTED_QTY = additive_qty.round(2) 
-    #component.U_PREPARED_QTY = 0
-    #component.U_MATERIAL_TYPE = 'Adalék'
-    #component.U_STATUS = 'O'
-    #component.U_BATCH_MANAGED = row["ManBtchNum"]   
-    
-    #transaction.U_AbsEntry = unit["AbsEntry"]
-    #transaction.U_Source = unit["Source"]
-    #transaction.U_ItemCode = unit["ItemCode"]
-    #transaction.U_ItemName = unit["ItemName"]
-    #transaction.U_Batch_Managed = @component["U_BATCH_MANAGED"]
-    #transaction.U_DistNumber = unit["DistNumber"]
-    #transaction.U_WhsCode = unit["WhsCode"]
-    #transaction.U_SL1Code = unit["SL1Code"]
-    #transaction.U_InDate = unit["InDate"]
-    #transaction.U_ExpDate = unit["ExpDate"]
-    #transaction.U_MarkedQty = marked_qty
-    #transaction.U_IGENY_SARZSSZAM = U_SARZSSZAM    
-    #transaction.U_MATERIAL_TYPE = @component["U_MATERIAL_TYPE"]
 
   def generate_summary_report(request, transactions)
     #report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'views', 'foamrequests', 'request_summary.tlf')
@@ -742,6 +737,47 @@ class FoamrequestsController < ApplicationController
           mennyiseg: transaction["U_MarkedQty"],
           lejarat_datum: transaction["U_ExpDate"]
           #tarhely: transaction["U_SL1Code"]
+      end
+    end
+
+    report.list.on_footer_insert do |footer|
+      # Szum mezők
+      #footer.item(:sum_amount).value(sum_sum_amount)
+    end
+
+    report.generate
+  end
+
+
+  def generate_picklist_report(request, transactions)
+    #report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'views', 'foamrequests', 'request_summary.tlf')
+    report = Thinreports::Report.new layout: File.join(Rails.root, 'app', 'views', 'foamrequests', 'request_picklist.tlf')
+
+    report.start_new_page
+
+    report.page.values print_date: Time.now
+    report.page.values igeny_sarzsszam: request.U_SARZSSZAM
+    report.page.values gep_id: request.U_GEP_ID
+    report.page.values habtipus: session[:foam_type]
+    report.page.values igenyelt_mennyiseg: session[:foam_type] == 'ISO' ? request.U_ISO_MENNYISEG.to_i.to_s + ' kg' : request.U_POLIOL_MENNYISEG.to_i.to_s + ' kg'
+
+    # JAN13 - the 13rd character is a checksum!!!!!
+    #filled_batch_nr = request.U_SARZSSZAM.rjust(12, '0')
+    #report.page.item(:jan_13).src(barcode(:ean_13, filled_batch_nr))    
+
+    #sum_sum_amount = 0  #Bruttó összeg
+
+    transactions.each do |transaction|
+      report.list.add_row do |row|
+     
+        #tipus: transaction["U_MATERIAL_TYPE"],
+        row.values tarhely: transaction["U_SL1Code"],
+          itemcode: transaction["U_ItemCode"],
+          itemname: transaction["U_ItemName"],
+          sarzsszam: transaction["U_DistNumber"],
+          mennyiseg: transaction["U_MarkedQty"],
+          lejarat_datum: transaction["U_ExpDate"]
+          
       end
     end
 
@@ -787,7 +823,72 @@ class FoamrequestsController < ApplicationController
   end
 
 
-#----------------------------------------------------- Use prepared materials 
+#----------------------------------------------------- Use prepared materials with Barcode
+
+  def use_prepared_request_index
+    @actu_step = 1
+  end
+
+  def search_material_request
+    #Search opened production orders
+    if params[:material_label].blank?
+      @actu_step = 1
+      flash.now[:danger] = "Az alapanyag címke vonalkódja nem lehet üres!"
+    else
+      material_label = params[:material_label]
+
+      #Check the charge_id is it alerady used or is it a brand new palett id
+      material_label_record = KOM_HABIGENYLES.search_prepared_material_record(material_label)
+
+      if material_label_record == nil
+        @actu_step = 1
+        flash.now[:danger] = "A #{material_label} sarzsszámú összekészített alapanyag rekord nem létezik vagy már be lett töltve korábban!"
+      else
+        @actu_step = 2
+        session[:material_label] = material_label
+      end
+    end
+    respond_to do |format|
+      format.js { render partial: 'use_prepared_request_barcode' }
+    end
+  end  
+
+  def search_container_id
+    if params[:container_id].blank?
+      @actu_step = 2
+      flash.now[:danger] = "A tartály azonosító vonalkódja nem lehet üres!"
+    else
+      container_id = params[:container_id]
+      requests = KOM_HABIGENYLES.search_prepared_material_record(session[:material_label])
+      #@request = KOM_HABIGENYLES.find(params[:id])
+
+      if requests == nil
+        @actu_step = 1
+        flash.now[:danger] = "A #{session[:material_label]} sarzsszámú összekészített alapanyag rekord nem létezik vagy már be lett töltve korábban!"
+      else
+        # Check the request record: is it the right container what the worker is going to use?
+        # Since the container_ide is not stored in the KOM_HABIGENYLES table, we need to check the foammachine and the foamtype
+        @request = requests.first
+        if @request["U_ISO_MENNYISEG"].to_i > 0
+          container_id = @request["U_GEP_ID"].rjust(2, '0') + '-ISO'
+        else
+          container_id = @request["U_GEP_ID"].rjust(2, '0') + '-POLIOL'
+        end
+        if params[:container_id] != container_id
+          @actu_step = 1
+          flash.now[:danger] = "A betöltés nem folytatható! A beolvasott #{params[:container_id]} tartály kód nem egyezik meg az igénylésben tárolt tartáls kóddal: #{container_id} !"
+        else
+          session[:container_id] = container_id
+          @actu_step = 3
+        end
+      end
+    end
+    respond_to do |format|
+      format.js { render partial: 'use_prepared_request_barcode' }
+    end
+  end
+
+#----------------------------------------------------- Use prepared materials without Barcode
 
 
   def use_prepared_request
@@ -829,7 +930,7 @@ class FoamrequestsController < ApplicationController
             @additives = ITT1.search_additives(@item["U_HABRENDSZER"])
             @error = false
             #Are the two foam systems equivalent?
-            if @item["U_HABRENDSZER"] != @foam_machine["U_AKTUHABRENDSZER"]
+            if (@foam_machine["U_AKTUHABRENDSZER"].present? && @item["U_HABRENDSZER"] != @foam_machine["U_AKTUHABRENDSZER"])
               @error = true
               @error_message += "A #{s_itemcode} termék habrendszere (#{@item["U_HABRENDSZER"]}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
             end
@@ -861,7 +962,7 @@ class FoamrequestsController < ApplicationController
             end
             #container foam check
             if @request.U_ISO_MENNYISEG.to_i > 0
-              if (@foam_machine["U_AKTU_ISO"] != nil and @foam_machine["U_AKTU_ISO"] != @iso_component["ItemCode"])
+              if (@foam_machine["U_AKTU_ISO"].present? and @foam_machine["U_AKTU_ISO"] != @iso_component["ItemCode"])
                 @error = true
                 @error_message += "Az összekészített ISO komponens (#{@iso_component["ItemCode"]}) nem egyezik meg az ISO tartályban jelenleg tárolt ISO cikkszámmal (#{@foam_machine["U_AKTU_ISO"]})!  *** "
               end
@@ -1025,10 +1126,117 @@ class FoamrequestsController < ApplicationController
       # 3. KOM_HABIGENYLES
       @request.U_STATUS = 'C'
       @request.U_BETOLTO_USER = current_user.username  
-      @request.U_BETOLTES_DATUM = d.strftime "%Y-%m-%d  %H:%M:%S"        
+      @request.U_BETOLTES_DATUM = d.strftime "%Y-%m-%d  %H:%M:%S"   
+      @request.U_BETOLTES_TARTALY_ID = session[:container_id]
       @request.save   
     end
   end
+
+#----------------------------------------------------- Use prepared materials with Barcode
+
+  def unloading_container_index
+    @actu_step = 1
+  end
+
+  def search_container_id_unloading
+    if params[:container_id].blank?
+      @actu_step = 1
+      flash.now[:danger] = "A tartály azonosító vonalkódja nem lehet üres!"
+    else
+      session[:container_id] = params[:container_id]
+      selected_container = Gepek.search_container(params[:container_id])
+      if selected_container == nil
+        flash.now[:danger] = "Nem létező tartály azonosító: #{params[:container_id]}!"
+        @actu_step = 1
+      else
+        @actu_step = 2
+      end
+    end
+    respond_to do |format|
+      format.js { render partial: 'unloading_container' }
+    end
+  end
+
+  def set_unloadable_quantity
+    if (params[:unloadable_qty].blank? || params[:unloadable_qty].to_i <= 0)      
+      @actu_step = 2
+      flash.now[:danger] = "A lefejtendő mennyiség mező nem lehet üres vagy nulla!"
+    else
+      @unloadable_qty = params[:unloadable_qty]
+      session[:unloadable_qty] = params[:unloadable_qty]
+      @selected_container = Gepek.search_container(session[:container_id])
+      if @selected_container == nil
+        flash.now[:danger] = "Nem létező tartály azonosító: #{session[:container_id]}!"
+        @actu_step = 1
+      else
+        if session[:container_id][3..5] == 'ISO'
+          @container_type = 'ISO'  
+          @actu_material = @selected_container["U_AKTU_ISO"]
+        else
+          @container_type = 'POLIOL'  
+          @actu_material = @selected_container["U_AKTU_POLIOL"]
+        end
+        @actu_step = 3
+      end  
+    end
+    respond_to do |format|
+      format.js { render partial: 'unloading_container' }
+    end
+  end
+
+  def save_unloading_record
+    if session[:container_id].blank?
+      @actu_step = 1
+      flash.now[:danger] = "Hiba: a tartály azonosító nem lehet üres! A lefejtési folyamat megszakadt!"
+    else
+      @foam_machine = Gepek.search_container(session[:container_id])
+      if @foam_machine == nil
+        flash.now[:danger] = "Nem létező tartály azonosító: #{session[:container_id]}!"
+        @actu_step = 1
+      else
+        d = DateTime.now
+
+        # Update foam_machine 
+        @foam_machine2 = Gepek.find(@foam_machine["Code"])
+        if session[:container_id][3..5] == 'ISO'
+          @foam_machine2.U_AKTU_ISO = ''
+        else
+          @foam_machine2.U_AKTU_POLIOL = ''
+        end
+        @foam_machine2.U_AKTUHABRENDSZER = ''
+        @foam_machine2.U_UTOLSO_MOZGAS = d.strftime "%Y-%m-%d  %H:%M:%S"
+        @foam_machine2.save
+
+        # New container movement record  
+        @transaction = KOM_TARTALY_MOZGAS.new
+        @transaction.U_GEP_ID = @foam_machine["Code"]
+        # In case of ISO
+        #if @request.U_ISO_MENNYISEG.to_i > 0
+        if session[:container_id][3..5] == 'ISO'  
+          @transaction.U_TARTALY_ID = @foam_machine["U_ISO_TARTALY_ID"]
+          @transaction.U_TARTALY_TYPE = 'ISO'
+          @transaction.U_GEP_HABCIKKSZAM = @foam_machine["U_AKTU_ISO"]
+        else
+          @transaction.U_TARTALY_ID = @foam_machine["U_POLIOL_TARTALY_ID"]
+          @transaction.U_TARTALY_TYPE = 'POLIOL'
+          @transaction.U_GEP_HABCIKKSZAM = @foam_machine["U_AKTU_POLIOL"]
+        end
+        @transaction.U_GEP_HABRENDSZER = @foam_machine["U_AKTUHABRENDSZER"]
+        @transaction.U_MOZGAS_TIPUS = 'LEFEJTÉS'
+        @transaction.U_Quantity = session[:unloadable_qty] 
+        @transaction.U_USER = current_user.username  
+        @transaction.U_CreateDate = d.strftime "%Y-%m-%d  %H:%M:%S"
+        @transaction.save
+
+        @actu_step = 4
+      end  
+    end
+    respond_to do |format|
+      format.js { render partial: 'unloading_container' }
+    end    
+  end
+
+#-----------------------------------------------------
 
 
   private

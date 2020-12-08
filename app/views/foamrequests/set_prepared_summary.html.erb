@@ -30,6 +30,19 @@
 <br>
 <div class="ui grid">
   <div class="left aligned bottom aligned eight wide column">
+  </div>
+  <div class="right aligned seven wide column">
+    <h3>Átadás/átvételi + Pick-lista: </h3>
+  </div>  
+  <div class="right aligned bottom aligned one wide column">
+    <%= link_to picklist_report_path(:request_id => @request.Code), target: :_blank, class: 'item icon run-report-button' do %>
+      <i class='print icon orange large run-report-button'></i>
+    <% end %>
+  </div>
+</div>
+
+<div class="ui grid">
+  <div class="left aligned bottom aligned eight wide column">
     <h3>Összekészítendő komponensek</h3>
   </div>
   <div class="right aligned seven wide column">

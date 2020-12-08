@@ -1,5 +1,5 @@
 <br>
-<h1>SAP Business One Portal v1.3.4 - Dashboard</h1>
+<h1>SAP Business One Portal v1.3.5 - Dashboard</h1>
 
 <!--
 <div class="ui vertical inverted labeled icon massive menu">
@@ -50,13 +50,30 @@
   <div class="ui horizontal center aligned list">
     <div class="item">
       <h3 class="ui center aligned icon header">
-        <%= link_to "<i class='rss clipboard outline orange circular icon'></i>Alapanyag igénylés".html_safe, foamrequests_path, class: "item" %>    
+        <%= link_to "<i class='rss clipboard outline orange circular icon'></i>Nyitott igénylések".html_safe, foamrequests_path, class: "item" %>    
       </h3>
     </div>
+
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='plus orange circular icon'></i>Alapanyag igénylés".html_safe, new_foam_request_index_path, class: "item" %>    
+      </h3>
+    </div>
+
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='filter orange circular icon'></i>Tartályba töltés".html_safe, use_prepared_request_index_path, class: "item" %>    
+      </h3>
+    </div>
+
+    <div class="item">
+      <h3 class="ui center aligned icon header">
+        <%= link_to "<i class='arrow alternate circle down outline orange circular icon'></i>Tartály lefejtés".html_safe, unloading_container_index_path, class: "item" %>    
+      </h3>
+    </div>
+
   </div>    
 <% end %>    
-
- 
 
 
 <br>
@@ -77,6 +94,29 @@
   </tr>
 </table>
 -->
+<br>
+<h2 class="ui dividing header">Változások - v1.3.5  (2020.12.08)</h2>
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th class="three wide">Modul</th>
+      <th class="thirteen wide">Leírás</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Alapanyag igénylés</td>
+    <td>Tartály lefejtés funkció</td>
+  </tr> 
+  <tr>
+    <td>Alapanyag igénylés</td>
+    <td>Tabletes verzió: Anyagigénylés, jóváhagyás, tartályba töltés, lefejtés</td>
+  </tr> 
+  <tr>
+    <td>Alapanyag igénylés</td>
+    <td>Raktári előkészítés: Picklista + átadás-átvételi riport</td>
+  </tr> 
+</table>
+
 <br>
 <h2 class="ui dividing header">Változások - v1.3.4  (2020.08.25)</h2>
 <table class="ui celled table">

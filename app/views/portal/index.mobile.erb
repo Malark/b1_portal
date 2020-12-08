@@ -13,3 +13,22 @@
     <%= link_to "<i class='truck icon'></i> Szállítások ellenőrzése".html_safe, check_delivery_index_path, class: "item" %>
   </div>
 <% end %>
+
+
+<% if session[:role_production] == true %>
+  <div class="ui vertical inverted labeled icon massive menu mobile">
+    <%= link_to "<i class='rss clipboard outline icon'></i> Nyitott igénylések".html_safe, foamrequests_path, class: "item" %>
+  </div>
+
+  <div class="ui vertical inverted labeled icon massive menu mobile">
+    <%= link_to "<i class='plus icon'></i> Alapanyag igénylés".html_safe, new_foam_request_index_path, class: "item" %>
+  </div>
+
+  <div class="ui vertical inverted labeled icon massive menu mobile">
+    <%= link_to "<i class='filter icon'></i> Tartályba töltés".html_safe, use_prepared_request_index_path, class: "item" %>
+  </div>
+
+  <div class="ui vertical inverted labeled icon massive menu mobile">
+    <%= link_to "<i class='arrow alternate circle down outline icon'></i> Tartály lefejtés".html_safe, unloading_container_index_path, class: "item" %>
+  </div>  
+<% end %>

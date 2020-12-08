@@ -1,0 +1,34 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="scan_container_unloading">
+    <%= render 'scan_container_unloading' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 2 %>
+  <div id="set_unloadable_quantity">
+    <%= render 'get_unloadable_quantity' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 3 %>
+  <div id="unloadable_container_summary">
+    <%= render 'unloadable_container_summary' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 4 %>
+  <div id="unloading_success_page">
+    <%= render 'unloading_success_page' %>
+  </div>
+<% end %>
+
+<br>
+<br>
+
+<% if @actu_step != 4 %>
+  <%= link_to 'Tartály lefejtés megszakítása', root_path %> 
+<% end %>  

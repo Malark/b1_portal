@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
     session[:mobile_device] = false
     session[:mobile_device] = true if is_mobile_device?
     #force_mobile_format   #-> if you want to force mobile format
-    #session[:mobile_device] = true
+    #session[:mobile_device] = true  #-> if you want to force mobile format
   end
 
   def current_database

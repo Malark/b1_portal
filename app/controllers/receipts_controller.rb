@@ -22,7 +22,7 @@ class ReceiptsController < ApplicationController
       #values.each do |value|
       #  puts value
       #end
-      if values.count != 9
+      if values.count < 9
         @actu_step = 1
         flash.now[:danger] = "Hibás QR kód struktúra!"
       else

@@ -1,0 +1,183 @@
+<% if @item %>
+  <div class="well results-block">
+    <div class="ui fluid card">
+      <div class="content">
+        <%= content_tag :div, class: "header" do %>
+          <div class="ui grid">
+            <div class="left aligned ten wide column">Sorszám: <%= @request["U_SARZSSZAM"] %></div>
+            <div class="right aligned six wide column">Igénylés dátuma: <%= @request["U_IGENYDATUM"].to_s[0..16] %></div>
+          </div>
+        <% end %>
+      </div>
+      <div class="content">
+        <div class="ui small feed">
+
+        <% if @request["U_ISO_MENNYISEG"].to_i > 0 %>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Igényelt alapanyag típusa: <strong>ISO</strong>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Igényelt mennyiség: <strong><%= @request["U_ISO_MENNYISEG"] %> kg</strong>
+              </div>
+            <% end %>
+          </div>
+        <% end %>  
+        <% if @request["U_POLIOL_MENNYISEG"].to_i > 0 %>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Igényelt alapanyag típusa: <strong>POLIOL</strong>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Igényelt mennyiség: <strong><%= @request["U_POLIOL_MENNYISEG"] %> kg</strong>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
+          <br>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                <h4 class="ui dividing header">Habosítógép adatok</h4>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Gép: <%= @foam_machine["Name"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Üzem: <%= @foam_machine["U_Uzem"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Gépben lévő aktuális habrendszer: <%= @foam_machine["U_AKTUHABRENDSZER"] %>
+              </div>
+            <% end %>
+          </div>
+          <br>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                <h4 class="ui dividing header">Gyártandó termék adatok</h4>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Termék cikkszám: <%= @item["ItemCode"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Termék megnevezés: <%= @item["ItemName"] %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Termék habrendszer: <%= @item["U_HABRENDSZER"] %>
+              </div>
+            <% end %>
+          </div>
+          <br>
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                ISO komponens: 
+                <% if @iso_component %>
+                  <%= @iso_component["ItemCode"] %>, (<%= @iso_component["ItemName"] %>)
+                <% end %>  
+              </div>
+            <% end %>
+          </div>
+
+          <div class="event">
+            <%= content_tag :div, class: "content" do %>
+              <div class="summary">
+                Poliol komponens: 
+                <% if @poliol_component %>
+                  <%= @poliol_component["ItemCode"] %> (<%= @poliol_component["ItemName"] %>)
+                <% end %>  
+              </div>
+            <% end %>
+          </div>
+          <% if @additives %>
+            <div class="event">
+              <%= content_tag :div, class: "content" do %>
+                <div class="summary">
+                  További adalékok: 
+                  <%= @additives.count %> db
+                  <br>
+                  <% @additives.each do |row| %>
+                    <ul>
+                      <li><%= row["ItemCode"] %> (<%= row["ItemName"] %>)</li>
+                    </ul>
+                  <% end %>
+                </div>                
+              <% end %>
+            </div>          
+          <% end %>  
+
+
+
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="summary">
+          <% if @error_message > '' %>
+            <%= content_tag :h3, class: "ui header center aligned" do %>
+              <div class="ui red center aligned horizontal big label"><%= @error_message %></div>
+            <% end %>
+          <% else %>
+            <%= content_tag :h2, class: "ui header center aligned" do %>
+              <div class="ui green center aligned horizontal big label">Nincsenek figyelmeztetések!</div>
+            <% end %>
+          <% end %>
+        </div>  
+      </div>
+      <div class="content">
+        <div class="ui grid">
+          <div class="left aligned eight wide column">
+            <%= link_to "Mégsem", foamrequests_path, class: "ui primary button" %>
+          </div>
+          <div class="right aligned eight wide column">
+            <%= form_tag set_approved_path, remote: true, method: :get, id: 'continue_to_select_quantities-form', class: 'ui reply form' do %> 
+              <%= hidden_field_tag :id, @request["Code"] %>
+              <%#= hidden_field_tag :foam_machine, @foam_machine %>
+              <div class="form-group">
+                <%= button_tag(type: :submit, class: "ui primary button") do %>
+                  Jóváhagy
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+<% end %> 

@@ -1,0 +1,12 @@
+<%= content_tag :h3 do %>
+  1. Összekészített alapanyag címke beolvasása
+<% end %>
+
+<%= form_tag search_material_request_path, remote: true, method: :get, id: 'tartalyba_toltes_step1-form', class: 'ui reply form' do %> 
+  <div class="field">
+    <%= content_tag :div, class: "ui fluid icon input"  do %>
+      <%= text_field_tag :material_label, nil, placeholder: "Alapanyag címke beolvasása...", autofocus: true %>
+      <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+    <% end %>
+  </div>
+<% end %>

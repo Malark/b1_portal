@@ -1,0 +1,28 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="scan_material_label">
+    <%= render 'scan_material_label' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 2 %>
+  <div id="scan_container">
+    <%= render 'scan_container' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 3 %>
+  <div id="container_check_success">
+    <%= render 'container_check_success' %>
+  </div>
+<% end %>
+
+<br>
+<br>
+
+<% if @actu_step != 3 %>
+  <%= link_to 'Tartályba töltés megszakítása', root_path %> 
+<% end %>  

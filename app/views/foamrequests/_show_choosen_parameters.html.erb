@@ -6,7 +6,7 @@
   <div class="well results-block">
     <div class="ui fluid card">
       <div class="content">
-        <%= content_tag :div, class: "header #{ 'mobile' if session[:mobile_device] == true }" do %>
+        <%= content_tag :div, class: "header " do %>
           <div class="ui grid">
             <div class="left aligned ten wide column"><%= @foam_machine["Name"] %></div>
             <div class="right aligned six wide column">Üzem: <%= @foam_machine["U_Uzem"] %></div>
@@ -14,19 +14,19 @@
         <% end %>
       </div>
       <div class="content">
-        <%= content_tag :h4, class: "ui sub header #{ 'mobile' if session[:mobile_device] == true }" do %>
+        <%= content_tag :h4, class: "ui sub header " do %>
           Termék: <%= @item["ItemCode"] %> (<%= @item["ItemName"] %>)
         <% end %>
         <div class="ui small feed">
           <div class="event">
-            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+            <%= content_tag :div, class: "content " do %>
               <div class="summary">
                 Gép habrendszer: <%= @foam_machine["U_AKTUHABRENDSZER"] %>
               </div>
             <% end %>
           </div>
           <div class="event">
-            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+            <%= content_tag :div, class: "content " do %>
               <div class="summary">
                 Termék habrendszer: <%= @item["U_HABRENDSZER"] %>
               </div>
@@ -34,7 +34,7 @@
           </div>
           <br>
           <div class="event">
-            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+            <%= content_tag :div, class: "content " do %>
               <div class="summary">
                 ISO komponens: 
                 <% if @iso_component %>
@@ -45,7 +45,7 @@
           </div>
 
           <div class="event">
-            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+            <%= content_tag :div, class: "content " do %>
               <div class="summary">
                 Poliol komponens: 
                 <% if @poliol_component %>
@@ -57,7 +57,7 @@
           <br>
           <% if @additives %>
             <div class="event">
-              <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <%= content_tag :div, class: "content " do %>
                 <div class="summary">
                   További adalékok: 
                   <%= @additives.count %> db
@@ -79,7 +79,7 @@
       <div class="extra content">
         <div class="summary">
           <% if @error_message > '' %>
-            <%= content_tag :h3, class: "ui header #{ 'mobile' if session[:mobile_device] == true }" do %>
+            <%= content_tag :h3, class: "ui header " do %>
               <div class="ui red center aligned horizontal large label"><%= @error_message %></div>
             <% end %>
           <% end %>
@@ -88,14 +88,14 @@
       <div class="content">
         <div class="ui grid">
           <div class="left aligned eight wide column">
-            <%= link_to "Újra kezd", new_foam_request_index_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+            <%= link_to "Újra kezd", new_foam_request_index_path, class: "ui primary button" %>
           </div>
           <div class="right aligned eight wide column">
             <%= form_tag select_quantities_path, remote: true, method: :get, id: 'continue_to_select_quantities-form', class: 'ui reply form' do %> 
               <%#= hidden_field_tag :item, @item %>
               <%#= hidden_field_tag :foam_machine, @foam_machine %>
               <div class="form-group">
-                <%= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+                <%= button_tag(type: :submit, class: "ui primary button") do %>
                   Tovább
                 <% end %>
               </div>
