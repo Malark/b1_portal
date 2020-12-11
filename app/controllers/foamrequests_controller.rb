@@ -59,7 +59,16 @@ class FoamrequestsController < ApplicationController
           @foaming_machines_groups = Gepek.all
         else
           #Check foam system of the product
-          @foam_system = OITM.search_item(@item["U_HABRENDSZER"])
+          # Searching the '-1-S/k' BOM list element of the item
+          k_itemcode = itemcode + '-1-S/k'
+          @bom_foam = ITT1.search_foam_system(k_itemcode)
+          if @bom_foam == nil
+            @foamsys_id = ''
+          else
+            @foamsys_id = @bom_foam["Code"]
+          end  
+          #@foam_system = OITM.search_item(@item["U_HABRENDSZER"])
+          @foam_system = OITM.search_item(@foamsys_id)
           if @foam_system == nil
             flash.now[:danger] = "Hibás vagy hiányzó habrendszer a termék törzsadatokban!}"
             @actu_step = 1
@@ -69,22 +78,22 @@ class FoamrequestsController < ApplicationController
             @error_message = ''
             session[:errors] = ''
             session[:product_itemcode] = itemcode
-            session[:foam_system] = @item["U_HABRENDSZER"]
+            session[:foam_system] = @foamsys_id
 
             #Foam system analysis
-            @iso_component = ITT1.search_iso_component(@item["U_HABRENDSZER"])
+            @iso_component = ITT1.search_iso_component(@foamsys_id)
             if @iso_component == nil
               error = true
               @error_message += "A #{session[:foam_system]} habrendszerben nincs ISO komponens definiálva! *** "
               session[:errors] += "* Nincs ISO komponens a habrendszerben "
             end
-            @poliol_component = ITT1.search_poliol_component(@item["U_HABRENDSZER"])
+            @poliol_component = ITT1.search_poliol_component(@foamsys_id)
             if @poliol_component == nil
               error = true
               @error_message += "A #{session[:foam_system]} habrendszerben nincs POLIOL komponens definiálva! *** "
               session[:errors] += "* Nincs POLIOL komponens a habrendszerben "
             end
-            @additives = ITT1.search_additives(@item["U_HABRENDSZER"])
+            @additives = ITT1.search_additives(@foamsys_id)
 
             #Are there opened production orders?
             @prod_orders = OWOR.search_opened_production_orders(s_itemcode)
@@ -95,10 +104,10 @@ class FoamrequestsController < ApplicationController
             end
       
             #Are the two foam systems equivalent?
-            if @item["U_HABRENDSZER"] != @foam_machine["U_AKTUHABRENDSZER"]
+            if @foamsys_id != @foam_machine["U_AKTUHABRENDSZER"]
               error = true
-              @error_message += "A #{s_itemcode} termék habrendszere (#{@item["U_HABRENDSZER"]}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
-              session[:errors] += "* A termék habrendszere (#{@item["U_HABRENDSZER"]}) eltér a gép habrendszerétől (#{@foam_machine["U_AKTUHABRENDSZER"]})"
+              @error_message += "A #{s_itemcode} termék habrendszere (#{@foamsys_id}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
+              session[:errors] += "* A termék habrendszere (#{@foamsys_id}) eltér a gép habrendszerétől (#{@foam_machine["U_AKTUHABRENDSZER"]})"
             end
             @actu_step = 2
           end
@@ -217,7 +226,16 @@ class FoamrequestsController < ApplicationController
         @actu_step = 9
       else
         #Check foam system of the product
-        @foam_system = OITM.search_item(@item["U_HABRENDSZER"])
+        # Searching the '-1-S/k' BOM list element of the item
+        k_itemcode = itemcode + '-1-S/k'
+        @bom_foam = ITT1.search_foam_system(k_itemcode)
+        if @bom_foam == nil
+          @foamsys_id = ''
+        else
+          @foamsys_id = @bom_foam["Code"]
+        end  
+        #@foam_system = OITM.search_item(@item["U_HABRENDSZER"])
+        @foam_system = OITM.search_item(@foamsys_id)
         if @foam_system == nil
           @error_message = "Hibás vagy hiányzó habrendszer a termék törzsadatokban!"
           @actu_step = 9
@@ -225,15 +243,15 @@ class FoamrequestsController < ApplicationController
           @error_message = ''
 
           #Foam system analysis
-          @iso_component = ITT1.search_iso_component(@item["U_HABRENDSZER"])
+          @iso_component = ITT1.search_iso_component(@foamsys_id)
           if @iso_component == nil
-            @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs ISO komponens definiálva! *** "
+            @error_message += "A #{@foamsys_id} habrendszerben nincs ISO komponens definiálva! *** "
           end
-          @poliol_component = ITT1.search_poliol_component(@item["U_HABRENDSZER"])
+          @poliol_component = ITT1.search_poliol_component(@foamsys_id)
           if @poliol_component == nil
-            @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs POLIOL komponens definiálva! *** "
+            @error_message += "A #{@foamsys_id} habrendszerben nincs POLIOL komponens definiálva! *** "
           end
-          @additives = ITT1.search_additives(@item["U_HABRENDSZER"])
+          @additives = ITT1.search_additives(@foamsys_id)
 
           #Are there opened production orders?
           @prod_orders = OWOR.search_opened_production_orders(s_itemcode)
@@ -242,8 +260,8 @@ class FoamrequestsController < ApplicationController
           end
     
           #Are the two foam systems equivalent?
-          if @item["U_HABRENDSZER"] != @foam_machine["U_AKTUHABRENDSZER"]
-            @error_message += "A #{s_itemcode} termék habrendszere (#{@item["U_HABRENDSZER"]}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
+          if @foamsys_id != @foam_machine["U_AKTUHABRENDSZER"]
+            @error_message += "A #{s_itemcode} termék habrendszere (#{@foamsys_id}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
           end
     
           @actu_step = 1
@@ -271,7 +289,6 @@ class FoamrequestsController < ApplicationController
       flash[:danger] = "HIBA! Csak 'Jóváhagyva' vagy 'Folyamatban' státuszú tétel készíthető össze!"
       redirect_to foamrequests_path
     end       
-    puts "GGGGGGGGGGGGGGGGGGGGGGG"
     #set main parameters
     session[:foam_type] = ''
     session[:foam_warehouse] = '1_alapW3'
@@ -295,9 +312,7 @@ class FoamrequestsController < ApplicationController
       
     @components = KOM_HABIGENY_TETEL.find_components(@request.U_SARZSSZAM)
     if @components == nil
-      puts "UUUUUUUUUUUUUUUUUURRRRRRRRRRRES"
       # When we open the request very first time, need to check prerequisites and fill the detail table up
-
       # 1. check prerequisites
       @error_message = ''
       #Check requested quantities
@@ -305,20 +320,20 @@ class FoamrequestsController < ApplicationController
         @error_message += "Az igényelt ISO és POLIOL mennyiség is 0! "
       end
       #Check the foam system presence
-      @foam_system = OITM.search_item( @request.U_HABRENDSZER)
+      @foam_system = OITM.search_item(@request.U_HABRENDSZER)
       if @foam_system == nil
         @error_message += "A (#{@request.U_HABRENDSZER}) habrendszer nem található meg a törzsadatokban! "
       end
       #Foam system analysis
-      @iso_component = ITT1.search_iso_component(@item["U_HABRENDSZER"])
+      @iso_component = ITT1.search_iso_component(@request.U_HABRENDSZER)
       if @iso_component == nil
-        @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs ISO komponens definiálva! "
+        @error_message += "A #{@request.U_HABRENDSZER} habrendszerben nincs ISO komponens definiálva! "
       end
-      @poliol_component = ITT1.search_poliol_component(@item["U_HABRENDSZER"])
+      @poliol_component = ITT1.search_poliol_component(@request.U_HABRENDSZER)
       if @poliol_component == nil
-        @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs POLIOL komponens definiálva! "
+        @error_message += "A #{@request.U_HABRENDSZER} habrendszerben nincs POLIOL komponens definiálva! "
       end
-      @additives = ITT1.search_additives(@item["U_HABRENDSZER"])
+      @additives = ITT1.search_additives(@request.U_HABRENDSZER)
 
       # 2. fill up details table
       if @error_message > ''  
@@ -911,7 +926,16 @@ class FoamrequestsController < ApplicationController
           redirect_to foamrequests_path
         else
           #Check foam system of the product
-          @foam_system = OITM.search_item(@item["U_HABRENDSZER"])
+          # Searching the '-1-S/k' BOM list element of the item
+          k_itemcode = itemcode + '-1-S/k'
+          @bom_foam = ITT1.search_foam_system(k_itemcode)
+          if @bom_foam == nil
+            @foamsys_id = ''
+          else
+            @foamsys_id = @bom_foam["Code"]
+          end
+          #@foam_system = OITM.search_item(@item["U_HABRENDSZER"])
+          @foam_system = OITM.search_item(@foamsys_id)
           if @foam_system == nil
             flash.now[:danger] = "Hibás vagy hiányzó habrendszer a termék törzsadatokban!"
             redirect_to foamrequests_path
@@ -919,20 +943,20 @@ class FoamrequestsController < ApplicationController
             @error_message = ''
   
             #Foam system analysis
-            @iso_component = ITT1.search_iso_component(@item["U_HABRENDSZER"])
+            @iso_component = ITT1.search_iso_component(@foam_system)
             if @iso_component == nil
-              @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs ISO komponens definiálva! *** "
+              @error_message += "A #{@foamsys_id} habrendszerben nincs ISO komponens definiálva! *** "
             end
-            @poliol_component = ITT1.search_poliol_component(@item["U_HABRENDSZER"])
+            @poliol_component = ITT1.search_poliol_component(@foamsys_id)
             if @poliol_component == nil
-              @error_message += "A #{@item["U_HABRENDSZER"]} habrendszerben nincs POLIOL komponens definiálva! *** "
+              @error_message += "A #{@foamsys_id} habrendszerben nincs POLIOL komponens definiálva! *** "
             end
-            @additives = ITT1.search_additives(@item["U_HABRENDSZER"])
+            @additives = ITT1.search_additives(@foamsys_id)
             @error = false
             #Are the two foam systems equivalent?
-            if (@foam_machine["U_AKTUHABRENDSZER"].present? && @item["U_HABRENDSZER"] != @foam_machine["U_AKTUHABRENDSZER"])
+            if (@foam_machine["U_AKTUHABRENDSZER"].present? && @foamsys_id != @foam_machine["U_AKTUHABRENDSZER"])
               @error = true
-              @error_message += "A #{s_itemcode} termék habrendszere (#{@item["U_HABRENDSZER"]}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
+              @error_message += "A #{s_itemcode} termék habrendszere (#{@foamsys_id}) nem egyezik meg a gépben tárolt habrendszerrel (#{@foam_machine["U_AKTUHABRENDSZER"]})!  *** "
             end
 
             # collecting the components

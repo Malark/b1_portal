@@ -1,6 +1,28 @@
 class ITT1 < ApplicationRecord
   self.table_name = 'ITT1'
 
+
+  def self.search_foam_system(father)
+    begin 
+      query = <<-SQL 
+        select *
+        from ITT1
+        where ITT1.Father = '#{father}'
+        and code like 'Hab%'
+      SQL
+      result = ActiveRecord::Base.connection.exec_query(query)
+      if result.count > 0
+        if result.count > 1
+          puts "Csak egyetlen tétel lehetne az eredmény táblában! (search_iso_component)"
+        end
+        return result.first
+      else
+        return nil
+      end
+    end
+  end  
+
+
   def self.search_iso_component(father)
     begin 
       query = <<-SQL 
