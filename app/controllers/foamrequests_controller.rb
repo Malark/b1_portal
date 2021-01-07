@@ -943,7 +943,7 @@ class FoamrequestsController < ApplicationController
             @error_message = ''
   
             #Foam system analysis
-            @iso_component = ITT1.search_iso_component(@foam_system)
+            @iso_component = ITT1.search_iso_component(@foamsys_id)
             if @iso_component == nil
               @error_message += "A #{@foamsys_id} habrendszerben nincs ISO komponens definiálva! *** "
             end
