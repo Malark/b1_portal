@@ -16,7 +16,7 @@
 <div class="well results-block">
   <strong>
     <%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
-      Ellenőrzött raklapok száma: <%= session[:checked_labels].count %> / <%= session[:labels].count %>
+      Ellenőrzött raklapok száma: <%= @checked_labels %> / <%= @all_labels %>
     <% end %>
   </strong>
 </div> 

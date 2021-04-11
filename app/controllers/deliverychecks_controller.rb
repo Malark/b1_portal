@@ -19,7 +19,7 @@ class DeliverychecksController < ApplicationController
         @customer_groups = Vevocsoport.all
         flash.now[:danger] = "Az adott vevőcsoportnak nincsenek nyitott szállításai!"
       else
-        session[:coosen_customer_group] =  params[:customer_group]
+        $coosen_customer_group =  params[:customer_group]
       end  
     end
     respond_to do |format|
@@ -31,30 +31,33 @@ class DeliverychecksController < ApplicationController
   def choose_deliveries
     if params[:deliveries].blank?
       @actu_step = 2
-      @deliveries = ODLN.search_from_lookup(session[:coosen_customer_group])
+      @deliveries = ODLN.search_from_lookup($coosen_customer_group)
       flash.now[:danger] = "Legalább 1 szállítólevél kiválasztása kötelező!"
     else
       @actu_step = 3
       @choosen_deliveries = params[:deliveries]
-      @master_labels = []
+      $choosen_delivery_notes = @choosen_deliveries
+      $master_labels = []
       @choosen_deliveries.each do |row|
         @masters = MOS_OWSD.search_master_labels(row)
         if @masters != nil
           @masters.each do |label|
-            @master_labels.push(label["U_raklap2"])
+            $master_labels.push(label["U_raklap2"])
+            $checkable_labels.push(label["U_raklap2"])
           end  
         end
       end 
-      puts @master_labels
-      session[:labels] = @master_labels
-      session[:checkable_labels] = @master_labels
-      session[:checked_labels] = []
-      session[:choosen_delivery_notes] = @choosen_deliveries
+      puts $master_labels
+      $checked_labels = []
+      @all_labels = $master_labels.length()
+      @checked_labels = $checked_labels.length()
+      
     end
     respond_to do |format|
       format.js { render partial: 'check_deliveries' }
     end
   end
+
 
   def check_labels
     @actu_step = 3
@@ -71,8 +74,8 @@ class DeliverychecksController < ApplicationController
         end
       end
       if checkable_label(label)
-        session[:checked_labels].push(label)    
-        session[:checkable_labels].delete(label)
+        $checked_labels.push(label)    
+        $checkable_labels.delete(label)
       else
         #Check if it was earlier checked
         if checked_label(label)
@@ -82,11 +85,13 @@ class DeliverychecksController < ApplicationController
         end
       end
     end
-    if session[:checked_labels].count >= session[:labels].count
+    @all_labels = $master_labels.length()
+    @checked_labels = $checked_labels.length()    
+    if @checked_labels >= @all_labels
       #When all the labels are checked
       @actu_step = 4
       write_data
-      @result_text = "Ellenőrzött raklapok száma: #{session[:labels].count}!  Ellenőrzött szállítás(ok): #{session[:choosen_delivery_notes]}"
+      @result_text = "Ellenőrzött raklapok száma: #{@all_labels}!  Ellenőrzött szállítás(ok): #{$choosen_delivery_notes}"
     end 
 
     respond_to do |format|
@@ -96,14 +101,14 @@ class DeliverychecksController < ApplicationController
 
   def write_data
     #puts "Update database for checked records"
-    MOS_OWSD.update_checked_labels(session[:checked_labels], current_user.username)
+    MOS_OWSD.update_checked_labels($checked_labels, current_user.username)
   end
 
 
   private 
 
     def checkable_label(label)
-      if session[:checkable_labels].include?(label) 
+      if $checkable_labels.include?(label)  
         return true
       else
         return false
@@ -111,7 +116,7 @@ class DeliverychecksController < ApplicationController
     end
 
     def checked_label(label)
-      if session[:checked_labels].include?(label) 
+      if $checked_labels.include?(label) 
         return true
       else
         return false
