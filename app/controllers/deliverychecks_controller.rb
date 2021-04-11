@@ -38,6 +38,7 @@ class DeliverychecksController < ApplicationController
       @choosen_deliveries = params[:deliveries]
       $choosen_delivery_notes = @choosen_deliveries
       $master_labels = []
+      $checkable_labels = []
       @choosen_deliveries.each do |row|
         @masters = MOS_OWSD.search_master_labels(row)
         if @masters != nil
