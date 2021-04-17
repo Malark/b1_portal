@@ -73,15 +73,20 @@ class VdachecksController < ApplicationController
         internal_label_record_with_master = KOM_GYARTBEERK.search_master_label(label)
         if internal_label_record_with_master != nil
           @checked = false
-          @result_text = "A beolvasott VDA címke sorszám (#{label}) már használatban van!"
+          @result_text = "A beolvasott VDA címke sorszám (#{label}) már hozzá lett rendelve egy másik raklaphoz!"
         end
       end
 
       # 4. update the internal label record in KOM_GYARTBEERK table
       if @checked
+        #Till now everything is OK with the labels. We can log this result into MOS_OWSD table 
+        MOS_OWSD.update_checked_VDAlabels(label, current_user.username, session[:internal_charge_nr])
+
+        #Last step to check the charge_nr of the internal label and log the vda chck result into KOM_GYARTBEERK table as well
         internal_label_record = KOM_GYARTBEERK.search_internal_label(session[:internal_charge_nr], session[:internal_itemcode])
         if internal_label_record == nil
-          @checked = false
+          #@checked = false        #in spete of the charge_nr can not be found all other checks were OK, so it is not an error
+          @checked = true
           @result_text = "A két cikkszám megegyezik, viszont nem található gyártási beérkezés ezen a sarzsszámon: #{session[:internal_charge_nr]} és cikkszámon: #{session[:internal_itemcode]}"
         else
           # 5. check the internal record: U_VDASORSZAM field needs to be empty

@@ -58,6 +58,17 @@ class MOS_OWSD < ApplicationRecord
     #return hiba
   end
 
+  def self.update_checked_VDAlabels(label, current_user, charge_nr)
+    #formatting date
+    current_date = Time.now.strftime("%Y-%m-%d").to_s
+    query = <<-SQL 
+      update dbo.[@MOS_OWSD]
+      set U_mezo06 = '#{charge_nr}', U_mezo07 = '#{current_date}', U_mezo08 = '#{current_user}'
+      where U_raklap2 = '#{label}'
+    SQL
+    result = ActiveRecord::Base.connection.exec_query(query) 
+  end  
+
 
   #-------- RFID conversation -----------
 
