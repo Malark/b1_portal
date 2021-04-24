@@ -23,6 +23,7 @@ class ReceiptsController < ApplicationController
       #  puts value
       #end
       if values.count < 9
+        puts "bell\a"
         @actu_step = 1
         flash.now[:danger] = "Hibás QR kód struktúra!"
       else
@@ -44,13 +45,14 @@ class ReceiptsController < ApplicationController
             @actu_step = 1
             flash.now[:danger] = "Érvénytelen dátum a belső címkén: #{production_date}! Bevételezés nem folytatható!"
           else  
-            @label = Label.new(  values[0], values[1], production_date, values[7],  label_type, values[5],  values[4], '', values[3])
+            @label = Label.new(  values[0].upcase, values[1], production_date, values[7],  label_type, values[5],  values[4], '', values[3])
             #@label = Label.new('14032V2',  125,       '2020-04-22',    '14:30:21', 'Raklap',   'Standard', '030',         '200422143021')
 
             #Check the charge_id is it alerady used or is it a brand new palett id
             internal_label_record = KOM_GYARTBEERK.search_internal_label(@label.charge_nr, @label.itemcode)
             
             if internal_label_record != nil
+              puts "bell\a"
               @actu_step = 1
               flash.now[:danger] = "A #{@label.charge_nr} sarzsszámú raklap már be lett vételezve korábban!"
             else
@@ -141,27 +143,35 @@ class ReceiptsController < ApplicationController
       flash[:danger] = "Hiba a feldolgozás során! A rendelésszám és a tárolóhely mező nem lehet üres! A bevételezési folyamat megszakadt!"
       @actu_step = 1
     else
-      d = DateTime.now
-      beerkezes = KOM_GYARTBEERK.new
-      beerkezes.U_GYARTRENDSZAM = params[:prod_order]
-      beerkezes.U_ItemCode = session[:label]["itemcode"]
-      beerkezes.U_Quantity = session[:label]["quantity"]
-      beerkezes.U_CSOMAGOLO = session[:label]["packager_id"]
-      beerkezes.U_MINOSEGELLENOR = session[:label]["qainspector_id"]
-      beerkezes.U_GYARTDATUM = session[:label]["prod_date"] + ' ' + session[:label]["prod_time"]
-      beerkezes.U_SARZSSZAM = session[:label]["charge_nr"]
-      beerkezes.U_CSOMEGYSEG = session[:label]["package_unit"]
-      beerkezes.U_CSOMTIPUS = session[:label]["package_type"]
-      beerkezes.U_TARHELY = params[:storage_id]
-      beerkezes.U_RAKTAROS = current_user.username  
-      beerkezes.U_CreateDate = d.strftime "%Y-%m-%d  %H:%M:%S"
-      if beerkezes.save
-        @actu_step = 6
-      else
-        @actu_step = 5
+      #Check the charge_id is it alerady used or is it a brand new palett id
+      internal_label_record = KOM_GYARTBEERK.search_internal_label(session[:label]["charge_nr"], session[:label]["itemcode"])
+      if internal_label_record != nil
+        @actu_step = 1
         @selected_storage_id = params[:storage_id]        
-        flash[:danger] = "Sikertelen mentési kísérlet az adatbázisba! Ismételje meg a folyamatot!"
-      end
+        flash[:danger] = "Vigyázat! Dupla kattintás történt a mentés gombra! Csak az első kattintás lett rögzítve!"        
+      else  
+        d = DateTime.now
+        beerkezes = KOM_GYARTBEERK.new
+        beerkezes.U_GYARTRENDSZAM = params[:prod_order]
+        beerkezes.U_ItemCode = session[:label]["itemcode"]
+        beerkezes.U_Quantity = session[:label]["quantity"]
+        beerkezes.U_CSOMAGOLO = session[:label]["packager_id"]
+        beerkezes.U_MINOSEGELLENOR = session[:label]["qainspector_id"]
+        beerkezes.U_GYARTDATUM = session[:label]["prod_date"] + ' ' + session[:label]["prod_time"]
+        beerkezes.U_SARZSSZAM = session[:label]["charge_nr"]
+        beerkezes.U_CSOMEGYSEG = session[:label]["package_unit"]
+        beerkezes.U_CSOMTIPUS = session[:label]["package_type"]
+        beerkezes.U_TARHELY = params[:storage_id]
+        beerkezes.U_RAKTAROS = current_user.username  
+        beerkezes.U_CreateDate = d.strftime "%Y-%m-%d  %H:%M:%S"
+        if beerkezes.save
+          @actu_step = 6
+        else
+          @actu_step = 5
+          @selected_storage_id = params[:storage_id]        
+          flash[:danger] = "Sikertelen mentési kísérlet az adatbázisba! Ismételje meg a folyamatot!"
+        end
+      end  
     end
 
     respond_to do |format|

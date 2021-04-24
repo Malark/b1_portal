@@ -1,0 +1,16 @@
+<br>
+<%= render 'layouts/messages' %>
+
+<br>
+<% if @actu_step == 1 %>
+  <div id="scan_internal_label_ir">
+    <%= render 'scan_internal_label_ir' %>
+  </div>
+<% end %>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<%= link_to 'Vissza a főmenübe', root_path, class: "#{ 'mobile-large-text' if session[:mobile_device] == true }" %> 

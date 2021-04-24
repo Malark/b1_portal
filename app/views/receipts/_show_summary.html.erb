@@ -77,7 +77,7 @@
                 <%= hidden_field_tag :prod_order, @selected_prod_order %>
                 <%= hidden_field_tag :storage_id, @selected_storage_id %>
                 <div class="form-group">
-                  <%= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+                  <%= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button", data: {disable_with: "Mentés..."}) do %>
                     Mentés
                   <% end %>
                 </div>

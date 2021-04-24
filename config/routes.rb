@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   resources :kom_users, except: [:new]
 
 
+  #old, not used routes
+
   get 'labelcheck_search', to: 'labelchecks#search_deliveries'
   get 'search_deliveries', to: 'customers#search'
   get 'choose_deliveries_old', to: 'customers#choose'
@@ -28,6 +30,7 @@ Rails.application.routes.draw do
   get 'beerkezes_gyartasbol_step4', to: 'beerkezes#step4'
 
 
+  #living routes
 
   get 'receipt_from_production_index', to: 'receipts#receipt_from_production_index' 
   get 'search_production_orders', to: 'receipts#search_production_orders'
@@ -81,4 +84,7 @@ Rails.application.routes.draw do
   get 'search_container_id_unloading', to: 'foamrequests#search_container_id_unloading'
   get 'save_unloading_record', to: 'foamrequests#save_unloading_record'
 
+  #Inventory requests (Készletáttárolás)
+  get 'inventory_request_index', to: 'inventoryrequests#inventory_request_index' 
+  get 'check_internal_label_ir', to: 'inventoryrequests#check_internal_label_ir'
 end

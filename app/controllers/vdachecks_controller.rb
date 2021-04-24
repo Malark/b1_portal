@@ -20,7 +20,7 @@ class VdachecksController < ApplicationController
       #  puts value
       #end
       @actu_step = 2
-      session[:internal_itemcode] = values[0]
+      session[:internal_itemcode] = values[0].upcase
       session[:internal_charge_nr] = values[3]
     end
 
@@ -57,7 +57,7 @@ class VdachecksController < ApplicationController
       else #if owsd_record was found
         if owsd_label_record.length >= 1
           owsd_label_record.each do |row| 
-            owsd_itemcode = row["U_ItemCode"]
+            owsd_itemcode = row["U_ItemCode"] 
           end
         end
         if session[:internal_itemcode] == owsd_itemcode

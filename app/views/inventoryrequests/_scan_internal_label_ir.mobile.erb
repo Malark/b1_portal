@@ -1,0 +1,10 @@
+<h3 align="left" class="mobile">Készletáttárolás - Belső címke beolvasása</h3> 
+
+<%= form_tag check_internal_label_ir_path, remote: true, method: :get, id: 'check_internal_label_ir-form', class: 'ui reply form' do %> 
+  <div class="field">
+    <%= content_tag :div, class: "ui fluid massive icon input"  do %>
+      <%= text_field_tag :internal_label, nil, placeholder: "Belső címke QR kód...", autofocus: true %>
+      <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
+    <% end %>
+  </div>
+<% end %>
