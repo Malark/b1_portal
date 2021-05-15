@@ -1,11 +1,12 @@
 <%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
-  Készletáttárolás - Belső címke beolvasása
+  3. Cél tárolóhely beolvasása
 <% end %>
 
-<%= form_tag check_internal_label_ir_path, remote: true, method: :get, id: 'check-internal_label_ir-form', class: 'ui reply form' do %> 
+<%= form_tag set_storage_id_ir_path, remote: true, method: :get, id: 'scan_storage_id_ir-form', class: 'ui reply form' do %> 
   <div class="field">
     <%= content_tag :div, class: "ui fluid icon input #{ 'massive' if session[:mobile_device] == true }"  do %>
-      <%= text_field_tag :internal_label, nil, placeholder: "Belső címke QR kód...", autofocus: true %>
+      <%= text_field_tag :storage_id, nil, placeholder: "Cél tárolóhely azonosító beolvasása...", autofocus: true %>
+      <%#= hidden_field_tag :prod_order, @selected_prod_order %>
       <%= button_tag '<i class="bordered inverted orange edit icon"></i>'.html_safe %>
     <% end %>
   </div>

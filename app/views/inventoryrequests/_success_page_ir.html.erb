@@ -1,0 +1,9 @@
+<%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+  4. Sikeres áttárolás!
+<% end %>
+<br>
+<br>
+<div class="ui grid">
+  <div class="left aligned eight wide column"><%= link_to "Új áttárolás", inventory_request_index_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %></div>
+  <div class="right aligned eight wide column"><%= link_to "Vissza a főmenübe", root_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %></div>
+</div>

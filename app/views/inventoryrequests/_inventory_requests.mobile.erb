@@ -3,8 +3,14 @@
 
 <br>
 <% if @actu_step == 1 %>
-  <div id="scan_internal_label">
-    <%= render 'scan_internal_label' %>
+  <div id="scan_internal_label_ir">
+    <%= render 'scan_internal_label_ir' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 2 %>
+  <div id="show_internal_label_ir">
+    <%= render 'show_internal_label_ir' %>
   </div>
 <% end %>
 

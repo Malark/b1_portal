@@ -8,6 +8,24 @@
   </div>
 <% end %>
 
+<% if @actu_step == 2 %>
+  <div id="show_internal_label_ir">
+    <%= render 'show_internal_label_ir' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 3 %>
+  <div id="scan_storage_id_ir">
+    <%= render 'scan_storage_id_ir' %>
+  </div>
+<% end %>
+
+<% if @actu_step == 4 %>
+  <div id="success_page_ir">
+    <%= render 'success_page_ir' %>
+  </div>
+<% end %>
+
 <br>
 <br>
 <br>
