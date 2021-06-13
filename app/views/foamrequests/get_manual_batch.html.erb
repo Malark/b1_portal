@@ -1,0 +1,41 @@
+<%= content_tag :h3 do %>
+  Batch adatok manuális megadása
+<% end %>
+
+
+<%= form_tag set_manual_batch_path, remote: false, method: :get, id: 'set_manual_batch' do %>
+  <div class="field">
+    <%= label_tag :product_itemcode, "Sarzsszám" %>
+    <%= content_tag :div, class: "ui fluid icon input"  do %>
+      <%= text_field_tag :item_batch, nil, placeholder: "Alapanyag sarzsszáma..." %>
+      <%= hidden_field_tag :row_id, @absentry %>
+      <%= hidden_field_tag :id, @request.Code %>
+      <%= hidden_field_tag :detail_table_id, @component["Code"] %>
+    <% end %>
+  </div>
+  <br>
+  <br>
+  <div class="field">
+    <%= label_tag :product_itemcode, "Lejárat dátuma" %>
+    <%= content_tag :div, class: "ui fluid icon input"  do %>
+      <%= text_field_tag :item_expdate, nil, placeholder: "Lejárat dátuma..." %>
+    <% end %>
+  </div>
+  <br>
+  <br>
+  <div class="ui grid">
+    <div class="left aligned eight wide column">
+      <%= link_to 'Mégsem', prepare_component_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'index_page'), class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+    </div>
+    <div class="right aligned eight wide column">
+      <div class="form-group">
+        <%= button_tag(type: :submit, class: "ui primary button") do %>
+          Tovább
+        <% end %>
+      </div>
+    </div>
+  </div>  
+<% end %>
+
+
+

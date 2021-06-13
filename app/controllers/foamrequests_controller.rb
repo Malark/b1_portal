@@ -464,159 +464,229 @@ class FoamrequestsController < ApplicationController
   end
   
 
-  def prepare_component
-    puts @request.U_POLIOL_MENNYISEG
+  #****************************************************************************
 
+
+  def prepare_component
     # check the existing requests: at the same time only one request is allowed to prepare
+    puts "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
     requests_in_progress = KOM_HABIGENYLES.find_requests_in_progress(@request.U_SARZSSZAM)
     if requests_in_progress != nil
+      puts "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP"
       first_record = requests_in_progress.first
       flash[:danger] = "Figyelem! Az előkészítés nem végezhető el, amíg van másik megkezdett előkészítési folyamat (ID: #{first_record["U_SARZSSZAM"]})!"
       redirect_to prepare_request_index_path(:id => @request)       
-    end
-
-    @component = KOM_HABIGENY_TETEL.find(params[:detail_table_id])
-    puts @component["U_ITEMNAME"]
-    @asked_quantity = 0
-    if @request.U_ISO_MENNYISEG.to_i > 0
-      session[:foam_type] = 'ISO'
-      @asked_quantity = @request.U_ISO_MENNYISEG.to_i
     else
-      session[:foam_type] = 'POLIOL'
-      @asked_quantity = @request.U_POLIOL_MENNYISEG.to_i
-    end
-    # searching for product OITM record
-    itemcode = @request.U_FOCIKKSZAM
-    @item = OITM.search_item(itemcode)
-    if @item == nil
-      flash[:danger] = "Nem létező termék cikkszám: #{itemcode}! "
-      redirect_to prepare_request_index_path(:id => @request) 
-    end
-
-    # In case of marking for use a batch or a unit
-    if params[:sender] == 'usage_batch'
-      puts "Batch egység felhasználás történt"
+      @component = KOM_HABIGENY_TETEL.find(params[:detail_table_id])
+    
+      puts @component["U_ITEMNAME"]
+      puts @request.Code
       puts params[:row_id]
-      puts params[:detail_table_id]
-      if @component["U_BATCH_MANAGED"] == 'Y'
-        @selected_unit = OBBQ.find_batch_by_absentry(@request.U_SARZSSZAM, params[:row_id])
+      @asked_quantity = 0
+      if @request.U_ISO_MENNYISEG.to_i > 0
+        session[:foam_type] = 'ISO'
+        @asked_quantity = @request.U_ISO_MENNYISEG.to_i
       else
-        @selected_unit = OIBQ.find_unit_by_absentry(@request.U_SARZSSZAM, params[:row_id])
+        session[:foam_type] = 'POLIOL'
+        @asked_quantity = @request.U_POLIOL_MENNYISEG.to_i
       end
-      if @selected_unit == nil
-        puts "HIBA! Nem található sarzs vagy tárolóhelyes tétel"
-      else
-        unit = @selected_unit.first
-        # Count the right needed amount of the selected batch or unit (based on the requested amount)
-        puts 'Helyes mennyiség számolás'
-        puts @component["U_REQUESTED_QTY"]
-        puts @component["U_PREPARED_QTY"]
-        puts unit["U_SARZSSZAM"]
-        requested_qty = @component["U_REQUESTED_QTY"]
-        prepared_qty = @component["U_PREPARED_QTY"]
-        needed_qty = requested_qty - prepared_qty
-        unit_available_qty = unit["OnHandQty"]
-        if needed_qty <= 0
-          # If all the requested qty is selected, don§'t do anything but an error message
-          flash[:danger] = "A #{@component["U_ITEMCODE"]} komponensből már a teljes szükséges mennyiség ki lett jelölve! Újabb tétel hozzáadása nem lehetséges!"
-          redirect_to prepare_request_index_path(:id => @request) 
+      # searching for product OITM record
+      itemcode = @request.U_FOCIKKSZAM
+      @item = OITM.search_item(itemcode)
+      if @item == nil
+        flash[:danger] = "Nem létező termék cikkszám: #{itemcode}! "
+        redirect_to prepare_request_index_path(:id => @request) 
+      end
+  
+      # In case of marking for use a batch or a unit
+      if params[:sender] == 'usage_batch'
+        puts "Batch egység felhasználás történt"
+        puts params[:row_id]
+        puts params[:detail_table_id]
+        if @component["U_BATCH_MANAGED"] == 'Y'
+          @selected_unit = OBBQ.find_batch_by_absentry(@request.U_SARZSSZAM, params[:row_id])
         else
-          if needed_qty >= unit_available_qty
-            marked_qty = unit_available_qty
+          @selected_unit = OIBQ.find_unit_by_absentry(@request.U_SARZSSZAM, params[:row_id])
+        end
+        if @selected_unit == nil
+          puts "HIBA! Nem található sarzs vagy tárolóhelyes tétel"
+        else
+          unit = @selected_unit.first
+          # Count the right needed amount of the selected batch or unit (based on the requested amount)
+          puts 'Helyes mennyiség számolás'
+          puts @component["U_REQUESTED_QTY"]
+          puts @component["U_PREPARED_QTY"]
+          puts unit["U_SARZSSZAM"]
+          requested_qty = @component["U_REQUESTED_QTY"]
+          prepared_qty = @component["U_PREPARED_QTY"]
+          needed_qty = requested_qty - prepared_qty
+          unit_available_qty = unit["OnHandQty"]
+          if needed_qty <= 0
+            # If all the requested qty is selected, don§'t do anything but an error message
+            flash[:danger] = "A #{@component["U_ITEMCODE"]} komponensből már a teljes szükséges mennyiség ki lett jelölve! Újabb tétel hozzáadása nem lehetséges!"
+            redirect_to prepare_request_index_path(:id => @request) 
           else
-            marked_qty = needed_qty
+            if needed_qty >= unit_available_qty
+              marked_qty = unit_available_qty
+            else
+              marked_qty = needed_qty
+            end
+  
+            # Add record to KOM_HABIGENY_MOZGAS table
+            transaction = KOM_HABIGENY_MOZGAS.new
+            transaction.U_AbsEntry = unit["AbsEntry"]
+            transaction.U_Source = unit["Source"]
+            transaction.U_ItemCode = unit["ItemCode"]
+            transaction.U_ItemName = unit["ItemName"]
+            transaction.U_Batch_Managed = @component["U_BATCH_MANAGED"]
+            transaction.U_DistNumber = unit["DistNumber"]
+            transaction.U_WhsCode = unit["WhsCode"]
+            transaction.U_SL1Code = unit["SL1Code"]
+            transaction.U_InDate = unit["InDate"]
+            transaction.U_ExpDate = unit["ExpDate"]
+            transaction.U_MarkedQty = marked_qty
+            #transaction.U_Status = ''
+            transaction.U_IGENY_SARZSSZAM = @request.U_SARZSSZAM
+            transaction.U_MATERIAL_TYPE = @component["U_MATERIAL_TYPE"]
+            transaction.save
+  
+            # Update component's U_PREPARED_QTY field
+            @component["U_PREPARED_QTY"] = prepared_qty + marked_qty
+            if @component["U_PREPARED_QTY"] >= @component["U_REQUESTED_QTY"] 
+              @component["U_STATUS"] = 'C'
+            else
+              @component["U_STATUS"] = 'P'
+            end  
+            @component.save
+  
+            # Update request's status
+            if @request.U_STATUS == 'A' 
+              @request.U_STATUS = 'I'
+              @request.save
+            end
           end
-
-          # Add record to KOM_HABIGENY_MOZGAS table
-          transaction = KOM_HABIGENY_MOZGAS.new
-          transaction.U_AbsEntry = unit["AbsEntry"]
-          transaction.U_Source = unit["Source"]
-          transaction.U_ItemCode = unit["ItemCode"]
-          transaction.U_ItemName = unit["ItemName"]
-          transaction.U_Batch_Managed = @component["U_BATCH_MANAGED"]
-          transaction.U_DistNumber = unit["DistNumber"]
-          transaction.U_WhsCode = unit["WhsCode"]
-          transaction.U_SL1Code = unit["SL1Code"]
-          transaction.U_InDate = unit["InDate"]
-          transaction.U_ExpDate = unit["ExpDate"]
-          transaction.U_MarkedQty = marked_qty
-          #transaction.U_Status = ''
-          transaction.U_IGENY_SARZSSZAM = @request.U_SARZSSZAM
-          transaction.U_MATERIAL_TYPE = @component["U_MATERIAL_TYPE"]
-          transaction.save
-
+  
+        end
+      end
+      # In case of removing a mark from a batch or a unit
+      if params[:sender] == 'remove_batch'
+        puts "Batch egység törlés történt"
+        #find_transaction_by_absentry(source, absentry)
+        if @component["U_BATCH_MANAGED"] == 'Y'
+          source = 'OBBQ'
+        else
+          source = 'OIBQ'
+        end
+        puts source
+        puts params[:row_id]
+        @unit = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry(source, params[:row_id])
+        if @unit == nil
+          puts "Nincs meg a tétel"
+        else
+          unit = @unit.first
+          puts "Tétel rekord megtalálva!!!"
+          puts unit["Code"]
+  
           # Update component's U_PREPARED_QTY field
-          @component["U_PREPARED_QTY"] = prepared_qty + marked_qty
-          if @component["U_PREPARED_QTY"] >= @component["U_REQUESTED_QTY"] 
-            @component["U_STATUS"] = 'C'
-          else
+          @component["U_PREPARED_QTY"] = @component["U_PREPARED_QTY"] - unit["U_MarkedQty"]
+          if @component["U_PREPARED_QTY"] == 0
+            @component["U_STATUS"] = 'O'
+          elsif (@component["U_PREPARED_QTY"] > 0 and @component["U_PREPARED_QTY"] < @component["U_REQUESTED_QTY"])
             @component["U_STATUS"] = 'P'
-          end  
-          @component.save
-
-          # Update request's status
-          if @request.U_STATUS == 'A' 
-            @request.U_STATUS = 'I'
-            @request.save
           end
-        end
-
+          @component.save
+          # delete transaction record
+          KOM_HABIGENY_MOZGAS.delete_transaction(unit["Code"])
+        end  
       end
-    end
-
-    # In case of removing a mark from a batch or a unit
-    if params[:sender] == 'remove_batch'
-      puts "Batch egység törlés történt"
-      #find_transaction_by_absentry(source, absentry)
+ 
+      # Building up batches and units struct to show them in a table
       if @component["U_BATCH_MANAGED"] == 'Y'
-        source = 'OBBQ'
+        @units = OBBQ.search_batches(@request.U_SARZSSZAM, @component["U_ITEMCODE"], session[:foam_warehouse])
       else
-        source = 'OIBQ'
+        @units = OIBQ.search_units(@request.U_SARZSSZAM, @component["U_ITEMCODE"], session[:foam_warehouse])
       end
-      puts source
-      puts params[:row_id]
-      @unit = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry(source, params[:row_id])
-      if @unit == nil
-        puts "Nincs meg a tétel"
+      if @units == nil
+        flash[:danger] = "Hiba! Nincs elérhető készlet!"
+        redirect_to prepare_request_index_path(:id => @request) 
       else
-        unit = @unit.first
-        puts "Tétel rekord megtalálva!!!"
-        puts unit["Code"]
-
-        # Update component's U_PREPARED_QTY field
-        @component["U_PREPARED_QTY"] = @component["U_PREPARED_QTY"] - unit["U_MarkedQty"]
-        if @component["U_PREPARED_QTY"] == 0
-          @component["U_STATUS"] = 'O'
-        elsif (@component["U_PREPARED_QTY"] > 0 and @component["U_PREPARED_QTY"] < @component["U_REQUESTED_QTY"])
-          @component["U_STATUS"] = 'P'
+        # Modify MarkedQty to 0 if not exists
+        @units.each do |item|
+          if item["U_MarkedQty"] == nil
+            item["U_MarkedQty"] = 0
+          end
+          item["OnHandQty"] = item["OnHandQty"] - item["U_MarkedQty"]
+          #Manual Batch
+          #if @component["U_BATCH_MANAGED"] == 'N'
+          #  @mozgasok = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry('OIBQ', item["AbsEntry"])
+          #  if @mozgasok == nil
+          #    puts "Nincs még mozgás tétel manuális batch megjelenítéséhez"
+          #  else
+          #    unit = @mozgasok.first
+          #    puts "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+          #    puts unit["U_DistNumber"]
+          #    item["U_DistNumber"] = unit["U_DistNumber"]
+          #  end  
+          #end
         end
-        @component.save
-
-        # delete transaction record
-        KOM_HABIGENY_MOZGAS.delete_transaction(unit["Code"])
-                
       end  
     end
-
-    # Building up batches and units struct to show them in a table
-    if @component["U_BATCH_MANAGED"] == 'Y'
-      @units = OBBQ.search_batches(@request.U_SARZSSZAM, @component["U_ITEMCODE"], session[:foam_warehouse])
-    else
-      @units = OIBQ.search_units(@request.U_SARZSSZAM, @component["U_ITEMCODE"], session[:foam_warehouse])
-    end
-    if @units == nil
-      flash[:danger] = "Hiba! Nincs elérhető készlet!"
-      redirect_to prepare_request_index_path(:id => @request) 
-    else
-      # Modify MarkedQty to 0 if not exists
-      @units.each do |item|
-        if item["U_MarkedQty"] == nil
-          item["U_MarkedQty"] = 0
-        end
-        item["OnHandQty"] = item["OnHandQty"] - item["U_MarkedQty"]
-      end
-    end  
   end
+
+
+#*****************************************************
+
+
+  def get_manual_batch
+    @component = KOM_HABIGENY_TETEL.find(params[:detail_table_id])
+    @request = KOM_HABIGENYLES.find(params[:id])
+    @absentry = params[:row_id]
+  end
+
+
+  def set_manual_batch
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    @component = KOM_HABIGENY_TETEL.find(params[:detail_table_id])
+    @request = KOM_HABIGENYLES.find(params[:id])
+
+    if params[:item_batch].blank?
+      flash[:danger] = "Sarzs megadása kötelező!"
+      redirect_to get_manual_batch_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'index_page')
+    else
+      
+      source = 'OIBQ'
+      puts params[:row_id]
+      @units = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry(source, params[:row_id])
+      if @units == nil
+        puts "Nincs meg a tétel"
+        flash[:danger] = "Hiba a manuális sarzs beállítása közben!"
+        redirect_to prepare_component_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'index_page')
+      else
+        unit = @units.first
+        puts "Tétel rekord megtalálva!!!"
+        puts unit["Code"]
+        @unit = KOM_HABIGENY_MOZGAS.find(unit["Code"])
+        puts @unit["Code"]
+        if @units == nil
+          puts "Nincs meg a tétel"
+          flash[:danger] = "Hiba a manuális sarzs beállítása közben!"
+          redirect_to prepare_component_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'index_page')
+        else
+          puts params[:item_batch]
+          @unit["U_DistNumber"] =  params[:item_batch]
+          @unit["U_ExpDate"] =  params[:item_expdate]
+          @unit.save
+          @component = KOM_HABIGENY_TETEL.find(params[:detail_table_id])
+          flash[:danger] = "A #{@component["U_ITEMCODE"]} alapanyag manuális sarzs beállítása sikeresen megtörtént!"
+          redirect_to prepare_component_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'index_page')
+        end  
+      end
+    end
+  end  
+
+
+#*****************************************************
+
 
 
   def set_prepared_summary
@@ -735,7 +805,6 @@ class FoamrequestsController < ApplicationController
 
     # JAN13 - the 13rd character is a checksum!!!!!
     filled_batch_nr = request.U_SARZSSZAM.rjust(12, '0')
-    #puts filled_batch_nr
     report.page.item(:jan_13).src(barcode(:ean_13, filled_batch_nr))    
     #report.page.item(:jan_13).src(barcode(:ean_13, '491234567890'))    
     #report.page.item(:jan_8).src(barcode(:ean_8, '4512345'))
@@ -850,7 +919,15 @@ class FoamrequestsController < ApplicationController
       @actu_step = 1
       flash.now[:danger] = "Az alapanyag címke vonalkódja nem lehet üres!"
     else
-      material_label = params[:material_label]
+      len = params[:material_label].length
+      if len >= 12
+        material_label = params[:material_label][len-6..len-2]
+      else  
+        material_label = params[:material_label]
+      end  
+      
+      puts "TTTTTTTTTTTTTTTTTTTTTTTT"
+      puts material_label
 
       #Check the charge_id is it alerady used or is it a brand new palett id
       material_label_record = KOM_HABIGENYLES.search_prepared_material_record(material_label)

@@ -63,6 +63,8 @@ Rails.application.routes.draw do
   
   get 'prepare_request_index', to: 'foamrequests#prepare_request_index'
   get 'prepare_component', to: 'foamrequests#prepare_component'  
+  get 'get_manual_batch', to: 'foamrequests#get_manual_batch'
+  get 'set_manual_batch', to: 'foamrequests#set_manual_batch'
   get 'set_prepared_summary', to: 'foamrequests#set_prepared_summary'  
   get 'summary_report', to: 'foamrequests#summary_report'  
   get 'picklist_report', to: 'foamrequests#picklist_report'  

@@ -106,7 +106,6 @@ class InventoryrequestsController < ApplicationController
         flash.now[:danger] = "#{params[:storage_id]} tárolóhely nem létezik! Kérem adjon meg létező tárhely kódot!"
         @actu_step = 3        
       else  
-        puts "qqqqqqqqqqqqqqqqqqq"
         puts $label.charge_nr
         puts $source_whscode
         puts $source_sl1code

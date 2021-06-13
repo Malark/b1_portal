@@ -90,6 +90,11 @@
             <%= link_to prepare_component_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'remove_batch', :row_id  => row["AbsEntry"]), class: 'item icon' do %>
               <i class='undo alternate large icon orange'></i>
             <% end %> 
+            <% if row["U_Batch_Managed"] = 'N' %>
+              <%= link_to get_manual_batch_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'set_manual_batch', :row_id  => row["AbsEntry"]), class: 'item icon' do %>
+                <i class='edit outline large icon orange'></i>
+              <% end %>             
+            <% end %> 
           <% else %>
             <%= link_to prepare_component_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'usage_batch', :row_id  => row["AbsEntry"]), class: 'item icon' do %>
               <i class='sign out alternate large icon orange'></i>

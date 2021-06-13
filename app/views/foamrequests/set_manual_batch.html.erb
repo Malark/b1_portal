@@ -1,0 +1,6 @@
+<%= content_tag :h3 do %>
+  Batch adatok manuális megadása sikeresen megtörtént!
+<% end %>
+<br>
+<br>
+<%= link_to 'Tovább', prepare_component_path(:id => @request.Code, :detail_table_id => @component["Code"], :sender => 'index_page'), class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
