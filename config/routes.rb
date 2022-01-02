@@ -89,6 +89,7 @@ Rails.application.routes.draw do
   #Inventory requests (Készletáttárolás)
   get 'inventory_request_index', to: 'inventoryrequests#inventory_request_index' 
   get 'check_internal_label_ir', to: 'inventoryrequests#check_internal_label_ir'
-  get 'get_storage_id_ir', to: 'inventoryrequests#get_storage_id_ir'
-  get 'set_storage_id_ir', to: 'inventoryrequests#set_storage_id_ir'
+  get 'get_storage_id_ir',       to: 'inventoryrequests#get_storage_id_ir'
+  get 'check_storage_id_ir',     to: 'inventoryrequests#check_storage_id_ir'
+  get 'set_storage_id_ir',       to: 'inventoryrequests#set_storage_id_ir'
 end

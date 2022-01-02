@@ -98,12 +98,16 @@
           <% end %>
 
 
-          <% if (req.U_STATUS == 'P' && session[:role_production] == true) %>                    
-            <%= link_to use_prepared_request_path(:id => req), class: 'item icon' do %>
-              <i class='industry large icon orange'></i>
+          <% if req.U_STATUS == 'P' %>
+            <% if session[:role_production_approval] == true %>                    
+              <%= link_to use_prepared_request_path(:id => req), class: 'item icon' do %>
+                <i class='industry large icon orange'></i>
+              <% end %>
             <% end %>
-            <%= link_to summary_report_path(:request_id => req), target: :_blank, class: 'item icon run-report-button' do %>
-              <i class='print icon orange large run-report-button'></i>
+            <% if session[:role_production] == true %>                    
+              <%= link_to summary_report_path(:request_id => req), target: :_blank, class: 'item icon run-report-button' do %>
+                <i class='print icon orange large run-report-button'></i>
+              <% end %>
             <% end %>
           <% end %>
         </td>

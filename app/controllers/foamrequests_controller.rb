@@ -579,7 +579,7 @@ class FoamrequestsController < ApplicationController
         end
         puts source
         puts params[:row_id]
-        @unit = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry(source, params[:row_id])
+        @unit = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry(source, params[:row_id], @request.U_SARZSSZAM)
         if @unit == nil
           puts "Nincs meg a tétel"
         else
@@ -656,7 +656,7 @@ class FoamrequestsController < ApplicationController
       
       source = 'OIBQ'
       puts params[:row_id]
-      @units = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry(source, params[:row_id])
+      @units = KOM_HABIGENY_MOZGAS.find_transaction_by_absentry(source, params[:row_id], @request.U_SARZSSZAM)
       if @units == nil
         puts "Nincs meg a tétel"
         flash[:danger] = "Hiba a manuális sarzs beállítása közben!"
@@ -1068,7 +1068,10 @@ class FoamrequestsController < ApplicationController
                 @error_message += "Az összekészített ISO komponens (#{@iso_component["ItemCode"]}) nem egyezik meg az ISO tartályban jelenleg tárolt ISO cikkszámmal (#{@foam_machine["U_AKTU_ISO"]})!  *** "
               end
             else
-              if (@foam_machine["U_AKTU_POLIOL"] != nil and @foam_machine["U_AKTU_POLIOL"] != @poliol_component["ItemCode"])
+              puts "TTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+              puts @foam_machine["U_AKTU_POLIOL"]
+              #if (@foam_machine["U_AKTU_POLIOL"] != nil and @foam_machine["U_AKTU_POLIOL"] != @poliol_component["ItemCode"])
+              if (@foam_machine["U_AKTU_POLIOL"].present? and @foam_machine["U_AKTU_POLIOL"] != @poliol_component["ItemCode"])
                 @error = true
                 @error_message += "Az összekészített POLIOL komponens (#{@poliol_component["ItemCode"]}) nem egyezik meg a POLIOL tartályban jelenleg tárolt POLIOL cikkszámmal (#{@foam_machine["U_AKTU_POLIOL"]})!  *** "
               end  

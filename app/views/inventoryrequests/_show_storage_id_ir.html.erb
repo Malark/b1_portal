@@ -1,0 +1,87 @@
+<%# if @prod_orders %>
+  <%= content_tag :h3, class: "#{ 'mobile' if session[:mobile_device] == true }"  do %>
+    4. Beolvasott cél tárolóhely adatai
+  <% end %>  
+  <div class="well results-block">
+     <div class="ui fluid card">
+      <div class="content">
+        <%= content_tag :div, class: "header #{ 'mobile' if session[:mobile_device] == true }" do %>
+          <div class="ui grid">
+            <div class="left aligned ten wide column"><%= $label.itemcode %></div>
+            <div class="right aligned six wide column"><%= $label.quantity %> db</div>
+          </div>
+        <% end %>
+      </div>
+      <div class="content">
+        <%= content_tag :h4, class: "ui sub header #{ 'mobile' if session[:mobile_device] == true }" do %>
+          <%= @itemname %>
+        <% end %>
+        <div class="ui small feed">
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Sarzs azonosító: <%= $label.charge_nr %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Gyártás dátuma: <%= $label.prod_date %>, <%= $label.prod_time %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Csom. egység, típus: <%= $label.package_unit %>, <%= $label.package_type %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                Csomagoló: <%= $label.packager_id %>
+              </div>
+            <% end %>
+          </div>
+          <div class="event">
+            <%= content_tag :div, class: "content #{ 'mobile-medium-text' if session[:mobile_device] == true }" do %>
+              <div class="summary">
+                MEO munkatárs: <%= $label.qainspector_id %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="summary">
+          <%= content_tag :h4, class: "ui header #{ 'mobile' if session[:mobile_device] == true }" do %>
+            Új tárolóhely: <%= @tarolohely %>
+          <% end %>
+        </div>  
+      </div>
+      <div class="content">
+        <div class="ui grid">
+          <div class="left aligned eight wide column">
+            <%= link_to "Kilépés", root_path, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button" %>
+          </div>
+          <div class="right aligned eight wide column">
+            <% if @tarolohely %>
+              <%= form_tag set_storage_id_ir_path, remote: true, method: :get, id: 'set_storage_id_ir_path-form', class: 'ui reply form' do %> 
+                <%#= hidden_field_tag :prod_orders, @prod_orders %>
+                <div class="form-group">
+                  <%= button_tag(type: :submit, class: "ui primary #{ 'massive' if session[:mobile_device] == true } button") do %>
+                    Tovább
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>                
+          </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+<%# end %>  
+  

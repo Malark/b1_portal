@@ -9,6 +9,7 @@ class MOS_OWSD < ApplicationRecord
       from dbo.[@MOS_OWSD]
       where U_forrasbiz = #{delivery_note} 
       and U_mezo09 is null
+      and U_DocType = 'CSOM'      
     SQL
     result = ActiveRecord::Base.connection.exec_query(query)
     if result.count > 0
@@ -27,6 +28,7 @@ class MOS_OWSD < ApplicationRecord
       select distinct U_raklap2, U_ItemCode
       from dbo.[@MOS_OWSD]
       where U_raklap2 = '#{master_label_id}'
+      and U_DocType = 'CSOM'
     SQL
     result = ActiveRecord::Base.connection.exec_query(query)
     if result.count > 0
@@ -77,6 +79,7 @@ class MOS_OWSD < ApplicationRecord
       select *
       from dbo.[@MOS_OWSD]
       where U_forrasbiz = #{delivery_note} 
+      and U_DocType = 'CSOM'
     SQL
     result = ActiveRecord::Base.connection.exec_query(query)
     if result.count > 0

@@ -96,7 +96,7 @@ class InventoryrequestsController < ApplicationController
   end
 
 
-  def set_storage_id_ir
+  def check_storage_id_ir
     if params[:storage_id].blank?
       flash.now[:danger] = "A tárolóhely azonosító nem lehet üres!"
       @actu_step = 3
@@ -106,10 +106,36 @@ class InventoryrequestsController < ApplicationController
         flash.now[:danger] = "#{params[:storage_id]} tárolóhely nem létezik! Kérem adjon meg létező tárhely kódot!"
         @actu_step = 3        
       else  
-        puts $label.charge_nr
-        puts $source_whscode
-        puts $source_sl1code
-        puts storage['SL1Code']
+        @tarolohely   = storage['SL1Code']
+        $dest_whscode = storage['WhsCode']
+        $dest_sl1code = @tarolohely      
+        #puts @tarolohely
+        #puts $dest_whscode
+        #puts $dest_sl1code
+        @actu_step = 4
+      end
+    end  
+    respond_to do |format|
+      format.js { render partial: 'inventory_requests' }
+    end        
+  end  
+
+
+  def set_storage_id_ir
+    #if params[:storage_id].blank?
+    #  flash.now[:danger] = "A tárolóhely azonosító nem lehet üres!"
+    #  @actu_step = 3
+    #else
+    #  storage = OBIN.search_storage(params[:storage_id])
+    #  if storage == nil
+    #    flash.now[:danger] = "#{params[:storage_id]} tárolóhely nem létezik! Kérem adjon meg létező tárhely kódot!"
+    #    @actu_step = 3        
+    #  else  
+        #puts $label.charge_nr
+        #puts $source_whscode
+        #puts $source_sl1code
+        #puts $dest_whscode
+        #puts $dest_sl1code
         d = DateTime.now
         attarolas = KOM_ATTAROLAS.new
         attarolas.U_ITEMCODE = $label.itemcode
@@ -117,18 +143,18 @@ class InventoryrequestsController < ApplicationController
         attarolas.U_SARZSSZAM = $label.charge_nr
         attarolas.U_KIAD_RAKTAR = $source_whscode
         attarolas.U_KIAD_TARHELY = $source_sl1code
-        attarolas.U_FOGAD_RAKTAR = storage['WhsCode']
-        attarolas.U_FOGAD_TARHELY = storage['SL1Code']
+        attarolas.U_FOGAD_RAKTAR = $dest_whscode
+        attarolas.U_FOGAD_TARHELY = $dest_sl1code
         attarolas.U_RAKTAROS = current_user.username  
         attarolas.U_CREATEDATE = d.strftime "%Y-%m-%d  %H:%M:%S"
         if attarolas.save
-          @actu_step = 4
+          @actu_step = 5
         else
           @actu_step = 1
           flash[:danger] = "Sikertelen áttárolási kísérlet! Ismételje meg a folyamatot!"
         end
-      end  
-    end
+    #  end  
+    #end
 
     respond_to do |format|
       format.js { render partial: 'inventory_requests' }
